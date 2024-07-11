@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>layout.html</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+</head>
+<body>
+    <nav th:replace="~{navbar::navbarfragment}"></nav>
+    <div layout:fragment="content"></div>
+    <div layout:fragment="script"></div>
+</body>
+</html>

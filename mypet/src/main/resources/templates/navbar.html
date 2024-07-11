@@ -1,0 +1,12 @@
+<nav th:fragment="navbarfragment" class="">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">메인페이지로</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{|/user/login|}">로그인</a>
+                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/user/logout|}">로그아웃</a>
+                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{|/user/signup|}">회원가입</a>
+            </ul>
+        </div>
+    </div>
+</nav>
