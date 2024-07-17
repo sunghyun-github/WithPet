@@ -1,0 +1,106 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+	<!-- 질문 내용 표시 -->
+	<div>
+		<h2 th:text="${question.subject}"></h2>
+		<div th:text="${question.content}"></div>
+		<td>
+			<span
+				th:text="${#temporals.format(question.updatedAt != null ? question.updatedAt : question.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+			<span th:if="${question.updatedAt != null}" th:text="' (수정됨)'"></span>
+		</td>
+	</div>
+	<div>
+		<!-- 질문 수정 버튼 -->
+		<a th:href="@{|/qna_question/modify/${question.questionIdx}|}" sec:authorize="isAuthenticated()" th:if="${question.author != null 
+	              and #authentication.getPrincipal().getUsername() == question.author.userId 
+	              and #lists.size(question.answerList) == 0}" th:text="수정"></a>
+		<a href="javascript:void(0);" th:data-uri="@{|/qna_question/delete/${question.questionIdx}|}"
+			class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+			th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.userId}"
+			th:text="삭제"></a>
+	</div>
+	<!-- 파일 업로드 표시 -->
+	<div>
+		<h5>첨부된 파일:</h5>
+		<div>
+			<div th:each="file : ${question.files}">
+				<div th:if="${file.fileType.startsWith('image')}">
+					<!-- 이미지 클릭 시 새 창에서 확대된 이미지 보기 -->
+					<a th:href="@{${file.filePath}}" target="_blank">
+						<img th:src="@{${file.filePath}}" th:alt="${file.fileName}"
+							style="max-width: 300px; max-height: 300px; cursor: pointer;" />
+					</a>
+				</div>
+				<div th:if="${!file.fileType.startsWith('image')}">
+					<a th:href="@{${file.filePath}}" th:text="${file.fileName}" target="_blank"></a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 답변 갯수 표시 -->
+	<div>
+		<h5 th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
+	</div>
+
+	<!-- 답변 반복 시작 -->
+	<div th:each="answer : ${question.answerList}">
+		<div th:text="${answer.content}"></div>
+		<div>
+			<span th:if="${question.author != null}" th:text="${answer.author.userId}"></span>
+		</div>
+		<div th:text="${#temporals.format(answer.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+		<div>
+			<a th:href="@{|/qna_answer/modify/${answer.answerIdx}|}" sec:authorize="isAuthenticated()"
+				th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.userId}"
+				th:text="수정"></a>
+				<a href="javascript:void(0);" th:data-uri="@{|/qna_answer/delete/${answer.answerIdx}|}"
+					class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+					th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.userId}"
+					th:text="삭제"></a>
+		</div>
+	</div>
+
+
+	<!-- 답변 작성 폼 -->
+	<form th:action="@{|/qna_answer/create/${question.questionIdx}|}" th:object="${answerForm}" method="post">
+		<div role="alert" th:if="${#fields.hasAnyErrors()}">
+			<div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+		</div>
+		<div>
+			<!-- ADMIN 또는 PET_MANAGER 권한이 있는 경우에만 입력창을 활성화 -->
+			<textarea th:field="*{content}" class="form-control" rows="10"
+				sec:authorize="hasAuthority('ADMIN') or hasAuthority('PET_MANAGER')"></textarea>
+
+			<!-- ADMIN과 PET_MANAGER 두 권한 모두 없는 경우에만 입력창을 비활성화 -->
+			<textarea class="form-control" rows="10" disabled
+				sec:authorize="!(hasAuthority('ADMIN') or hasAuthority('PET_MANAGER'))">권한이 없습니다.
+	        </textarea>
+		</div>
+		<!-- ADMIN 또는 PET_MANAGER 권한이 있는 경우에만 버튼 활성화 -->
+		<input type="submit" value="답변등록" sec:authorize="hasAuthority('ADMIN') or hasAuthority('PET_MANAGER')" />
+
+		<!-- ADMIN과 PET_MANAGER 두 권한 모두 없는 경우 버튼 비활성화 -->
+		<input type="submit" value="답변등록" sec:authorize="!(hasAuthority('ADMIN') or hasAuthority('PET_MANAGER'))"
+			disabled />
+	</form>
+
+
+
+	<!-- 목록으로 돌아가기 링크 -->
+	<a th:href="@{/qna_question/list}">목록</a>
+</div>
+
+<script layout:fragment="script" type='text/javascript'>
+	const delete_elements = document.getElementsByClassName("delete");
+	Array.from(delete_elements).forEach(function (element) {
+		element.addEventListener('click', function () {
+			if (confirm("정말로 삭제하시겠습니까?")) {
+				location.href = this.dataset.uri;
+			};
+		});
+	});
+</script>
+
+</html>
