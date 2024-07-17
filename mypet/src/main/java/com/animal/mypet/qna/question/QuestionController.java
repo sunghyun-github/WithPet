@@ -59,7 +59,7 @@ public class QuestionController {
 			return "qna/question_form";
 		}
 		User user = this.userService.getUser(principal.getName());
-		this.questionService.create(questionForm.getSubject(), questionForm.getContent(), files, user);
+		this.questionService.create(questionForm.getCategory(), questionForm.getSubject(), questionForm.getContent(), files, user);
 		return "redirect:/qna_question/list";
 	}
 
@@ -71,6 +71,7 @@ public class QuestionController {
 		if (!question.getAuthor().getUserId().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
+		questionForm.setCategory(question.getCategory());
 		questionForm.setSubject(question.getSubject());
 		questionForm.setContent(question.getContent());
 		return "/qna/question_form";
@@ -90,7 +91,7 @@ public class QuestionController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
 		}
 
-		this.questionService.modify(question, questionForm.getSubject(), questionForm.getContent(), files);
+		this.questionService.modify(question,questionForm.getCategory(), questionForm.getSubject(), questionForm.getContent(), files);
 		return String.format("redirect:/qna_question/detail/%s", questionIdx);
 	}
 

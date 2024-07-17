@@ -56,9 +56,10 @@ public class QuestionService {
 		}
 	}
 
-	public Question create(String subject, String content, MultipartFile[] files, User user) {
+	public Question create(String category, String subject, String content, MultipartFile[] files, User user) {
 		// 새로운 Question 객체를 생성하고 제목, 내용, 작성 시간, 작성자를 설정
 		Question q = new Question();
+		q.setCategory(category);
 		q.setSubject(subject);
 		q.setContent(content);
 		q.setCreatedAt(LocalDateTime.now());
@@ -88,7 +89,8 @@ public class QuestionService {
 		return questionRepository.save(q);
 	}
 
-	public void modify(Question question, String subject, String content, MultipartFile[] files) {
+	public void modify(Question question, String category, String subject, String content, MultipartFile[] files) {
+		question.setCategory(category);
 		question.setSubject(subject);
 		question.setContent(content);
 		question.setUpdatedAt(LocalDateTime.now());

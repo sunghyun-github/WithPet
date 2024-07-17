@@ -11,13 +11,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class QuestionForm {
+    private String category;
+	
     @NotEmpty(message="제목은 필수항목입니다.")
     @Size(max=200)
     private String subject;
 
-    @NotEmpty(message="내용은 필수항목입니다.")
+    @NotEmpty(message="내용을 입력하세요.")
     private String content;
     
-    private MultipartFile[] file;  // 파일 업로드를 위한 필드 추가
-    
+    private MultipartFile[] file;
+   
 }
