@@ -38,12 +38,10 @@
 			</div>
 		</div>
 	</div>
-
 	<!-- 답변 갯수 표시 -->
 	<div>
 		<h5 th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
 	</div>
-
 	<!-- 답변 반복 시작 -->
 	<div th:each="answer : ${question.answerList}">
 		<div th:text="${answer.content}"></div>
@@ -55,14 +53,12 @@
 			<a th:href="@{|/qna_answer/modify/${answer.answerIdx}|}" sec:authorize="isAuthenticated()"
 				th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.userId}"
 				th:text="수정"></a>
-				<a href="javascript:void(0);" th:data-uri="@{|/qna_answer/delete/${answer.answerIdx}|}"
-					class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
-					th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.userId}"
-					th:text="삭제"></a>
+			<a href="javascript:void(0);" th:data-uri="@{|/qna_answer/delete/${answer.answerIdx}|}"
+				class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+				th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.userId}"
+				th:text="삭제"></a>
 		</div>
 	</div>
-
-
 	<!-- 답변 작성 폼 -->
 	<form th:action="@{|/qna_answer/create/${question.questionIdx}|}" th:object="${answerForm}" method="post">
 		<div role="alert" th:if="${#fields.hasAnyErrors()}">
@@ -85,13 +81,9 @@
 		<input type="submit" value="답변등록" sec:authorize="!(hasAuthority('ADMIN') or hasAuthority('PET_MANAGER'))"
 			disabled />
 	</form>
-
-
-
 	<!-- 목록으로 돌아가기 링크 -->
 	<a th:href="@{/qna_question/list}">목록</a>
 </div>
-
 <script layout:fragment="script" type='text/javascript'>
 	const delete_elements = document.getElementsByClassName("delete");
 	Array.from(delete_elements).forEach(function (element) {
@@ -102,5 +94,4 @@
 		});
 	});
 </script>
-
 </html>

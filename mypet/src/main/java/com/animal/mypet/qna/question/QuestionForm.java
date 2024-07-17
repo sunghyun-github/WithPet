@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class QuestionForm {
+	@NotEmpty(message="카테고리를 선택해주세요.")
     private String category;
 	
     @NotEmpty(message="제목은 필수항목입니다.")

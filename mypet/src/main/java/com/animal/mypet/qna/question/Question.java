@@ -50,7 +50,7 @@ public class Question {
 
 	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<File> files; // 파일과의 연관 관계
-	
+
 	@Column(name = "category")
 	private String category;
 }

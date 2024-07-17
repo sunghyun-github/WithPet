@@ -59,7 +59,8 @@ public class QuestionController {
 			return "qna/question_form";
 		}
 		User user = this.userService.getUser(principal.getName());
-		this.questionService.create(questionForm.getCategory(), questionForm.getSubject(), questionForm.getContent(), files, user);
+		this.questionService.create(questionForm.getCategory(), questionForm.getSubject(), questionForm.getContent(),
+				files, user);
 		return "redirect:/qna_question/list";
 	}
 
@@ -91,18 +92,19 @@ public class QuestionController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
 		}
 
-		this.questionService.modify(question,questionForm.getCategory(), questionForm.getSubject(), questionForm.getContent(), files);
+		this.questionService.modify(question, questionForm.getCategory(), questionForm.getSubject(),
+				questionForm.getContent(), files);
 		return String.format("redirect:/qna_question/detail/%s", questionIdx);
 	}
 
 	@PreAuthorize("isAuthenticated()")
-    @GetMapping("/delete/{question_idx}")
-    public String questionDelete(Principal principal, @PathVariable("question_idx") Integer questionIdx) {
-        Question question = this.questionService.getQuestion(questionIdx);
-        if (!question.getAuthor().getUserId().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-        }
-        this.questionService.delete(question);
-        return "redirect:/";
-    }
+	@GetMapping("/delete/{question_idx}")
+	public String questionDelete(Principal principal, @PathVariable("question_idx") Integer questionIdx) {
+		Question question = this.questionService.getQuestion(questionIdx);
+		if (!question.getAuthor().getUserId().equals(principal.getName())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+		}
+		this.questionService.delete(question);
+		return "redirect:/";
+	}
 }
