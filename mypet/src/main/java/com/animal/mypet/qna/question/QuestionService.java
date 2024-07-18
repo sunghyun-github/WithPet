@@ -10,14 +10,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.animal.mypet.DataNotFoundException;
+import com.animal.mypet.qna.answer.Answer;
 import com.animal.mypet.qna.file.File;
 import com.animal.mypet.qna.file.FileService;
 import com.animal.mypet.user.User;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -31,15 +39,16 @@ public class QuestionService {
 		return this.questionRepository.findAll();
 	}
 
-	public Page<Question> getList(int page) {
+	public Page<Question> getList(int page, String kw) {
 		// 정렬 기준을 저장할 리스트 생성
 		List<Sort.Order> sorts = new ArrayList<>();
 		// createdAt 필드를 기준으로 내림차순 정렬 추가
 		sorts.add(Sort.Order.desc("createdAt"));
 		// Pageable 객체를 생성, 페이지 번호와 페이지 크기, 정렬 기준 설정
 		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+	    Specification<Question> spec = search(kw);
 		// 페이징된 질문 목록을 조회하여 반환
-		return this.questionRepository.findAll(pageable);
+		return this.questionRepository.findAll(spec, pageable);
 	}
 
 	public Question getQuestion(Integer questionIdx) {
@@ -119,4 +128,19 @@ public class QuestionService {
 	public void delete(Question question) {
 		this.questionRepository.delete(question);
 	}
+	
+	
+    private Specification<Question> search(String kw) {
+        return new Specification<>() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public Predicate toPredicate(Root<Question> q, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                query.distinct(true);  // 중복을 제거 
+                Join<Question, User> u1 = q.join("author", JoinType.LEFT);
+                Join<Question, Answer> a = q.join("answerList", JoinType.LEFT);
+                return cb.or(cb.like(q.get("subject"), "%" + kw + "%"), // 제목 
+                        cb.like(u1.get("userId"), "%" + kw + "%")); // 질문 작성자 
+            }
+        };
+    }
 }
