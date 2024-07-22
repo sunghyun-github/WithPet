@@ -32,10 +32,13 @@ public class QuestionController {
 	private final UserService userService;
 
 	@GetMapping("/list")
-	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value="kw", defaultValue = "") String kw) {
-		Page<Question> paging = this.questionService.getList(page, kw);
+	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "kw", defaultValue = "") String kw,
+			@RequestParam(value = "category", defaultValue = "") String category) {
+		Page<Question> paging = this.questionService.getList(page, kw, category);
 		model.addAttribute("paging", paging);
-		model.addAttribute("kw",kw);
+		model.addAttribute("category", category); // 카테고리 추가
+		model.addAttribute("kw", kw);
 		return "/qna/question_list";
 	}
 
