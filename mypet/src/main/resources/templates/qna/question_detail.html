@@ -48,7 +48,11 @@
 		<div>
 			<span th:if="${question.author != null}" th:text="${answer.author.userId}"></span>
 		</div>
-		<div th:text="${#temporals.format(answer.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+		<div>
+			<span th:text="${#temporals.format(answer.updatedAt != null ? answer.updatedAt : answer.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+			<span th:if="${answer.updatedAt != null}" th:text="' (수정됨)'"></span>
+			
+		</div>
 		<div>
 			<a th:href="@{|/qna_answer/modify/${answer.answerIdx}|}" sec:authorize="isAuthenticated()"
 				th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.userId}"
