@@ -1,6 +1,7 @@
 package com.animal.mypet.user;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
@@ -26,7 +27,9 @@ public class User {
 
     @Column(nullable = false)
     private String userName;
-
+    
+    @Column
+    private String provider;
 
     @Column(nullable = false, unique = true)
     private String userPhone;
@@ -34,13 +37,13 @@ public class User {
     @Column(nullable = false)
     private String userEmail;
     
-    private boolean emailVerified;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+    
 
     @PrePersist
     protected void onCreate() {
@@ -52,4 +55,7 @@ public class User {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+    
+    
+
 }
