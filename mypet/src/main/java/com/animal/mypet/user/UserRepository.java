@@ -6,8 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByUserId(String userId);
+	Optional<User> findByUserId(String userId);
 
-    Optional<User> findByUserEmail(String userEmail);
+	Optional<User> findByUserNameAndUserEmailAndUserPhone(String userName, String userEmail, String userPhone);
+	
+	// 비밀번호 초기화
+	Optional<User> findByUserIdAndUserNameAndUserPhone(String userId, String userName, String userPhone);
+
+    boolean existsByUserId(String userId);
+    
     
 }

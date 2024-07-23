@@ -1,57 +1,76 @@
-
+<!DOCTYPE html>
 <html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container my-3">
 <head>
-    <meta charset="UTF-8">
-    <title>회원가입</title>
+    <meta charset="utf-8" />
+    <meta name="_csrf" content="${_csrf.token}">
+    <meta name="_csrf_header" content="${_csrf.headerName}">
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/common.css">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/main.js"></script>
 </head>
 <body>
-    <div class="container my-3">
-        <div class="my-3 border-bottom pb-2">
-            <div>
-                <h5>회원가입</h5>
-            </div>
-            <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <div class="mb-3">
-                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-                        <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
-                    </div>
-                    <label for="userRole">역할</label>
-                    <select id="userRole" name="userRole" th:field="*{userRole}">
-                        <option value="USER" selected>User</option>
-                        <option value="PET_MANAGER">PetManager</option>
-                        <option value="ADMIN">Admin</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="userId">사용자ID</label>
-                    <input type="text" id="userId" th:field="*{userId}">
-                </div>
-                <div class="mb-3">
-                    <label for="userPassword">비밀번호</label>
-                    <input type="password" id="password1" th:field="*{userPassword}">
-                </div>
-                <div class="mb-3">
-                    <label for="userPassword2">비밀번호 확인</label>
-                    <input type="password" id="password2" th:field="*{userPassword2}">
-                </div>
-                <div class="mb-3">
-                    <label for="userName">이름</label>
-                    <input type="text" id="name" th:field="*{userName}">
-                </div>
-                <div class="mb-3">
-                    <label for="userEmail">이메일</label>
-                    <input type="email" id="email" th:field="*{userEmail}">
-                </div>
-                <div class="mb-3">
-                    <label for="userPhone">전화번호</label>
-                    <input type="text" id="phone" th:field="*{userPhone}">
-                </div>
-                <input type="submit" value="회원가입">
-            </form>
+    <div layout:fragment="content" class="container my-3">
+        <div class="title">
+            <div class="heading">회원가입</div>
         </div>
+        <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" class="create-user-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <div class="mb-3">
+                <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+                    <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
+                </div>
+            </div>
+            <div class="overlap-group-id">
+                <label for="userId"></label>
+                <input type="text" class="form-control" id="userId" th:field="*{userId}" placeholder="아이디">
+                <button type="button" onclick="validateUserId()">확인</button>
+                <div id="validationMessage"></div>
+            </div>
+            <div class="overlap-group">
+                <label for="userPassword"></label>
+                <input type="password" class="form-control" id="password1" th:field="*{userPassword}" placeholder="비밀번호" onkeyup="validatePassword()">
+                <div style="font-size: 0.9em;">※ 비밀번호는 영문, 숫자, 특수문자를 포함하여 10자 이상이어야 합니다.</div>
+            </div>
+            <div class="overlap-group">
+                <label for="userPassword2"></label>
+                <input type="password" class="form-control" id="password2" th:field="*{userPassword2}" placeholder="비밀번호 확인" onkeyup="validatePassword()">
+                <div id="passwordMessage" style="font-size: 0.9em;"></div>
+            </div>
+            <div class="overlap-group">
+                <label for="userName"></label>
+                <input type="text" class="form-control" id="name" th:field="*{userName}" placeholder="이름">
+            </div>
+            <div class="overlap-group">
+                <label for="userEmailPrefix"></label>
+                <input type="text" class="form-control" id="emailPrefix" th:field="*{emailPrefix}" placeholder="개인 이메일">
+                <label for="userEmailDomain">@</label>
+                <input type="text" class="form-control" id="emailDomain" th:field="*{emailDomain}" placeholder="도메인" list="domainList">
+                <datalist id="domainList">
+                    <option value="naver.com">
+                    <option value="gmail.com">
+                    <option value="yahoo.com">
+                    <option value="daum.net">
+                    <option value="hanmail.net">
+                </datalist>
+                <button type="button" id="sendBtn" name="sendBtn" onclick="sendNumber()">인증번호</button>
+            </div>
+            <br>
+            <div id="mail_number" name="mail_number" style="display: none;">
+                <input type="text" name="number" id="number" placeholder="인증번호 입력">
+                <input type="hidden" id="Confirm"> <!-- 숨겨진 input 요소 추가 -->
+                <button type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()">이메일 인증</button>
+                <input type="hidden" id="emailVerified" name="emailVerified" value="false"> <!-- 이메일 인증 여부 확인 필드 -->
+            </div>
+            <div class="overlap-group">
+                <label for="userPhone"></label>
+                <input type="text" class="form-control" id="phone" th:field="*{userPhone}" placeholder="전화번호">
+            </div>
+            <div class="master-primary-login">
+                <input type="submit" value="회원가입" class="master-primary">
+            </div>
+        </form>
     </div>
 </body>
-</div>
 </html>
