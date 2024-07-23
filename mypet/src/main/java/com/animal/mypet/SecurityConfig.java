@@ -9,9 +9,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.animal.mypet.social.CustomOAuth2UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -39,6 +44,15 @@ public class SecurityConfig {
             .formLogin(formLogin -> formLogin
                 .loginPage("/user/login")
                 .defaultSuccessUrl("/"))
+            .oauth2Login(oauth2 -> oauth2
+                    .loginPage("/user/login")
+                    .defaultSuccessUrl("/")
+                    .redirectionEndpoint()
+                        .baseUri("/user/login/oauth/**")
+                    .and()
+                    .userInfoEndpoint()
+                    .userService(oAuth2UserService())
+                )
             .logout(logout -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                 .logoutSuccessUrl("/")
@@ -59,4 +73,11 @@ public class SecurityConfig {
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+    
+    @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
+        return new CustomOAuth2UserService();
+    }
+    
+    
 }
