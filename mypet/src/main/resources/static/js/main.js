@@ -107,37 +107,4 @@ $(document).ready(function() {
             event.preventDefault(); // 폼 제출 막기
         }
     });
-	const loginForm = document.querySelector('form');
-	   
-	   loginForm.addEventListener('submit', function(event) {
-	       event.preventDefault(); // 폼 제출을 막습니다.
-	       
-	       // 로그인 요청을 비동기로 보냅니다.
-	       const formData = new FormData(loginForm);
-	       const actionUrl = loginForm.action;
-	       
-	       fetch(actionUrl, {
-	           method: 'POST',
-	           body: formData
-	       })
-	       .then(response => {
-	           if (!response.ok) {
-	               throw new Error('네트워크 응답이 정상이 아닙니다.');
-	           }
-	           return response.text();
-	       })
-	       .then(result => {
-	           // 로그인 성공 시, 서버가 성공 메시지를 보내면 페이지를 리다이렉트합니다.
-	           if (result.includes('로그인 성공')) {
-	               window.location.href = '/home'; // 로그인 성공 후 리다이렉션할 URL
-	           } else {
-	               // 로그인 실패 시, 에러 메시지를 alert으로 표시합니다.
-	               alert('아이디 또는 비밀번호가 틀렸습니다!');
-	           }
-	       })
-	       .catch(error => {
-	           console.error('로그인 처리 중 오류 발생:', error);
-	           alert('로그인 처리 중 오류가 발생했습니다.');
-	       });
-	   });
 });

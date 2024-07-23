@@ -1,0 +1,290 @@
+<html layout:decorate="~{layout}">
+<head>
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="isAuthenticated" th:content="${isAuthenticated}"/>
+</head>
+<div layout:fragment="content" class="container">
+    <div class="inner detail_wrap">
+    	<div class="detail_title">
+    		<table>
+	            <tr>
+	                <td th:text="${board.title}" class="title"></td>
+	                <td th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}" class="date"></td> 
+	            </tr>
+	            <tr>
+	                <td colspan="2">
+	                	<ul class="bottom">
+	                		<li th:if="${board.author != null}" th:text="${board.author.userId}"></li>
+	                		<li>
+	                			<span><i class="fa-solid fa-eye"></i></i><strong th:text="${board.views}"></strong></span>
+	                			<span><i class="fa-solid fa-comment"></i><strong th:text="${#lists.size(board.commentList)}"></strong></span>
+	                			<span><i class="fa-solid fa-thumbs-up"></i><strong th:text="${#lists.size(board.voter)}"></strong></span>
+	                		</li>
+	                	</ul>
+	                </td>
+	            </tr>
+	        </table>
+    	</div>
+    	<div class="detail_content">
+    		<table>
+    			 <tr>
+	                <td class="btn_wrap">
+	                    <a th:href="@{|/board/modify/${board.idx}|}" class="detail_btn" sec:authorize="isAuthenticated()"
+	                        th:if="${board.author != null and #authentication.getPrincipal().getUsername() == board.author.userId}"
+	                        ><i class="fa-solid fa-pen-to-square"></i>수정</a>
+	                    <a href="javascript:void(0);" th:data-uri="@{|/board/delete/${board.idx}|}" class="delete detail_btn" sec:authorize="isAuthenticated()"
+	                        th:if="${board.author != null and #authentication.getPrincipal().getUsername() == board.author.userId}">
+	                        <i class="fa-solid fa-trash-can"></i>삭제</a>
+	                </td>
+	            </tr>
+    			<tr>
+	                <td th:utext="${board.content}" class="content"></td>
+	            </tr>
+	            <tr>
+	            	<td class="content_bottom">
+	            		<a href="javascript:void(0);" class="btn recommend" th:data-uri="@{|/board/vote/${board.idx}|}"
+	            		th:data-status-uri="@{|/board/vote/status/${board.idx}|}" th:if="${board.author != null and #authentication.name != board.author.userId}">
+	            			<i class="fa-regular fa-thumbs-up"></i>
+							<span class="count" th:text="${#lists.size(board.voter)}"></span>
+	            		</a>
+	            	</td>
+	            </tr>
+	           
+    		</table>
+    	</div>
+    	
+		<!-- 댓글 -->
+		<div class="board_comment">
+			<div class="comment_form">
+			
+ 		       	<!-- 댓글 입력 폼 -->
+	            <form th:action="@{|/comment/create/${board.idx}|}" th:object="${commentForm}" method="post" id="commentForm">
+	                <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+	                <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" placeholder="로그인 후 이용 가능합니다."></textarea>
+	                <textarea sec:authorize="isAuthenticated()" th:field="*{content}" id="commentContent" th:placeholder="|${#authentication.getPrincipal().getUsername()}으로 댓글 작성|"></textarea>
+	                <input type="submit" value="확인" class="submit_btn" />
+	            </form>
+	        </div>
+	        
+	        <p class="comment_size" th:text="|${#lists.size(board.commentList)}개의 댓글이 있습니다.|"></p>
+	        
+			<!-- 댓글 목록 -->
+			<div class="comment_list_wrap" th:if="${not #lists.isEmpty(board.commentList)}">
+			    <ul>
+			        <li th:each="comment : ${paging}">
+			        	<!-- 댓글 작성자, 작성 시간 -->
+			            <div class="comment_header">
+			            	<div th:if="${comment.author != null}" class="name" ><i class="fa-solid fa-user"></i>
+			            		<span th:text="${comment.author.userId}"></span>
+			            		<span th:if="${#authentication.name == comment.author.userId}" class="comment_size">내 댓글</span>
+			            	</div>
+			                <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}" class="date"></div>
+			            </div>
+			            <!-- 댓글 내용, 버튼 -->
+			            <div class="comment_bottom">
+				            <div class="comment_content" th:id="'comment-' + ${comment.idx}">
+				                <div th:text="${comment.content}"></div>
+				            </div>
+				            <div class="comment_actions">
+				                <a href="javascript:void(0);" class="btn recommend" th:data-uri="@{|/comment/vote/${comment.idx}|}"
+				                    th:if="${#authentication.name != comment.author.userId}" th:data-status-uri="@{|/comment/vote/status/${comment.idx}|}">
+				                    <i class="fa-light fa-thumbs-up"></i><span class="count" th:text="${#lists.size(comment.voter)}"></span>
+				                </a>
+				                <div class="btn_wrap">
+					                <button class="modify detail_btn" th:data-idx="${comment.idx}" sec:authorize="isAuthenticated()"
+					                    th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.userId}">
+					                    <i class="fa-solid fa-pen-to-square"></i>
+					                    수정
+					                </button>
+					                <button class="delete detail_btn" th:data-idx="${comment.idx}" sec:authorize="isAuthenticated()"
+					                    th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.userId}">
+					                    <i class="fa-solid fa-trash-can"></i>
+					                    삭제
+					                </button>
+				                </div>
+				            </div>
+			            </div>
+			        </li>
+			    </ul>
+			</div>
+
+		</div>
+        
+        
+        <!-- 페이징처리 시작 -->
+		<div th:if="${!paging.isEmpty()}">
+		    <ul class="pagination_c">
+		        <li class="arrow prev" th:classappend="${paging.first} ? 'disabled' : ''">
+		            <a th:href="@{|?page=${paging.number-1}|}" th:if="${!paging.first}">
+		                <span>이전</span>
+		            </a>
+		        </li>
+		        <li th:each="page : ${#numbers.sequence(1, paging.totalPages)}"
+		            th:classappend="${page == paging.number + 1} ? 'active' : ''" 
+		            class="number">
+		            <a th:text="${page}" th:href="@{|?page=${page-1}|}" th:data-page="${page}"></a>
+		        </li>
+		        <li class="arrow next" th:classappend="${paging.last} ? 'disabled' : ''">
+		            <a th:href="@{|?page=${paging.number+1}|}" th:if="${!paging.last}">
+		                <span>다음</span>
+		            </a>
+		        </li>
+		    </ul>
+		</div>
+		<!-- 페이징처리 끝 -->
+
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script layout:fragment="script" type='text/javascript'>
+$(document).ready(function() {
+	
+	 document.getElementById('commentForm').addEventListener('submit', function(event) {
+        var content = document.getElementById('commentContent').value.trim();
+        if (content === '') {
+            alert('내용을 입력하세요.');
+            event.preventDefault();
+        }
+    });
+	 
+	var isAuthenticated = $('meta[name="isAuthenticated"]').attr('content') === 'true';
+  
+	// 댓글 수정 버튼 클릭 시
+    $(".comment_actions").on("click", ".modify", function() {
+        var commentIdx = $(this).data("idx");
+        var $commentDiv = $("#comment-" + commentIdx + " div");
+        var commentText = $commentDiv.text();
+        
+        // 현재 댓글 내용을 textarea로 변경
+        $commentDiv.replaceWith('<textarea class="edit-content">' + commentText + '</textarea>');
+        $(this).html('저장'); // 수정 버튼을 저장 버튼으로 변경
+        $(this).removeClass("modify").addClass("save"); // 클래스를 수정 버튼에서 저장 버튼으로 변경
+    });
+
+    // 저장 버튼 클릭 시
+    $(".comment_actions").on("click", ".save", function() {
+        var commentIdx = $(this).data("idx");
+        var newContent = $("#comment-" + commentIdx + " .edit-content").val();
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        $.ajax({
+            url: '/comment/modify/' + commentIdx,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ content: newContent }),
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function(response) {
+                var updatedCommentDiv = '<div>' + newContent + '</div>';
+                $("#comment-" + commentIdx + " .edit-content").replaceWith(updatedCommentDiv);
+                $(this).html('<i class="fa-solid fa-pen-to-square"></i> 수정'); // 저장 버튼을 수정 버튼으로 변경
+                $(this).removeClass("save").addClass("modify"); // 클래스를 저장 버튼에서 수정 버튼으로 변경
+            },
+            error: function(xhr, status, error) {
+                alert("댓글 수정에 실패했습니다: " + error);
+            }
+        });
+    });
+
+    $(".delete").click(function(e) {
+        e.preventDefault();
+
+        if (!confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
+            return;
+        }
+
+        var commentIdx = $(this).data("idx");
+        var deleteUri = "/comment/delete/" + commentIdx;
+
+        $.ajax({
+            url: deleteUri,
+            type: 'POST',  // DELETE 대신 POST 방식 사용
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')
+            },
+            success: function(response) {
+                if (response === "success") {
+                    $("#comment-" + commentIdx).closest("li").remove();
+                    alert("댓글이 삭제되었습니다.");
+                } else {
+                    alert("댓글 삭제에 실패했습니다.");
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("처리 중 오류가 발생했습니다: " + error);
+            }
+        });
+    });
+    
+    // 페이지 로드 시 추천 상태 확인
+    $('.recommend').each(function() {
+        var statusUri = $(this).data('status-uri');
+        
+        $.ajax({
+            url: statusUri,
+            type: 'GET',
+            success: function(response) {
+                // 응답에서 상태와 추천 수를 가져옵니다
+                var isActive = response.isActive;
+                var count = response.count;
+
+                // 추천 수 업데이트
+                $(this).find(".count").text(count);
+
+                // 버튼 상태 변경
+                if (isActive) {
+                    $(this).addClass("active");
+                    $(this).find("i").removeClass("fa-regular").addClass("fa-solid");
+                } else {
+                    $(this).removeClass("active");
+                    $(this).find("i").removeClass("fa-solid").addClass("fa-regular");
+                }
+            }.bind(this),
+            error: function(xhr, status, error) {
+                console.error("추천 상태 확인 중 오류가 발생했습니다: " + error);
+            }
+        });
+    });
+    
+    $(".recommend").click(function(e) {
+    	e.preventDefault();
+    	
+    	if (!isAuthenticated) {
+            alert("로그인 후 이용 가능합니다.");
+            return;
+        }
+    	
+    	var uri = $(this).data("uri");
+    	var isCancel = $(this).hasClass("active");
+    	
+        
+        $.ajax({
+            url: uri,
+            type: isCancel ? 'DELETE' : 'POST',
+        	headers: {
+        		'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')
+        	},
+            success: function(response) {
+                // 추천 수 업데이트
+                var newCount = response;
+                $(this).find(".count").text(newCount);
+                
+                // 버튼 상태 변경
+                if (isCancel) {
+                    $(this).removeClass("active").find("i").removeClass("fa-solid").addClass("fa-regular");
+                } else {
+                    $(this).addClass("active").find("i").removeClass("fa-regular").addClass("fa-solid");
+                }
+            }.bind(this),
+            error: function(xhr, status, error) {
+                alert("처리 중 오류가 발생했습니다: " + error);
+            }
+        });
+    });
+    
+});
+</script>
+</html>
