@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>아이디 찾기</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h1>아이디 찾기</h1>
+        <form th:action="@{/user/findId}" method="post">
+            <label for="userName">이름:</label>
+            <input type="text" id="userName" name="userName" required>
+            <br>
+            <label for="userEmail">이메일:</label>
+            <input type="email" id="userEmail" name="userEmail" required>
+            <br>
+            <label for="userPhone">전화번호:</label>
+            <input type="tel" id="userPhone" name="userPhone" required>
+            <br>
+            <input type="submit" value="아이디 찾기">
+        </form>
+        <div th:if="${errorMessage}" class="error-message">
+            <p th:text="${errorMessage}"></p>
+        </div>
+    </div>
+</body>
+</html>

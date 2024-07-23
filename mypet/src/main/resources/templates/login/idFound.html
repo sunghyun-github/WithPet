@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>아이디 찾기 결과</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h1>아이디 찾기 결과</h1>
+        <p>회원님의 아이디는: <span th:text="${userId}"></span></p>
+        <a href="/user/login" class="btn btn-primary">로그인하러 가기</a>
+    </div>
+</body>
+</html>
