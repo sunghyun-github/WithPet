@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class UserService {
     
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender mailSender;
     
     public void create(Map<String, String> userForm) throws Exception {
         Optional<User> existingUser = userRepository.findByUserId(userForm.get("userId"));
@@ -33,7 +35,7 @@ public class UserService {
         user.setUserName(userForm.get("userName"));
         user.setUserPhone(userForm.get("userPhone"));
         user.setUserEmail(userForm.get("userEmail"));
-        user.setUserRole(userForm.get("userRole"));
+        user.setUserRole("USER");
         
         userRepository.save(user);
     }
@@ -89,5 +91,89 @@ public class UserService {
             throw new DataNotFoundException("user not found");
         }
     }
+    
+    // id 유효성검사
+    public boolean isUserIdAvailable(String userId) {
+        Optional<User> existingUser = userRepository.findByUserId(userId);
+        return existingUser.isEmpty();
+    }
+    
+    // 사용자 이름과 이메일로 ID 찾기
+    public String findUserIdByNameEmailAndPhone(String name, String email, String phone) throws Exception {
+        Optional<User> user = userRepository.findByUserNameAndUserEmailAndUserPhone(name, email, phone);
+        if (user.isPresent()) {
+            return user.get().getUserId();
+        } else {
+            throw new Exception("해당 사용자 정보를 찾을 수 없습니다.");
+        }
+    }
+    
+    // 비밀번호 초기화 메서드
+    public String resetPassword(String userId, String name, String phone) throws Exception {
+        Optional<User> userOpt = userRepository.findByUserIdAndUserNameAndUserPhone(userId, name, phone);
+        if (userOpt.isEmpty()) {
+            throw new Exception("해당 사용자 정보를 찾을 수 없습니다.");
+        }
 
+        User user = userOpt.get();
+        String newPassword = generateRandomPassword();
+        user.setUserPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        return newPassword;
+    }
+
+    // 랜덤으로 비밀번호 바꿔줌
+    private String generateRandomPassword() {
+        // 랜덤 비밀번호 생성 로직 (예: 8자 길이의 랜덤 문자열)
+        int length = 8;
+        StringBuilder sb = new StringBuilder();
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        java.util.Random random = new java.util.Random();
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(characters.length());
+            sb.append(characters.charAt(index));
+        }
+        return sb.toString();
+    }
+    
+        
+    // 비밀번호 변경
+    public void changePassword(String userId, String currentPassword, String newPassword) throws Exception {
+        Optional<User> userOpt = userRepository.findByUserId(userId);
+        if (userOpt.isEmpty()) {
+            throw new Exception("사용자를 찾을 수 없습니다.");
+        }
+
+        User user = userOpt.get();
+        if (!passwordEncoder.matches(currentPassword, user.getUserPassword())) {
+            throw new Exception("현재 비밀번호가 맞지 않습니다.");
+        }
+
+        user.setUserPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+    
+    // 회원 탈퇴 메서드
+    public boolean deleteAccount(String userId, String confirmPassword) throws Exception {
+        Optional<User> userOpt = userRepository.findByUserId(userId);
+        if (userOpt.isEmpty()) {
+            throw new Exception("사용자를 찾을 수 없습니다.");
+        }
+
+        User user = userOpt.get();
+        if (!passwordEncoder.matches(confirmPassword, user.getUserPassword())) {
+            return false; // 비밀번호 불일치
+        }
+
+        userRepository.delete(user);
+        return true; // 성공적으로 삭제됨
+    }
+    
+    
+    
+    
+    
+
+   
 }

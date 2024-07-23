@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 페이지</title>
+
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="/bootstrap/vendor/bootstrap/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="/bootstrap/vendor/fontawesome-free/css/all.min.css">
+<!-- Google Fonts - Nunito -->
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link rel="stylesheet" href="/bootstrap/css/sb-admin-2.min.css">
+
+</head>
+<body>
+
+<div class="container-fluid">
+
+   	<!-- 메인 페이지로 이동하는 버튼 -->
+    <a href="/" class="btn btn-primary mb-3">메인 페이지로 돌아가기</a>
+    
+    <!-- Page Heading -->
+      <h1 class="h3 mb-2 text-gray-800" style="padding: 10px 20px; border-bottom: 1px solid #ddd; margin-bottom: 20px;">관리자 페이지</h1>
+    
+    <!-- Tab Navigation -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="user-management-tab" data-toggle="tab" href="#user-management" role="tab" aria-controls="user-management" aria-selected="true">유저 관리</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="section1-tab" data-toggle="tab" href="#section1" role="tab" aria-controls="section1" aria-selected="false">추가 섹션 1</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="section2-tab" data-toggle="tab" href="#section2" role="tab" aria-controls="section2" aria-selected="false">추가 섹션 2</a>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="myTabContent">
+        <!-- User Management Section -->
+        <div class="tab-pane fade show active" id="user-management" role="tabpanel" aria-labelledby="user-management-tab">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">유저 관리</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr style="text-align: center;">
+                                    <th style="width: 80px;">번호</th>
+                                    <th>ID</th>
+                                    <th>이름</th>
+                                    <th>전화번호</th>
+                                    <th>이메일</th>
+                                    <th>등급</th>
+                                    <th>생성일</th>
+                                    <th>수정일</th>
+                                    <th>작업</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="user : ${users}" style="text-align: center;">
+                                    <td th:text="${user.userIdx}"></td>
+                                    <td th:text="${user.userId}"></td>
+                                    <td th:text="${user.userName}"></td>
+                                    <td th:text="${user.userPhone}"></td>
+                                    <td th:text="${user.userEmail}"></td>
+                                    <td th:text="${user.userRole}"></td>
+                                    <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                    <td th:text="${#temporals.format(user.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                    <td style="display: flex; gap: 10px; align-items: center;">
+                                        <form th:action="@{/user/editRole/{userId}(userId=${user.userId})}" method="post">
+                                            <select name="newRole" class="form-control" style="display: inline-block; width: auto; margin-right: 5px;">
+                                                <option value="ADMIN" th:selected="${user.userRole == 'ADMIN'}">ADMIN</option>
+                                                <option value="PET_MANAGER" th:selected="${user.userRole == 'PET_MANAGER'}">PET_MANAGER</option>
+                                                <option value="USER" th:selected="${user.userRole == 'USER'}">USER</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary btn-sm">변경</button>
+                                        </form>
+                                        <form th:action="@{/user/delete/{userId}(userId=${user.userId})}" method="post" onsubmit="return confirm('정말 탈퇴시키겠습니까?');">
+                                            <button type="submit" class="btn btn-danger btn-sm">회원 탈퇴</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Section 1 -->
+        <div class="tab-pane fade" id="section1" role="tabpanel" aria-labelledby="section1-tab">
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">추가 섹션 1</h6>
+                        </div>
+                        <div class="card-body">내용을 추가할 수 있는 섹션 예시입니다.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Section 2 -->
+        <div class="tab-pane fade" id="section2" role="tabpanel" aria-labelledby="section2-tab">
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">추가 섹션 2</h6>
+                        </div>
+                        <div class="card-body">또 다른 추가 섹션 예시입니다.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
+<script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/bootstrap/js/sb-admin-2.min.js"></script>
+<!-- Page level plugins -->
+<script src="/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<!-- Page level custom scripts -->
+<script src="/bootstrap/js/demo/datatables-demo.js"></script>
+
+</body>
+</html>

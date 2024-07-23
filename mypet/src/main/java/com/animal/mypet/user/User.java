@@ -28,11 +28,13 @@ public class User {
     private String userName;
 
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String userPhone;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String userEmail;
+    
+    private boolean emailVerified;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
