@@ -1,0 +1,13 @@
+<html layout:decorate="~{layout}">
+  <div layout:fragment="content" class="container">
+    <h5 class="my-3 border-bottom pb-2">댓글 등록</h5>
+    <form th:object="${commentForm}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <nav th:replace="form_errors :: formErrorsFragment"></nav>
+        <div class="mb-3">
+            <label for="content" class="form-label">내용</label>
+            <textarea th:field="*{content}" rows="5"></textarea>
+        </div>
+        <input type="submit" value="저장하기" class="btn">
+    </form>
+</html>

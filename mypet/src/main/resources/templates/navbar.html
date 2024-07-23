@@ -1,17 +1,31 @@
-<nav th:fragment="navbarfragment" class="">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">메인페이지로</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{|/user/login|}">로그인</a>
-                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/user/logout|}">로그아웃</a>
-                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/qna_question/list|}">QnA</a>
-                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{|/user/signup|}">회원가입</a>
-                    <a class="nav-link" sec:authorize="hasAuthority('ADMIN')" th:href="@{|/user/admin|}">관리자 페이지</a>
-                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/user/changePassword|}">비밀번호 변경</a> <!-- 추가된 링크 -->
-                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/user/deleteAccount|}">회원 탈퇴</a>
-                    
-            </ul>
-        </div>
-    </div>
-</nav>
+<header th:fragment="navbarfragment" id="header">
+	<div class="inner">
+		<h1><a href="/">LOGO</a></h1>
+		
+		<nav class="gnb_wrap">
+			<ul class="gnb">
+				<li><a href="/">홈</a></li>
+				<li><a href="/">입양</a></li>
+				<li><a href="/">반려동물 용품</a></li>
+				<li><a th:href="@{|/board/list|}">커뮤니티</a></li>
+				<li><a th:href="@{|/qna_question/list|}">Q&A</a></li>
+<!--                     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/user/changePassword|}">비밀번호 변경</a> 추가된 링크 -->
+<!--                     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/user/deleteAccount|}">회원 탈퇴</a> -->
+			</ul>
+			<div class="log_area">
+				<ul class="log_wrap">
+					<li>
+						<a sec:authorize="isAnonymous()" th:href="@{|/user/login|}" class="btn">로그인</a>
+						<a sec:authorize="isAuthenticated()" th:href="@{|/user/logout|}" class="btn">로그아웃</a>
+					</li>
+					<li>
+						<a sec:authorize="isAnonymous()" th:href="@{|/user/signup|}" class="btn">회원가입</a>
+						<a sec:authorize="isAuthenticated()" th:href="@{|/user/mypage|}" class="btn">마이페이지</a>
+						<a sec:authorize="hasAuthority('ADMIN')" th:href="@{|/user/admin|}" class="btn">관리자 페이지</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+	
+</header>
