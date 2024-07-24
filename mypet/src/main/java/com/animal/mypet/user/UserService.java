@@ -21,7 +21,6 @@ public class UserService {
     
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JavaMailSender mailSender;
     
     public void create(Map<String, String> userForm) throws Exception {
         Optional<User> existingUser = userRepository.findByUserId(userForm.get("userId"));
@@ -169,11 +168,5 @@ public class UserService {
         userRepository.delete(user);
         return true; // 성공적으로 삭제됨
     }
-    
-    
-    
-    
-    
-
    
 }

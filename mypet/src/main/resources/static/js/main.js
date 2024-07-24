@@ -46,6 +46,28 @@ function validatePassword() {
     }
 }
 
+function changevalidatePassword() {
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+    const passwordMessage = document.getElementById('passwordMessage');
+    // 대문자를 제외한 영문 소문자, 숫자, 특수문자를 포함하여 10자 이상이어야 하는 정규식
+    const passwordPattern = /^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[a-z\d@$!%*?&]{10,}$/;
+
+    if (!passwordPattern.test(newPassword)) {
+        passwordMessage.textContent = '비밀번호는 소문자, 숫자, 특수문자를 포함하여 10자 이상이어야 합니다.';
+        passwordMessage.style.color = 'red';
+    } else {
+        passwordMessage.textContent = ''; // 조건 메시지 초기화
+        if (newPassword !== confirmNewPassword) {
+            passwordMessage.textContent = '비밀번호가 일치하지 않습니다.';
+            passwordMessage.style.color = 'red';
+        } else {
+            passwordMessage.textContent = '비밀번호가 일치합니다.';
+            passwordMessage.style.color = 'green';
+        }
+    }
+}
+
 function sendNumber() {
     $("#mail_number").css("display", "block");
     $.ajax({
@@ -107,4 +129,13 @@ $(document).ready(function() {
             event.preventDefault(); // 폼 제출 막기
         }
     });
+	
+	// 비밀번호 변경 폼의 submit 이벤트에 validatePassword 함수 추가
+	$("#passwordChangeForm").on("submit", function(event) {
+	       changevalidatePassword();
+	       const passwordMessage = document.getElementById('passwordMessage');
+	       if (passwordMessage.textContent.includes('일치하지 않습니다') || passwordMessage.textContent.includes('포함하여 10자 이상이어야 합니다')) {
+	           event.preventDefault();
+	       }
+	   });
 });
