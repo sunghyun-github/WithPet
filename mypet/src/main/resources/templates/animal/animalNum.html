@@ -1,10 +1,208 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .screen {
+            width: 100%;
+            height: 50px;
+            border-top: 1px solid #e6e6e6;
+            border-bottom: 1px solid #e6e6e6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .overlap-group {
+            display: flex;
+            gap: 20px; /* 메뉴 항목 사이의 간격 */
+        }
+
+        .text-wrapper, .screen-div {
+            font-weight: 700;
+            font-size: 18px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .rectangle {
+            width: 100%;
+            height: 1px;
+            background-color: #5d5a88;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .frame {
+            max-width: 1220px;
+            margin: 0 auto;
+            background-color: #f3f3f3;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            margin-bottom: 20px;
+        }
+
+        .heading {
+            font-weight: 700;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .paragraph {
+            font-size: 16px;
+            line-height: 1.5;
+            text-align: center;
+            color: #555;
+        }
+
+        .container-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 50px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .master-primary {
+            display: inline-block;
+            padding: 14px 24px;
+            border-radius: 50px;
+            background-color: #5d5a88;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .master-primary:hover {
+            background-color: #4a4671;
+        }
+
+        .animal-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px; /* 사진 사이의 간격 설정 */
+            justify-content: center;
+        }
+
+        .animal-item {
+            width: 300px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+
+        .animal-item img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            border-radius: 8px; /* 사진에 둥근 모서리 설정 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 사진에 그림자 효과 추가 */
+        }
+    </style>
 </head>
 <body>
+    <div class="screen">
+        <div class="overlap-group">
+            <a th:href="@{/animal/animalBoard}" class="text-wrapper">유기동물 입양</a>
+            <a th:href="@{/animal/animalNum}" class="screen-div">동물 등록 번호 검색</a>
+            <a th:href="@{/animal/animalShelters}" class="screen-div">주변 보호소 검색</a>
+        </div>
+        <div class="rectangle"></div>
+    </div>
+    <div class="frame">
+        <div class="title">
+            <div class="heading">동물등록번호 검색</div>
+            <p class="paragraph">
+                ※ 동물등록번호 검색의 경우 소유주가 동물보호관리시스템에 회원가입이 되어 있고,<br>
+                소유주의 정보가 등록되어 있어야 정상적으로 조회가 가능합니다. <br>
+                ※ 임의로 동물등록 사항을 확인하는 것을 방지하기 위하여, 소유주의 개인정보를 추가 입력하여야 동물등록번호 검색이 가능합니다.
+            </p>
+        </div>
+        <div class="view">
+            <div class="container-wrapper">
+                <input type="text" id="abdmIdInput" class="input-field" placeholder="동물등록번호">
+                <div class="master-primary" id="searchButton">검색</div>
+            </div>
+        </div>
+    </div>
+    <div id="animalResults" class="animal-list"></div>
 
+    <script>
+    $(document).ready(function() {
+        $('#searchButton').click(function() {
+            var abdmId = $('#abdmIdInput').val().trim();
+            if (abdmId !== '') {
+                console.log('Searching for animal with ID:', abdmId);
+                $.ajax({
+                    type: 'GET',
+                    url: '/animal/' + abdmId,
+                    success: function(response) {
+                        console.log('Response received:', response);
+                        displayAnimals([response]);
+                    },
+                    error: function(xhr, status, error) {
+                        alert('동물 정보를 찾을 수 없습니다.');
+                        console.error('Error:', error);
+                        console.error('Status:', status);
+                        console.error('XHR:', xhr);
+                    }
+                });
+            } else {
+                alert('동물등록번호를 입력해주세요.');
+            }
+        });
+
+        function displayAnimals(animals) {
+            $('#animalResults').empty();
+            animals.forEach(function(animal) {
+                var imageUrl = '';
+                if (animal.imageCours) {
+                    imageUrl = animal.imageCours.startsWith('http') ? animal.imageCours : 'http://' + animal.imageCours;
+                } else if (animal.photoUrl) {
+                    imageUrl = animal.photoUrl.startsWith('http') ? animal.photoUrl : 'http://' + animal.photoUrl;
+                } else {
+                    imageUrl = 'https://loremflickr.com/cache/resized/521_31094492753_0bb59abbde_z_600_400_nofilter.jpg'; // 기본 이미지 경로 설정
+                }
+
+                var animalHtml = '<div class="animal-item">' +
+                                    '<img src="' + imageUrl + '" alt="Animal">' +
+                                    '<div>' + (animal.nm ? animal.nm : '') + '</div>' +
+                                    '<div>' + (animal.speciesNm ? animal.speciesNm : (animal.spcs ? animal.spcs : '')) + '</div>' +
+                                    '<div>' + (animal.breeds ? animal.breeds : '') + '</div>' +
+                                    '<div>' + (animal.sexNm ? animal.sexNm : (animal.sexdstn ? animal.sexdstn : '')) + '</div>' +
+                                    '<div>' + (animal.ageInfo ? animal.ageInfo : (animal.age ? animal.age : '')) + '</div>' +
+                                    '<div>' + (animal.sfetrInfo ? animal.sfetrInfo : (animal.intrcnCn ? animal.intrcnCn : '')) + '</div>' +
+                                 '</div>';
+                $('#animalResults').append(animalHtml);
+            });
+        }
+    });
+    </script>
 </body>
 </html>
