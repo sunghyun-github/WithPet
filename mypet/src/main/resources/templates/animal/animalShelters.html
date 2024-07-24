@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>경기 유기동물 지도</title>
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=49a94a748769df934430e8ac57310ad0&libraries=services"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            width: 100%;
+            height: 500px;
+        }
+        .screen {
+            background-color: #f0f0f0;
+            padding: 20px;
+            text-align: center;
+        }
+        .overlap-group {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .text-wrapper, .screen-div {
+            text-decoration: none;
+            color: #333;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .text-wrapper:hover, .screen-div:hover {
+            background-color: #ddd;
+        }
+        .rectangle {
+            height: 2px;
+            background-color: #ccc;
+            margin: 20px 0;
+        }
+        .section-shelters {
+            text-align: left;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .small-text {
+            font-size: 12px;
+            color: #888;
+        }
+        .search-input {
+            width: 300px;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .search-results {
+            text-align: left;
+        }
+        .search-item {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .search-item:hover {
+            background-color: #e9e9e9;
+        }
+        .info-window {
+            width: 200px;
+        }
+        .info-header {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .info-body {
+            margin-bottom: 10px;
+        }
+        .info-item {
+            margin-bottom: 5px;
+        }
+        .info-label {
+            font-weight: bold;
+        }
+        .info-image {
+            max-width: 200px;
+            max-height: 200px;
+        }
+        .close-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #f44336;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="screen">
+        <div class="overlap-group">
+            <a href="/animal/animalBoard" class="text-wrapper">유기동물 입양</a>
+            <a href="/animal/animalNum" class="screen-div">동물 등록 번호 검색</a>
+            <a href="/animal/animalShelters" class="screen-div">주변 보호소 검색</a>
+        </div>
+        <div class="rectangle"></div>
+        <div class="section-shelters">
+            <h2>주변 보호소 검색</h2>
+            <p class="small-text">※ 동물등록번호 검색의 경우 소유주가 동물보호관리시스템에 회원가입이 되어 있고, 소유주의 정보가 등록되어 있어야 정상적으로 조회가 가능합니다.</p>
+            <p class="small-text">※ 임의로 동물등록 사항을 확인하는 것을 방지하기 위하여, 소유주의 개인정보를 추가 입력하여야 동물등록번호 검색이 가능합니다.</p>
+            <input type="text" id="searchInput" class="search-input" placeholder="장소 검색 ex) 경기">
+            <div id="searchResults" class="search-results"></div>
+        </div>
+    </div>
+    <div id="map"></div>
+    <script>
+        var mapContainer = document.getElementById('map');
+        var options = {
+            center: new kakao.maps.LatLng(37.566826, 126.9786567), // 서울시청을 중심으로 지도 초기화
+            level: 8 // 지도 확대 레벨 (1부터 14까지 숫자가 클수록 확대)
+        };
+        var map = new kakao.maps.Map(mapContainer, options);
+
+        // 지도 마커
+        var imageSrc = '/static/images/free-icon-dog-2965370.png'; // 로컬 이미지의 경로입니다
+        var imageSize = new kakao.maps.Size(64, 69); // 마커이미지의 크기입니다
+        var imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption); // 마커 이미지 생성
+
+        var apiUrl = "https://openapi.gg.go.kr/AbdmAnimalProtect?KEY=2489db646b404d58bd848a19a2208e80&pIndex=1&type=json";
+        
+        // JSON을 가져오고 처리하는 함수
+        function fetchAndProcessJson() {
+            fetch(apiUrl)
+                .then(response => response.json()) // JSON 데이터로 변환
+                .then(data => {
+                    var items = data.AbdmAnimalProtect[1].row;
+
+                    items.forEach(function(item) {
+                        var latitude = parseFloat(item.REFINE_WGS84_LAT);
+                        var longitude = parseFloat(item.REFINE_WGS84_LOGT);
+                        var species = item.SPECIES_NM;
+                        var location = item.DISCVRY_PLC_INFO;
+                        var image = item.IMAGE_COURS;
+                        var thumbImage = item.THUMB_IMAGE_COURS;
+                        var protectPlc = item.PROTECT_PLC;
+
+                        // 마커 생성
+                        var markerPosition = new kakao.maps.LatLng(latitude, longitude);
+                        var marker = new kakao.maps.Marker({
+                            position: markerPosition,
+                            image: markerImage // 생성한 마커 이미지를 설정
+                        });
+                        marker.setMap(map);
+
+                        // 마커 클릭 이벤트 리스너 추가
+                        kakao.maps.event.addListener(marker, 'click', function() {
+                            var content = '<div class="info-window">' +
+                                            '<div class="info-header">' +
+                                                '<strong>유기동물 정보</strong>' +
+                                            '</div>' +
+                                            '<div class="info-body">' +
+                                                '<div class="info-item">' +
+                                                    '<span class="info-label">종:</span>' +
+                                                    '<span class="info-value">' + species + '</span>' +
+                                                '</div>' +
+                                                '<div class="info-item">' +
+                                                    '<span class="info-label">발견 장소:</span>' +
+                                                    '<span class="info-value">' + location + '</span>' +
+                                                '</div>' +
+                                                '<div class="info-item">' +
+                                                    '<span class="info-label">보호 장소:</span>' +
+                                                    '<span class="info-value">' + protectPlc + '</span>' +
+                                                '</div>';
+
+                            if (image) {
+                                content += '<div class="info-item">' +
+                                                '<span class="info-label">사진:</span>' +
+                                                '<img src="' + image + '" class="info-image" style="max-width: 200px; max-height: 200px;">' + // 이미지 크기 조정
+                                           '</div>';
+                            }
+
+                            content += '<button class="close-button" onclick="closeInfoWindow()">닫기</button>' + // 닫기 버튼 추가
+                                       '</div>' +
+                                       '</div>';
+
+                            var infowindow = new kakao.maps.InfoWindow({
+                                content: content
+                            });
+                            infowindow.open(map, marker);
+
+                            // 닫기 버튼 클릭 시 인포윈도우 닫기
+                            window.closeInfoWindow = function() {
+                                infowindow.close();
+                            };
+                        });
+                    });
+                })
+                .catch(error => console.error('API 호출 오류:', error));
+        }
+
+        // 장소 검색 기능 추가
+        var searchInput = document.getElementById('searchInput');
+        var searchResults = document.getElementById('searchResults');
+
+        searchInput.addEventListener('keyup', function(event) {
+            var keyword = event.target.value.trim();
+
+            if (keyword.length > 0) {
+                searchPlaces(keyword);
+            } else {
+                searchResults.innerHTML = '';
+            }
+        });
+
+        function searchPlaces(keyword) {
+            var ps = new kakao.maps.services.Places();
+
+            ps.keywordSearch(keyword, function(data, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    displaySearchResults(data);
+                } else {
+                    console.error('장소 검색 오류:', status);
+                }
+            });
+        }
+
+        function displaySearchResults(places) {
+            searchResults.innerHTML = '';
+
+            places.forEach(function(place) {
+                var name = place.place_name;
+                var address = place.address_name;
+                var content = '<div class="search-item" onclick="moveToPlace(' + place.y + ', ' + place.x + ')">' +
+                                '<div><strong>' + name + '</strong></div>' +
+                                '<div>' + address + '</div>' +
+                              '</div>';
+                searchResults.innerHTML += content;
+            });
+        }
+
+        function moveToPlace(lat, lng) {
+            var moveLatLng = new kakao.maps.LatLng(lat, lng);
+            map.panTo(moveLatLng);
+        }
+
+        // 페이지 로드 시 API 호출 및 처리
+        window.onload = function() {
+            fetchAndProcessJson();
+        };
+    </script>
+</body>
+</html>

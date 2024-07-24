@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>동물 목록</title>
+<style>
+/* CSS 스타일은 여기에 포함 */
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.animal-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.animal-item {
+    flex: 0 0 calc(33.33% - 20px);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.animal-item img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.head {
+    font-size: 36px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.paragraph {
+    font-size: 18px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+.filter-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.filter-group label {
+    font-size: 16px;
+    font-weight: 500;
+}
+  .animal-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .overlap-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .text-wrapper, .screen-div {
+            padding: 10px 20px;
+            background-color: #ece6cc;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .text-wrapper:hover, .screen-div:hover {
+            background-color: #ece6cc;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .rectangle {
+            width: 100%;
+            height: 4px;
+            background-color: #ece6cc;
+        }
+</style>
+</head>
+<body>
+<div class="screen">
+        <div class="overlap-group">
+            <a th:href="@{/animal/animalBoard}" class="text-wrapper">유기동물 입양</a>
+            <a th:href="@{/animal/animalNum}" class="screen-div">동물 등록 번호 검색</a>
+            <a th:href="@{/animal/animalShelters}" class="screen-div">주변 보호소 검색</a>
+        </div>
+        <div class="rectangle"></div>
+    </div>
+<div class="head">입양 대기 유기동물</div>
+<div>
+    <p class="paragraph">143마리의 친구들이 보호자를 기다리고 있습니다.<br/>멍냥 친구들에게 새로운 가족을 찾아주세요!</p>
+</div>
+
+<!-- 필터링 체크박스 -->
+<div class="filter-section">
+    <div class="filter-group">
+        <label>종류:</label>
+        <input type="checkbox" id="cat" onclick="filterAnimals()"> 고양이
+        <input type="checkbox" id="dog" onclick="filterAnimals()"> 강아지
+    </div>
+    <div class="filter-group">
+        <label>지역:</label>
+        <input type="checkbox" id="seoul" onclick="filterAnimals()"> 서울
+        <input type="checkbox" id="gyeonggi" onclick="filterAnimals()"> 경기
+        <input type="checkbox" id="allRegions" onclick="filterAnimals()"> 전체
+    </div>
+    <div class="filter-group">
+        <label>성별:</label>
+        <input type="checkbox" id="male" onclick="filterAnimals()"> 수컷
+        <input type="checkbox" id="female" onclick="filterAnimals()"> 암컷
+        <input type="checkbox" id="unknown" onclick="filterAnimals()"> 알수없음
+    </div>
+</div>
+
+<h2>서울 동물들</h2>
+<div class="animal-list" id="seoulAnimals">
+    <!-- Thymeleaf 반복문을 이용해 서울 동물들을 표시 -->
+    <div th:each="animal : ${seoulAnimals}" class="animal-item" th:data-species="${animal.spcs}" th:data-region="seoul" th:data-sex="${animal.sexdstn}">
+        <!-- 동물 상세 페이지 링크 -->
+        <a th:href="@{'/animal/animal-details/' + ${animal.animalNo}}">
+            <!-- 동물 이미지 표시 -->
+          <img th:if="${animal.photoUrl != null && !animal.photoUrl.startsWith('http')}" th:src="'http://' + ${animal.photoUrl}" alt="동물 이미지" />    
+        </a>
+        <!-- 동물 고유번호 표시 -->
+        <p>유기고유번호: <span th:text="${animal.animalNo}"></span></p>
+        <p>성별: <span th:text="${animal.sexdstn}"></span></p>
+    </div>
+</div>
+
+<h2>경기 동물들</h2>
+<div class="animal-list" id="gyeonggiAnimals">
+    <!-- Thymeleaf 반복문을 이용해 경기 동물들을 표시 -->
+    <div th:each="animal : ${gyeonggiAnimals}" class="animal-item" th:data-species="${animal.speciesNm}" th:data-region="gyeonggi" th:data-sex="${animal.sexNm}">
+        <!-- 동물 상세 페이지 링크 -->
+        <a th:href="@{'/animal/animal-details/' + ${animal.abdmIdntfyNo}}">
+            <!-- 동물 이미지 표시 -->
+            <img th:src="${animal.imageCours.startsWith('http') ? animal.imageCours : 'http://' + animal.imageCours}" alt="동물 이미지" />
+        </a>
+        <!-- 동물 고유번호 표시 -->
+        <p>고유번호: <span th:text="${animal.abdmIdntfyNo}"></span></p>
+        <p>성별: <span th:text="${animal.sexNm}"></span></p>
+        <p>보호장소: <span th:text="${animal.protectPlc}"></span></p>
+        <p>중성화여부: <span th:text="${animal.neutYn}"></span></p>
+    </div>
+</div>
+
+<script>
+function filterAnimals() {
+    const isCatChecked = document.getElementById('cat').checked;
+    const isDogChecked = document.getElementById('dog').checked;
+    const isSeoulChecked = document.getElementById('seoul').checked;
+    const isGyeonggiChecked = document.getElementById('gyeonggi').checked;
+    const isAllRegionsChecked = document.getElementById('allRegions').checked;
+    const isMaleChecked = document.getElementById('male').checked;
+    const isFemaleChecked = document.getElementById('female').checked;
+    const isUnknownChecked = document.getElementById('unknown').checked;
+
+    const seoulAnimals = document.querySelectorAll('#seoulAnimals .animal-item');
+    const gyeonggiAnimals = document.querySelectorAll('#gyeonggiAnimals .animal-item');
+
+    seoulAnimals.forEach(animal => {
+        const species = animal.getAttribute('data-species');
+        const region = animal.getAttribute('data-region');
+        const sex = animal.getAttribute('data-sex');
+        animal.style.display = 'none';
+
+        if (
+            ((isCatChecked && species === 'CAT') || (isDogChecked && species === 'DOG') || (!isCatChecked && !isDogChecked)) &&
+            ((isSeoulChecked && region === 'seoul') || (!isSeoulChecked && isAllRegionsChecked) || (!isSeoulChecked && !isGyeonggiChecked && !isAllRegionsChecked)) &&
+            ((isMaleChecked && sex === 'M') || (isFemaleChecked && sex === 'F') || (isUnknownChecked && sex === 'Q') || (!isMaleChecked && !isFemaleChecked && !isUnknownChecked))
+        ) {
+            animal.style.display = 'block';
+        }
+    });
+
+    gyeonggiAnimals.forEach(animal => {
+        const species = animal.getAttribute('data-species');
+        const region = animal.getAttribute('data-region');
+        const sex = animal.getAttribute('data-sex');
+        animal.style.display = 'none';
+
+        if (
+            ((isCatChecked && species.includes('고양이')) || (isDogChecked && species.includes('개')) || (!isCatChecked && !isDogChecked)) &&
+            ((isGyeonggiChecked && region === 'gyeonggi') || (!isGyeonggiChecked && isAllRegionsChecked) || (!isSeoulChecked && !isGyeonggiChecked && !isAllRegionsChecked)) &&
+            ((isMaleChecked && sex === 'M') || (isFemaleChecked && sex === 'F') || (isUnknownChecked && sex === 'Q') || (!isMaleChecked && !isFemaleChecked && !isUnknownChecked))
+        ) {
+            animal.style.display = 'block';
+        }
+    });
+}
+</script>
+
+</body>
+</html>
