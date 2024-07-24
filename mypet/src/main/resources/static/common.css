@@ -205,7 +205,6 @@ h6 {
 /* -webkit-appearance: none -> iOS 폼요소 기본모양 제거 */
 
 input,
-select,
 textarea,
 button {
   vertical-align: middle;
@@ -219,6 +218,19 @@ button {
   /*포커스시 아웃라인 제거 */
   outline: none;
 }
+select {
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+/*   -webkit-appearance: none; */
+/*   -moz-appearance: none; */
+/*   appearance: none; */
+/*   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1); */
+  /*포커스시 아웃라인 제거 */
+  outline: none;
+}
+
 
 /* textarea 리사이즈 막기 */
 textarea {
@@ -290,11 +302,11 @@ table {
   display: none;
 } */
 
-/* 텍스트 선택 컬러 */
-/* ::selection {
+/* 텍스트 선택 컬러 
+::selection {
   background: var(--primary-color);
   color: #ffffff;
-} */
+}*/
 
 /* legend,caption, 섹션제목 안보이게 */
 legend,
@@ -430,10 +442,10 @@ input[type='radio']:checked + label:after {
 
 /* select 공통 */
 /* 익스 화살표 제거 */
-select::-ms-expand {
-  display: none;
-}
-
+/* select::-ms-expand { */
+/*   display: none; */
+/* } */
+/*
 .select_wrap {
   display: inline-block;
   width: 192px;
@@ -460,8 +472,17 @@ select::-ms-expand {
   cursor: pointer;
   background: none;
 }
-
+*/
 /* select 커스텀 */
+.select_custom {
+  width: 130px;
+  display: inline-block;
+  border: 1px solid #ddd;
+  vertical-align: middle;
+  margin-right: 10px;
+  height: 30px;
+}
+/* 
 .select_custom {
   width: 192px;
   display: inline-block;
@@ -487,7 +508,7 @@ select::-ms-expand {
 }
 .select_custom .select_list_wrap {
   position: relative;
-  /* display: none; */
+  display: none;
 }
 .select_custom .select_list {
   position: absolute;
@@ -506,6 +527,7 @@ select::-ms-expand {
 .select_custom .select_list a:hover {
   background: #eee;
 }
+*/
 
 /* textarea */
 textarea {
@@ -562,7 +584,7 @@ textarea {
   font-size: 14px;
   border-radius: 30px;
   text-align: center;
-  padding: 6px 25px;
+  padding: 6px 20px;
   display: inline-flex;
   align-items: center;
   transition: all 0.2s;
