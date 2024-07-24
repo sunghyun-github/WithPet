@@ -27,7 +27,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation' 
     implementation 'org.springframework.boot:spring-boot-starter-webflux' 
     implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
@@ -37,7 +37,11 @@ dependencies {
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect' 
     implementation 'javax.xml.bind:jaxb-api:2.3.1' 
     implementation 'javax.validation:validation-api:2.0.1.Final' 
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' 
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' 
+    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'commons-io:commons-io:2.16.1'
+    implementation 'commons-fileupload:commons-fileupload:1.5'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.jupiter:junit-jupiter' 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -45,9 +49,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'mysql:mysql-connector-java:8.0.32'
-    
-    // 성현거
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }	
 
 tasks.named('test') {
