@@ -62,6 +62,7 @@
   font-weight: 500;
   transition: all 0.2s;
   padding: 0 15px;
+  white-space:nowrap 
 }
 #header .gnb > li > a:hover {
   color: var(--point-color2);
@@ -151,6 +152,12 @@ h2 {
 .recommend i {
   padding-right: 5px;
   /* 	color: var(--txt-color-600); */
+}
+
+.disabled {
+  /* 클릭 이벤트 무시 */
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 /*---------------- 로그인 ----------------*/
@@ -296,7 +303,7 @@ h2 {
 }
 
 .board_list_wrap th:nth-child(1) {
-  width: 60px;
+  width: 70px;
 }
 .board_list_wrap th:nth-child(2) {
   width: 50%;
@@ -422,12 +429,12 @@ h2 {
 }
 
 .detail_content {
-  padding: 10px 10px;
+  padding: 10px 20px;
   border-bottom: 1px solid var(--border-color);
 }
 
 .detail_content .content {
-  padding: 50px 0 100px;
+  padding: 20px 0 100px;
 }
 .detail_content .content table,
 .detail_content .content td {
@@ -439,6 +446,14 @@ h2 {
 }
 .detail_content .content_bottom {
   text-align: center;
+}
+
+.detail_wrap .list {
+	margin-bottom: 10px;
+	text-align: right;
+}
+.detail_wrap .list i {
+	padding-right: 5px;
 }
 
 /* 댓글 */
@@ -511,7 +526,7 @@ h2 {
   width: calc(100% - 80px);
 }
 .comment_actions {
-  width: 110px;
+  width: 125px;
   text-align: right;
 }
 .comment_actions button {
@@ -527,20 +542,378 @@ h2 {
   margin: 0;
 }
 
-/* .comment_list_wrap table { */
-/* 	border-bottom: 1px solid var(--border-color); */
-/* 	padding: 50px 0; */
 
-/* } */
-/* .comment_list_wrap td:nth-child(2) { */
-/* 	text-align: right; */
-/* 	width: 200px; */
-/* } */
+/* ---------------- Q&A ----------------*/
 
-/* Q&A */
-
-.disabled-link {
-  /* 클릭 이벤트 무시 */
-  pointer-events: none;
-  opacity: 0.6;
+.qna_form {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
 }
+.qna_detail .content {
+	padding: 20px 0 30px;
+}
+.qna_detail .detail_content {
+	padding: 10px 20px 100px;
+}
+.qna_detail .title {
+	padding-left: 20px;
+	margin-left: 5px;
+	position: relative;
+}
+.qna_detail .title::before {
+	content: '';
+	position: absolute;
+ 	width: 1px;
+ 	height: 14px;
+	top: 5px;
+	left: 0;
+	background: var(--txt-color-400);
+}
+
+
+
+/* ---------------- 아이디 찾기 ----------------*/
+.find_id_wrap h2 {
+   margin-bottom: 40px;
+}
+
+.find_id_wrap .find_id_area {
+   width: 600px;
+   margin: 0 auto;
+}
+
+.find_id_form {
+   display: flex;
+   flex-direction: column;
+   gap: 25px;
+   border-bottom: 1px solid var(--border-color);
+   padding-bottom: 40px;
+}
+
+.find_id_wrap .input_wrap input {
+   width: 100%;
+   height: 50px;
+   margin-top: 15px;
+   border: none;
+   border-radius: 7px;
+   padding: 0 30px;
+   background: var(--point-color4);
+}
+
+.find_id_wrap .input_wrap label {
+   font-size: 16px;
+   color: var(--txt-color-600);
+   margin-bottom: 8px;
+}
+
+.find_id_wrap .btn_wrap .btn {
+   width: 100%;
+   height: 50px;
+   background: var(--point-color3);
+   border: var(--point-color3);
+   color: #fff;
+}
+
+.error-message p {
+   color: red;
+   text-align: center;
+   margin-top: 20px;
+}
+
+/*---------------- 비밀번호 찾기 ----------------*/
+.find_password_wrap h2 {
+   margin-bottom: 40px;
+   font-size: 24px;
+   color: var(--txt-color-600);
+   text-align: center;
+}
+
+.find_password_wrap .find_password_area {
+   width: 600px;
+   margin: 0 auto;
+}
+
+.find_password_form {
+   display: flex;
+   flex-direction: column;
+   gap: 25px;
+   border-bottom: 1px solid var(--border-color);
+   padding-bottom: 40px;
+}
+
+.find_password_wrap .input_wrap {
+   display: flex;
+   flex-direction: column;
+}
+
+.find_password_wrap .input_wrap label {
+   font-size: 16px;
+   color: var(--txt-color-600);
+   margin-bottom: 8px;
+}
+
+.find_password_wrap .input_wrap input {
+   width: 100%;
+   height: 50px;
+   margin-top: 5px;
+   border: 1px solid #ccc;
+   border-radius: 7px;
+   padding: 0 15px;
+   background: var(--point-color4);
+   font-size: 16px;
+}
+
+.find_password_wrap .btn_wrap {
+   margin-top: 30px;
+}
+
+.find_password_wrap .btn_wrap .btn {
+   width: 100%;
+   height: 50px;
+   background: var(--point-color3);
+   border: none;
+   color: #fff;
+   cursor: pointer;
+   font-size: 16px;
+   border-radius: 7px;
+   text-align: center;
+   line-height: 50px;
+}
+
+.error-message p {
+   color: red;
+   text-align: center;
+   margin-top: 20px;
+}
+
+/*---------------- 아이디 찾기 결과 ----------------*/
+.find_id_result_wrap {
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.find_id_result_wrap h1 {
+    margin-bottom: 20px;
+    font-size: 26px;
+    color: var(--txt-color-700);
+    font-weight: 600;
+}
+
+.find_id_result_wrap p {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.find_id_result_wrap .user-id {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--txt-color-400);
+    background: var(--point-color4);
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+}
+
+.find_id_result_wrap .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 7px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #fff;
+    background: var(--point-color3);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin: 10px 5px; /* Add margin for spacing between buttons */
+}
+
+.find_id_result_wrap .btn-primary:hover {
+    background: var(--point-color2);
+    transform: translateY(-2px);
+}
+
+.find_id_result_wrap .btn-primary:active {
+    background: var(--point-color3);
+    transform: translateY(0);
+}
+
+
+
+/*---------------- 비밀번호 찾기 결과----------------*/
+.reset_password_wrap {
+   text-align: center;
+   width: 100%;
+   max-width: 600px;
+   margin: 40px auto;
+   padding: 40px;
+   border: 1px solid var(--border-color);
+   border-radius: 10px;
+   background: #fff;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reset_password_wrap h1 {
+   margin-bottom: 20px;
+   font-size: 26px;
+   color: var(--txt-color-700);
+   font-weight: 600;
+}
+
+.pw-success-message {
+   font-size: 20px;
+   color: var(--success-color);
+   margin-bottom: 20px;
+   font-weight: 500;
+   line-height: 1.4;
+}
+
+.new-password {
+   font-size: 22px;
+   font-weight: 600;
+   color: var(--txt-color-400);
+   background: var(--point-color4);
+   padding: 10px;
+   border-radius: 5px;
+   display: inline-block;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   margin: 10px 0;
+}
+
+.pw-recommendation {
+   font-size: 16px;
+   color: var(--danger-color);
+   margin-bottom: 30px;
+   line-height: 1.6;
+}
+
+.pw-btn {
+   display: inline-block;
+   padding: 12px 24px;
+   border-radius: 7px;
+   text-align: center;
+   font-size: 16px;
+   font-weight: 500;
+   text-decoration: none;
+   color: #fff;
+   background: var(--point-color3);
+   transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.pw-btn-primary {
+   background: var(--point-color3);
+}
+
+.pw-btn-primary:hover {
+   background: var(--point-color2);
+   transform: translateY(-2px);
+}
+
+.btn-primary:active {
+   background: var(--point-color3);
+   transform: translateY(0);
+}
+
+/*---------------- 비밀번호 변경----------------*/
+.password-change-wrap {
+    text-align: center;
+    width: 600px;
+    margin: 0 auto;
+    padding: 40px 30px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.password-change-wrap h1 {
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: var(--txt-color-700);
+}
+
+.password-change-wrap form {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+    padding: 20px 0;
+}
+
+.password-change-wrap label {
+    font-size: 18px;
+    color: var(--txt-color-700);
+    display: block;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.password-change-wrap input[type="password"] {
+    width: 100%;
+    height: 45px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0 20px;
+    background: #ffffff;
+    font-size: 16px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.password-change-wrap p {
+    font-size: 16px;
+    color: var(--txt-color-600);
+    margin-bottom: 25px;
+}
+
+.password-change-wrap .btn {
+    width: 100%;
+    height: 50px;
+    background: var(--point-color3);
+    border: none;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.password-change-wrap .btn:hover {
+    background: var(--point-color2);
+    transform: scale(1.02);
+}
+
+.cp-error-message p, .cp-success-message p {
+    font-size: 18px;
+    margin-top: 20px;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.cp-error-message p {
+    color: var(--danger-color);
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid var(--danger-color);
+}
+
+.cp-success-message p {
+    color: var(--success-color);
+    background: rgba(0, 255, 0, 0.1);
+    border: 1px solid var(--success-color);
+}
+
+
+
+

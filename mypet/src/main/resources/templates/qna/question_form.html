@@ -1,14 +1,13 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content">
-	<h5>질문등록</h5>
-	<form th:object="${questionForm}" method="post" enctype="multipart/form-data">
+<div layout:fragment="content" class="container">
+	<div class="inner write_wrap">
+	<form th:object="${questionForm}" method="post" enctype="multipart/form-data" class="qna_form">
 		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 		<div role="alert" th:if="${#fields.hasAnyErrors()}">
 			<div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
 		</div>
 		<div>
-			<label for="category">카테고리</label>
-			<select th:field="*{category}">
+			<select th:field="*{category}" class="select_custom">
 				<option value="" selected>카테고리</option>
 				<option value="입양">입양</option>
 				<option value="회원정보">회원정보</option>
@@ -16,21 +15,21 @@
 				<option value="기타">기타</option>
 			</select>
 		</div>
-		<div>
-			<label for="subject">제목</label>
-			<input type="text" th:field="*{subject}">
+		<div class="title_wrap">
+			<input type="text" th:field="*{subject}" placeholder="제목">
+		</div>
+		<div class="content_area">
+			<textarea th:field="*{content}" rows="10" placeholder="내용"></textarea>
 		</div>
 		<div>
-			<label for="content">내용</label>
-			<textarea th:field="*{content}" rows="10"></textarea>
-		</div>
-		<div>
-			<label for="files">첨부 파일</label>
 			<input type="file" name="files" id="files" multiple>
 		</div>
-		<input type="submit" value="저장하기">
-		<a th:href="@{/qna_question/list}">취소</a>
+		<div class="btn_wrap">
+			<a th:href="@{/qna_question/list}" class="btn write_btn">취소하기</a>
+			<input type="submit" value="등록하기" class="btn write_btn" />
+		</div>
+		
 	</form>
 </div>
-
+</div>
 </html>

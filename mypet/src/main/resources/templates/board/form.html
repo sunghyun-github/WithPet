@@ -42,48 +42,44 @@
 			['view',['codeview']]],
 		fontSizes : ['8','10','12','14','16','18','20','22','24','28','30','36','50','72'],
 		lineHeights : ['0.2','0.3','0.4','0.5','0.6','0.8','1.0','1.2','1.4','1.5','2.0','3.0'],
-   	   	callbacks : {                                                    
-  			onImageUpload : function(files) {   //, editor, welEditable
-                  // 파일 업로드(다중업로드를 위해 반복문 사용)
-  				for (var i = files.length - 1; i >= 0; i--) {
-                      imageUploader(files[i], this, token, header)
-  				}
-  			},
-	        }
-	      });
-	    });
+		callbacks: {
+            onImageUpload: function(files) {
+            	for (var i = 0; i < files.length; i++) {
+                    uploadImage(files[i], this, token, header);
+                }
+            }
+        }
+    });
+      
+      function uploadImage(file, editor, token, header) {
+          var formData = new FormData();
+          formData.append('file', file);
+          formData.append('_csrf', token);
+
+          $.ajax({
+              url: '/files/uploadSummernoteImageFile',
+              type: 'POST',
+              data: formData,
+              contentType: false,
+              processData: false,
+              beforeSend: function(xhr) {
+                  xhr.setRequestHeader(header, token);
+              },
+              success: function(data) {
+                  var url = data.url;
+                  $(editor).summernote('insertImage', url, function($image) {
+                      $image.css('width', "60%");
+                  });
+              },
+              error: function() {
+                  alert('이미지 업로드 실패');
+              }
+          });
+      }
+  });
   
   
-//이미지 업로드 ajax
-  function imageUploader(file, el, token, header) {
-	  var formData = new FormData();
-	  formData.append('file', file);
-	  formData.append('_csrf', token);
-	  
-      $.ajax({
-          data: formData,
-          type: 'POST',
-          url: '/post/image-upload',
-          contentType : false,
-  		  processData : false,
-          enctype: 'multipart/form-data',
-          beforeSend: function(xhr) {
-            xhr.setRequestHeader(header, token);
-          },
-          success: function (data) {
-        	  $(el).summernote('insertImage', "/upload/" + data, function($image) {
-                  $image.css('width', "60%");
-               });
-              console.log(data);
-          },
-          error: function() {
-              alert('이미지 업로드 실패');
-          }
-      });
-  }
   
 </script>
- </div>
-  
-  
+</div>  
 </html>

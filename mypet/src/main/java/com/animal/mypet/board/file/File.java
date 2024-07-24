@@ -1,6 +1,4 @@
-package com.animal.mypet.qna.file;
-
-import com.animal.mypet.qna.question.Question;
+package com.animal.mypet.board.file;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,10 +11,10 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name = "QnaFile")
+@Entity(name = "BoardFile")
 @Getter
 @Setter
-@Table(name = "qna_file")
+@Table(name = "board_file")
 public class File {
 
 	@Id
@@ -33,7 +31,4 @@ public class File {
 	@Column(name = "file_type", nullable = false)
 	private String fileType; // 파일 타입
 
-	@ManyToOne
-	@JoinColumn(name = "question_idx")
-	private Question question; // 질문과의 연관 관계
 }

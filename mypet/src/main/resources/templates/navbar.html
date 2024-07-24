@@ -9,6 +9,7 @@
 				<li><a href="/">반려동물 용품</a></li>
 				<li><a th:href="@{|/board/list|}">커뮤니티</a></li>
 				<li><a th:href="@{|/qna_question/list|}">Q&A</a></li>
+				<li><a href="/user/changePassword">비밀번호 변경</a></li>
 <!--                     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/user/changePassword|}">비밀번호 변경</a> 추가된 링크 -->
 <!--                     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/user/deleteAccount|}">회원 탈퇴</a> -->
 			</ul>
@@ -20,7 +21,7 @@
 					</li>
 					<li>
 						<a sec:authorize="isAnonymous()" th:href="@{|/user/signup|}" class="btn">회원가입</a>
-						<a sec:authorize="isAuthenticated()" th:href="@{|/user/mypage|}" class="btn">마이페이지</a>
+						<a sec:authorize="isAuthenticated() and !hasAuthority('ADMIN')" th:href="@{|/user/mypage|}" class="btn">마이페이지</a>
 						<a sec:authorize="hasAuthority('ADMIN')" th:href="@{|/user/admin|}" class="btn">관리자 페이지</a>
 					</li>
 				</ul>
