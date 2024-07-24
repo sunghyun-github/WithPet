@@ -6,10 +6,13 @@
     <title>아이디 찾기 결과</title>
 </head>
 <body>
-    <div layout:fragment="content">
-        <h1>아이디 찾기 결과</h1>
-        <p>회원님의 아이디는: <span th:text="${userId}"></span></p>
-        <a href="/user/login" class="btn btn-primary">로그인하러 가기</a>
+    <div layout:fragment="content" class="container">
+        <div class="inner find_id_result_wrap">
+            <h1>아이디 찾기 결과</h1>
+            <p>회원님의 아이디는: <span th:text="${userId}" class="user-id"></span></p>
+            <a href="/user/login" class="btn btn-primary">로그인하러 가기</a>
+            <a href="/user/findPassword" class="btn btn-primary">비밀번호 찾기</a>
+        </div>
     </div>
 </body>
 </html>

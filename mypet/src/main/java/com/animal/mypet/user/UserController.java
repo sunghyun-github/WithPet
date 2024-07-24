@@ -154,14 +154,20 @@ public class UserController {
                                @RequestParam("userPhone") String userPhone,
                                Model model) {
         try {
+            // 비밀번호 초기화
             String newPassword = userService.resetPassword(userId, userName, userPhone);
-            model.addAttribute("successMessage", "비밀번호가 초기화되었습니다. 새 비밀번호: " + newPassword);
+            
+            // 성공 메시지
+            model.addAttribute("successMessage", "비밀번호가 초기화되었습니다.");
+            model.addAttribute("newPassword", newPassword); // 새 비밀번호 추가
+
             return "login/findPasswordSuccess"; // 성공 페이지로 이동
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "login/findPassword"; // 에러 발생 시 같은 페이지로 돌아감
         }
     }
+
     
     // 패스워드 찾기
     @GetMapping("/changePassword")
