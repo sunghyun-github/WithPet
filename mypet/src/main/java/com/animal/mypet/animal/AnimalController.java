@@ -63,7 +63,7 @@ public class AnimalController {
         return animals;
     }
 
-    @GetMapping("/animal-details/{animalNo}")
+    @GetMapping("/animalDetails/{animalNo}")
     public String showAnimalDetails(@PathVariable("animalNo") String animalNo, Model model) {
         if (animalNo == null || animalNo.isEmpty()) {
             return "animal/animalNotFound";
@@ -89,7 +89,7 @@ public class AnimalController {
             return "animal/animalNotFound";
         }
 
-        return "animal/animal-details";
+        return "animal/animalDetails";
     }
 
     // 동물 등록 번호 검색 페이지 반환
@@ -99,7 +99,7 @@ public class AnimalController {
     }
 
     // animalBoard로 이동
-    @GetMapping("/animal-details")
+    @GetMapping("/animalDetails")
     public String showAnimalBoard() {
         return "/animal/animalBoard";
     }
