@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -107,51 +106,18 @@ public class UserService {
         }
     }
     
-    // 비밀번호 초기화 메서드
-    public String resetPassword(String userId, String name, String phone) throws Exception {
-        Optional<User> userOpt = userRepository.findByUserIdAndUserNameAndUserPhone(userId, name, phone);
-        if (userOpt.isEmpty()) {
-            throw new Exception("해당 사용자 정보를 찾을 수 없습니다.");
-        }
-
-        User user = userOpt.get();
-        String newPassword = generateRandomPassword();
-        user.setUserPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
-
-        return newPassword;
-    }
-
-    // 랜덤으로 비밀번호 바꿔줌
-    private String generateRandomPassword() {
-        // 랜덤 비밀번호 생성 로직 (예: 8자 길이의 랜덤 문자열)
-        int length = 8;
-        StringBuilder sb = new StringBuilder();
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        java.util.Random random = new java.util.Random();
-        for (int i = 0; i < length; i++) {
-            int index = random.nextInt(characters.length());
-            sb.append(characters.charAt(index));
-        }
-        return sb.toString();
-    }
-    
-        
     // 비밀번호 변경
-    public void changePassword(String userId, String currentPassword, String newPassword) throws Exception {
+    public void changePassword(String userId, String newPassword) throws Exception {
         Optional<User> userOpt = userRepository.findByUserId(userId);
         if (userOpt.isEmpty()) {
             throw new Exception("사용자를 찾을 수 없습니다.");
         }
 
         User user = userOpt.get();
-        if (!passwordEncoder.matches(currentPassword, user.getUserPassword())) {
-            throw new Exception("현재 비밀번호가 맞지 않습니다.");
-        }
-
         user.setUserPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
+
     
     // 회원 탈퇴 메서드
     public boolean deleteAccount(String userId, String confirmPassword) throws Exception {

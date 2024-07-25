@@ -1,6 +1,5 @@
 package com.animal.mypet.user;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,62 +140,62 @@ public class UserController {
         }
     }
     
-    // 비밀번호 찾기 폼 보여주기
+    // PW 찾기ㅣ
     @GetMapping("/findPassword")
     public String showFindPasswordForm() {
-        return "login/findPassword";
+        return "login/findPassword"; // 아이디 찾기 폼 페이지로 이동
     }
-
-    // 비밀번호 찾기 처리 , 초기화
+    
     @PostMapping("/findPassword")
     public String findPassword(@RequestParam("userId") String userId,
                                @RequestParam("userName") String userName,
                                @RequestParam("userPhone") String userPhone,
                                Model model) {
         try {
-            // 비밀번호 초기화
-            String newPassword = userService.resetPassword(userId, userName, userPhone);
-            
-            // 성공 메시지
-            model.addAttribute("successMessage", "비밀번호가 초기화되었습니다.");
-            model.addAttribute("newPassword", newPassword); // 새 비밀번호 추가
-
-            return "login/findPasswordSuccess"; // 성공 페이지로 이동
+            // 사용자 정보 확인
+            User user = userService.getUser(userId);
+            if (user.getUserName().equals(userName) && user.getUserPhone().equals(userPhone)) {
+                // 사용자 ID를 뷰에 전달
+                model.addAttribute("userId", userId);
+                return "login/changePassword"; // 비밀번호 변경 페이지로 이동
+            } else {
+                throw new Exception("입력한 정보가 일치하지 않습니다.");
+            }
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "login/findPassword"; // 에러 발생 시 같은 페이지로 돌아감
+            return "login/findPassword"; // 에러 발생 시 비밀번호 찾기 페이지로 돌아감
         }
     }
-
-    
-    // 패스워드 찾기
+    // 비밀번호 변경 폼 페이지로 이동
     @GetMapping("/changePassword")
     public String showChangePasswordForm() {
-        return "login/changePassword"; // 비밀번호 변경 폼 페이지로 이동
+        return "login/findPassword"; // 비밀번호 변경 폼 페이지로 이동
     }
 
- // 비밀번호 변경 요청을 처리합니다
+    // 비밀번호 변경 요청을 처리합니다
     @PostMapping("/changePassword")
-    public String changePassword(@RequestParam("currentPassword") String currentPassword,
+    public String changePassword(@RequestParam("userId") String userId,
                                  @RequestParam("newPassword") String newPassword,
                                  @RequestParam("confirmNewPassword") String confirmNewPassword,
-                                 Principal principal, // 현재 로그인한 사용자 정보
                                  Model model) {
+        // 비밀번호와 비밀번호 확인이 일치하는지 확인
         if (!newPassword.equals(confirmNewPassword)) {
             model.addAttribute("errorMessage", "새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
             return "login/changePassword";
         }
 
         try {
-            String userId = principal.getName(); // 현재 로그인한 사용자 ID
-            userService.changePassword(userId, currentPassword, newPassword);
-            model.addAttribute("successMessage", "비밀번호가 성공적으로 변경되었습니다.");
-            return "login/form"; // 비밀번호 변경 성공 페이지로 이동 (다시 폼 페이지로 이동할 수도 있음)
+            // 비밀번호 변경 요청 처리
+            userService.changePassword(userId, newPassword);
+            // 비밀번호 변경 성공 시 루트 페이지로 리다이렉션
+            return "redirect:/";
         } catch (Exception e) {
+            // 예외 발생 시 에러 메시지와 함께 원래 페이지로 돌아감
             model.addAttribute("errorMessage", e.getMessage());
-            return "login/changePassword"; // 에러 발생 시 같은 페이지로 돌아감
+            return "login/changePassword";
         }
     }
+
     
     // 회원 탈퇴 폼 페이지로 이동
     @GetMapping("/deleteAccount")

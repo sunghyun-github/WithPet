@@ -1,3 +1,4 @@
+// 사용자 아이디 검증
 function validateUserId() {
     const userId = document.getElementById('userId').value;
     const validationMessage = document.getElementById('validationMessage');
@@ -25,49 +26,61 @@ function validateUserId() {
         });
 }
 
+// 비밀번호 검증
 function validatePassword() {
-    const password1 = document.getElementById('password1').value;
-    const password2 = document.getElementById('password2').value;
+    const password1 = document.getElementById('password1') ? document.getElementById('password1').value : document.getElementById('newPassword').value;
+    const password2 = document.getElementById('password2') ? document.getElementById('password2').value : document.getElementById('confirmNewPassword').value;
     const passwordMessage = document.getElementById('passwordMessage');
+    
+    // 대문자를 포함하는 경우
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/;
+    const passwordPatternLowercase = /^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[a-z\d@$!%*?&]{10,}$/;
 
     if (!passwordPattern.test(password1)) {
         passwordMessage.textContent = '비밀번호는 영문, 숫자, 특수문자를 포함하여 10자 이상이어야 합니다.';
         passwordMessage.style.color = 'red';
+    } else if (password1 !== password2) {
+        passwordMessage.textContent = '비밀번호가 일치하지 않습니다.';
+        passwordMessage.style.color = 'red';
     } else {
-        passwordMessage.textContent = ''; // 조건 메시지 초기화
-        if (password1 !== password2) {
-            passwordMessage.textContent = '비밀번호가 일치하지 않습니다.';
-            passwordMessage.style.color = 'red';
-        } else {
-            passwordMessage.textContent = '비밀번호가 일치합니다.';
-            passwordMessage.style.color = 'green';
-        }
+        passwordMessage.textContent = '비밀번호가 일치합니다.';
+        passwordMessage.style.color = 'green';
     }
 }
 
+// 비밀번호 찾기
 function changevalidatePassword() {
     const newPassword = document.getElementById('newPassword').value;
     const confirmNewPassword = document.getElementById('confirmNewPassword').value;
     const passwordMessage = document.getElementById('passwordMessage');
+    
     // 대문자를 제외한 영문 소문자, 숫자, 특수문자를 포함하여 10자 이상이어야 하는 정규식
     const passwordPattern = /^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[a-z\d@$!%*?&]{10,}$/;
 
     if (!passwordPattern.test(newPassword)) {
         passwordMessage.textContent = '비밀번호는 소문자, 숫자, 특수문자를 포함하여 10자 이상이어야 합니다.';
         passwordMessage.style.color = 'red';
+    } else if (newPassword !== confirmNewPassword) {
+        passwordMessage.textContent = '비밀번호가 일치하지 않습니다.';
+        passwordMessage.style.color = 'red';
     } else {
-        passwordMessage.textContent = ''; // 조건 메시지 초기화
-        if (newPassword !== confirmNewPassword) {
-            passwordMessage.textContent = '비밀번호가 일치하지 않습니다.';
-            passwordMessage.style.color = 'red';
-        } else {
-            passwordMessage.textContent = '비밀번호가 일치합니다.';
-            passwordMessage.style.color = 'green';
-        }
+        passwordMessage.textContent = '비밀번호가 일치합니다.';
+        passwordMessage.style.color = 'green';
     }
 }
 
+// 폼 검증
+function validateForm() {
+    const passwordMessage = document.getElementById('passwordMessage').textContent;
+    if (passwordMessage.includes('비밀번호가 일치하지 않습니다.') || 
+        passwordMessage.includes('비밀번호는 영문, 숫자, 특수문자를 포함하여 10자 이상이어야 합니다.') || 
+        passwordMessage.includes('비밀번호는 소문자, 숫자, 특수문자를 포함하여 10자 이상이어야 합니다.')) {
+        return false; // 폼 제출 방지
+    }
+    return true; // 폼 제출 허용
+}
+
+// 이메일 인증
 function sendNumber() {
     $("#mail_number").css("display", "block");
     $.ajax({
@@ -93,17 +106,15 @@ function sendNumber() {
     });
 }
 
-// 이메일인증 토큰
+// CSRF Token 가져오기
 function getCsrfToken() {
     return document.querySelector('meta[name="_csrf"]').getAttribute('content');
 }
 
+// 이메일 인증 번호 확인
 function confirmNumber() {
-    var number1 = $("#number").val();
-    var number2 = $("#Confirm").val();
-
-    console.log("Input Number:", number1);
-    console.log("Stored Number:", number2);
+    const number1 = $("#number").val();
+    const number2 = $("#Confirm").val();
 
     if (number1 === number2) {
         alert("인증되었습니다.");
@@ -114,7 +125,6 @@ function confirmNumber() {
     }
 }
 
-
 $(document).ready(function() {
     // 폼의 submit 이벤트에 confirmDeletion 함수 추가
     $("#deleteForm").on("submit", function(event) {
@@ -123,19 +133,10 @@ $(document).ready(function() {
 
     // 이메일 인증 관련 폼의 ID와 클래스를 정확히 설정합니다.
     $(".create-user-form").submit(function(event) {
-        var emailVerified = $("#emailVerified").val();
+        const emailVerified = $("#emailVerified").val();
         if (emailVerified !== "true") {
             alert("이메일 인증이 완료되지 않았습니다.");
             event.preventDefault(); // 폼 제출 막기
         }
     });
-	
-	// 비밀번호 변경 폼의 submit 이벤트에 validatePassword 함수 추가
-	$("#passwordChangeForm").on("submit", function(event) {
-	       changevalidatePassword();
-	       const passwordMessage = document.getElementById('passwordMessage');
-	       if (passwordMessage.textContent.includes('일치하지 않습니다') || passwordMessage.textContent.includes('포함하여 10자 이상이어야 합니다')) {
-	           event.preventDefault();
-	       }
-	   });
 });
