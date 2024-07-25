@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{layout}">
 <head>
     <title>Animal Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -52,6 +51,8 @@
     </style>
 </head>
 <body>
+<div layout:fragment="content" class="container">
+<div class="inner board_wrap">
     <h1>Animal Details</h1>
 
     <!-- 서울 동물 정보 -->
@@ -97,5 +98,7 @@
     </div>
 
     <a href="/animal/animalBoard">동물 목록으로 돌아가기</a>
+</div>
+</div>
 </body>
 </html>

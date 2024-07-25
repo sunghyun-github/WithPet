@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -127,6 +126,8 @@
     </style>
 </head>
 <body>
+<div layout:fragment="content" class="container">
+<div class="inner board_wrap">
     <div class="screen">
         <div class="overlap-group">
             <a th:href="@{/animal/animalBoard}" class="text-wrapper">유기동물 입양</a>
@@ -204,5 +205,7 @@
         }
     });
     </script>
+</div>
+</div>
 </body>
 </html>
