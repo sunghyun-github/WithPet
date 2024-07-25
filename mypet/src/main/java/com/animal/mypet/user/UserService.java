@@ -48,15 +48,15 @@ public class UserService {
         user.setUserRole(newRole);
         userRepository.save(user);
     }
-
-    // 회원 탈퇴 메서드
-    public void deleteUser(String userId) throws Exception {
-        Optional<User> existingUser = userRepository.findByUserId(userId);
-        if (existingUser.isEmpty()) {
-            throw new Exception("User not found");
-        }
-        userRepository.delete(existingUser.get());
-    }
+//
+//    // 회원 탈퇴 메서드
+//    public void deleteUser(String userId) throws Exception {
+//        Optional<User> existingUser = userRepository.findByUserId(userId);
+//        if (existingUser.isEmpty()) {
+//            throw new Exception("User not found");
+//        }
+//        userRepository.delete(existingUser.get());
+//    }
     
     // 유저 @개 만드는거
     public List<User> createUsers(int numberOfUsers) {

@@ -30,20 +30,23 @@ public class SecurityConfig {
                 .ignoringRequestMatchers("/mail/**")  // /mail/** 경로에 대해 CSRF 보호를 비활성화
             )
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/qna_question/create").hasAuthority("USER")  // USER만 질문 등록 가능
-                .requestMatchers("/qna_answer/**").hasAnyAuthority("ADMIN", "PET_MANAGER")  // ADMIN 또는 PET_MANAGER만 답글 등록 가능
-                .requestMatchers("/**").permitAll()  // 모든 다른 요청은 허용
-                .requestMatchers("/user/findId").permitAll()  // 아이디 찾기 요청 허용
-                .requestMatchers("/user/idFound").permitAll()  // 아이디 찾기 결과 페이지 허용
-                .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()  // 모든 사용자가 인증(로그인) 없이 해당 경로에 접근할 수 있도록 설정
-                .requestMatchers("/", "/members/**", "/item/**", "/images/**", "/mail/**").permitAll()  // 추가된 경로 설정
+            		.requestMatchers("/qna_question/create").hasAuthority("USER")  // USER만 질문 등록 가능
+                    .requestMatchers("/qna_answer/**").hasAnyAuthority("ADMIN", "PET_MANAGER")  // ADMIN 또는 PET_MANAGER만 답글 등록 가능
+                    .requestMatchers("/**").permitAll()  // 모든 다른 요청은 허용
+                    .requestMatchers("/user/findId").permitAll()  // 아이디 찾기 요청 허용
+                    .requestMatchers("/user/idFound").permitAll()  // 아이디 찾기 결과 페이지 허용
+                    .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()  // 모든 사용자가 인증(로그인) 없이 해당 경로에 접근할 수 있도록 설정
+                    .requestMatchers("/", "/members/**", "/item/**", "/images/**", "/mail/**").permitAll()  // 추가된 경로 설정
+                    .requestMatchers("/user/findPassword", "/user/resetPassword", "/user/resetPasswordSuccess").permitAll() // 비밀번호 찾기 및 재설정 경로 추가
             )
             .headers(headers -> headers
                 .addHeaderWriter(new XFrameOptionsHeaderWriter(
                     XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
             .formLogin(formLogin -> formLogin
-                .loginPage("/user/login")
-                .defaultSuccessUrl("/"))
+            		.loginPage("/user/login")
+                    .defaultSuccessUrl("/")
+                    .usernameParameter("userId") // userId 필드 사용
+                    .permitAll())
             .oauth2Login(oauth2 -> oauth2
                     .loginPage("/user/login")
                     .defaultSuccessUrl("/")
