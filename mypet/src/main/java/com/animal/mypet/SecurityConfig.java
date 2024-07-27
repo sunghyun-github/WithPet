@@ -27,9 +27,10 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/mail/**")  // /mail/** 경로에 대해 CSRF 보호를 비활성화
+                .ignoringRequestMatchers("/mail/**","/adopt/submit")  // /mail/** 경로에 대해 CSRF 보호를 비활성화
             )
             .authorizeHttpRequests(authorize -> authorize
+            	    .requestMatchers("/adopt/**").permitAll()  // /adopt/** 경로를 인증 없이 허용
             		.requestMatchers("/qna_question/create").hasAuthority("USER")  // USER만 질문 등록 가능
                     .requestMatchers("/qna_answer/**").hasAnyAuthority("ADMIN", "PET_MANAGER")  // ADMIN 또는 PET_MANAGER만 답글 등록 가능
                     .requestMatchers("/**").permitAll()  // 모든 다른 요청은 허용

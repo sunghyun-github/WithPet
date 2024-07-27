@@ -28,9 +28,9 @@ public class ApiService {
     private final ApiRepository apiRepository;
 
     @Autowired
-    public ApiService(RestTemplate restTemplate, ApiRepository boardRepository) {
+    public ApiService(RestTemplate restTemplate, ApiRepository apiRepository) {
         this.restTemplate = restTemplate;
-        this.apiRepository = boardRepository;
+        this.apiRepository = apiRepository;
         this.httpClient = HttpClient.newHttpClient();
     }
 
@@ -138,6 +138,19 @@ public class ApiService {
         } catch (Exception e) {
             log.error("Error fetching all animals: " + e.getMessage(), e);
             throw e; // or return an empty list, depending on your error handling strategy
+        }
+    }
+
+    public ApiEntity getAnimalDetails(Long animalId) {
+        // 서울과 경기 API에서 동물 정보를 가져오는 로직을 구현합니다.
+        // 동물 ID를 기준으로 서울과 경기 데이터를 검색하여 반환합니다.
+        Optional<ApiEntity> animalOptional = apiRepository.findById(animalId);
+
+        if (animalOptional.isPresent()) {
+            return animalOptional.get();
+        } else {
+            log.warn("Animal with ID " + animalId + " not found");
+            return null;
         }
     }
 

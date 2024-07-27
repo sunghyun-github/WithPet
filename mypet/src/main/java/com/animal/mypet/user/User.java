@@ -5,6 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.animal.mypet.animal.AnimalLike;
+import com.animal.mypet.animal.AnimalLikeId;
 
 @Getter
 @Setter
@@ -43,6 +48,10 @@ public class User {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+    
+    @OneToMany(mappedBy = "user")
+    private Set<AnimalLike> animalLikes = new HashSet<>();
+
     
 
     @PrePersist

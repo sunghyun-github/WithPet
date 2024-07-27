@@ -1,10 +1,17 @@
 package com.animal.mypet.api;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.animal.mypet.animal.AnimalLike;
+import com.animal.mypet.animal.AnimalLikeId;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -98,6 +105,10 @@ public class ApiEntity {
     private String photoUrl;
     @Column(name = "PHOTO_NO")
     private String photoNo;
+    
+    // 이거 추가하면 동물검색 안댐 ;; 
+//    @OneToMany(mappedBy = "animal")
+//    private Set<AnimalLike> animalLikes = new HashSet<>();
 
     @Override
     public String toString() {

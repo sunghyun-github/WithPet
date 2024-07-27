@@ -1,12 +1,11 @@
 package com.animal.mypet.animal;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.animal.mypet.api.ApiEntity;
 import com.animal.mypet.api.ApiRepository;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 public class AnimalController {
 
     private final ApiService apiService;
-    private final ApiRepository apiRepository; // BoardRepository 추가
+    private final ApiRepository apiRepository;
 
     public AnimalController(ApiService apiService, ApiRepository apiRepository) {
         this.apiService = apiService;
@@ -92,13 +91,11 @@ public class AnimalController {
         return "animal/animalDetails";
     }
 
-    // 동물 등록 번호 검색 페이지 반환
     @GetMapping("/animalNum")
     public String showAnimalNumPage() {
         return "/animal/animalNum";
     }
 
-    // animalBoard로 이동
     @GetMapping("/animalDetails")
     public String showAnimalBoard() {
         return "/animal/animalBoard";
@@ -106,18 +103,16 @@ public class AnimalController {
     
     @GetMapping("/animalShelters")
     public String showAnimalShelters() {
-    	return "/animal/animalShelters";
+        return "/animal/animalShelters";
     }
     
     @GetMapping("{abdmId}")
     public ResponseEntity<ApiEntity> getAnimalByAbdmId(@PathVariable("abdmId") String abdmId) {
-    	ApiEntity animal = apiRepository.findByAbdmIdntfyNoOrAnimalNo(abdmId, abdmId);
-        if (animal != null) {
-            return ResponseEntity.ok(animal);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Optional<ApiEntity> animal = apiRepository.findByAbdmIdntfyNoOrAnimalNo(abdmId, abdmId);
+        return animal.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    
     }
 
-    
-}
+
+
