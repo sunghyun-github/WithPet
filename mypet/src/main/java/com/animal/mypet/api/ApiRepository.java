@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface ApiRepository extends JpaRepository<ApiEntity, Long> {
 //    Animal findByAnimalNo(String animalNo);
 //    Animal findByAbdmIdntfyNo(String abdmIdntfyNo);
-    ApiEntity findByAbdmIdntfyNoOrAnimalNo(String abdmIdntfyNo, String animalNo);
+    Optional<ApiEntity> findByAbdmIdntfyNoOrAnimalNo(String abdmIdntfyNo, String animalNo);
 
 }
