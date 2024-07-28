@@ -1,71 +1,63 @@
-<html layout:decorate="~{layout}">
+<!DOCTYPE html>
+
 <head>
-    <meta name="_csrf" content="${_csrf.token}">
-    <meta name="_csrf_header" content="${_csrf.headerName}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <title>회원가입</title>
+	<title>마이페이지</title>
 </head>
-<div layout:fragment="content" class="container">
-	<div class="inner login_wrap">
-       	<h2>회원가입</h2>
-       	<div class="login_area">
-        <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" class="create-user-form">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-            <div class="mb-3">
-                <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-                    <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
-                </div>
-            </div>
-            <div class="input_wrap signup_wrap">
-	            <div class="signup_id">
-	            	<div class="signup">
-	            		<input type="text" id="userId" th:field="*{userId}" placeholder="아이디">
-	                	<button type="button" onclick="validateUserId()" class="btn">확인</button>
-	            	</div>
-	                <span id="validationMessage" class="comment_size message"></span>
-	            </div>
-	            <div>
-	                <input type="password" id="password1" th:field="*{userPassword}" placeholder="비밀번호" onkeyup="validatePassword()">
-	                <span class="pw_message message">※ 비밀번호는 영문, 숫자, 특수문자를 포함하여 10자 이상이어야 합니다.</span>
-	            </div>
-	            <div>
-	                <input type="password" id="password2" th:field="*{userPassword2}" placeholder="비밀번호 확인" onkeyup="validatePassword()">
-	                <span id="passwordMessage" class="comment_size message"></span>
-	            </div>
-	            <div>
-	                <input type="text" id="name" th:field="*{userName}" placeholder="이름">
-	            </div>
-	            <div class="signup">
-	                <input type="text" id="emailPrefix" th:field="*{emailPrefix}" placeholder="이메일 주소">
-	                <label for="userEmailDomain">@</label>
-	                <input type="text" id="emailDomain" th:field="*{emailDomain}" placeholder="선택" list="domainList">
-	                <datalist id="domainList" class="domainList">
-	                    <option value="naver.com">
-	                    <option value="gmail.com">
-	                    <option value="yahoo.com">
-	                    <option value="daum.net">
-	                    <option value="hanmail.net">
-	                </datalist>
-	                <button type="button" id="sendBtn" class="btn" name="sendBtn" onclick="sendNumber()">확인</button>
-	            </div>
-	            <div id="mail_number" name="mail_number" style="display: none;">
-	            	<div class="signup">
-	            	<input type="text" name="number" id="number" placeholder="인증번호 입력">
-	                <input type="hidden" id="Confirm"> <!-- 숨겨진 input 요소 추가 -->
-	                <button type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()" class="btn">인증하기</button>
-	                <input type="hidden" id="emailVerified" name="emailVerified" value="false"> <!-- 이메일 인증 여부 확인 필드 -->
-	            	</div>
-	                
-	            </div>
-	            <div>
-	                <input type="text" id="phone" th:field="*{userPhone}" placeholder="전화번호">
-	            </div>
-            </div>
-            <div class="btn_wrap">
-                <input type="submit" value="회원가입" class="btn">
-            </div>
-        </form>
-        </div>
-    </div>
-</div>
+
+<body>
+	<div class="container">
+		<h2>마이페이지</h2>
+		<style>
+			.hidden {
+				display: none;
+			}
+		</style>
+
+		<!--로그인회원 정보출력-->
+		<div>
+			<p><strong>아이디:</strong> <span th:text="${user.userId}"></span></p>
+			<p><strong>이름:</strong> <span th:text="${user.userName}"></span></p>
+			<p><strong>이메일:</strong> <span th:text="${user.userEmail}"></span></p>
+			<p><strong>전화번호:</strong> <span th:text="${user.userPhone}"></span></p>
+			<p><strong>가입일자:</strong> <span th:text="${user.createdAt}"></span></p>
+		</div>
+			
+		<!--이전페이지로 이동-->
+		<div>
+			<a href="javascript:history.back()" class="btn">이전 페이지로 이동</a>
+		</div>
+
+
+		<!--회원탈퇴 버튼-->
+		<button type="button" class="btn" onclick="confirmDeleteAccount()">회원탈퇴</button>
+		<div id="deleteAccountForm" class="hidden">
+			<form th:action="@{/user/deleteAccount}" method="post">
+				<label for="confirmPassword">비밀번호 확인:</label>
+				<input type="password" id="confirmPassword" name="confirmPassword" required>
+				<button type="submit" class="btn">계정 삭제</button>
+			</form>
+		</div>
+
+		<!--정보 수정하기 버튼-->
+		<div>
+			<a th:href="@{/user/editProfile}" class="btn">정보 수정하기</a>
+		</div>
+	</div>
+	<script>
+		function confirmDeleteAccount() {
+			// 탈퇴 여부 확인
+			var confirmation = confirm("탈퇴하시겠습니까?");
+			if (confirmation) {
+				// 비밀번호 확인 폼을 표시
+				toggleDeleteAccountForm();
+			}
+		}
+
+		function toggleDeleteAccountForm() {
+			var form = document.getElementById("deleteAccountForm");
+			form.classList.toggle("hidden");
+		}
+	</script>
+</body>
+
 </html>

@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.animal.mypet.DataNotFoundException;
+import com.animal.mypet.UserNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -134,5 +135,22 @@ public class UserService {
         userRepository.delete(user);
         return true; // 성공적으로 삭제됨
     }
-   
+    
+    public User findByUserId(String userId) {
+        return userRepository.findByUserId(userId).orElse(null);
+    }
+    
+    public void editProfile(String userId, String userName, String userEmail, String userPhone) {
+        // 사용자를 현재 ID로 찾음
+        User user = userRepository.findByUserId(userId)
+                      .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+
+        // 사용자 정보 업데이트
+        user.setUserName(userName);
+        user.setUserEmail(userEmail);
+        user.setUserPhone(userPhone);
+        
+        // 저장
+        userRepository.save(user);
+    }
 }
