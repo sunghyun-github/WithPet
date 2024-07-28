@@ -27,7 +27,7 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/mail/**","/adopt/submit")  // /mail/** 경로에 대해 CSRF 보호를 비활성화
+                .ignoringRequestMatchers("/mail/**","/adopt/submit",  "/admin/changePassword")  // /mail/** 경로에 대해 CSRF 보호를 비활성화
             )
             .authorizeHttpRequests(authorize -> authorize
             	    .requestMatchers("/adopt/**").permitAll()  // /adopt/** 경로를 인증 없이 허용
@@ -38,7 +38,7 @@ public class SecurityConfig {
                     .requestMatchers("/user/idFound").permitAll()  // 아이디 찾기 결과 페이지 허용
                     .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()  // 모든 사용자가 인증(로그인) 없이 해당 경로에 접근할 수 있도록 설정
                     .requestMatchers("/", "/members/**", "/item/**", "/images/**", "/mail/**").permitAll()  // 추가된 경로 설정
-                    .requestMatchers("/user/findPassword", "/user/resetPassword", "/user/resetPasswordSuccess").permitAll() // 비밀번호 찾기 및 재설정 경로 추가
+                    .requestMatchers("/user/findPassword", "/user/resetPassword").permitAll() // 비밀번호 찾기 및 재설정 경로 추가
             )
             .headers(headers -> headers
                 .addHeaderWriter(new XFrameOptionsHeaderWriter(

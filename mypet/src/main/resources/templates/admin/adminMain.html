@@ -1,44 +1,56 @@
 <!DOCTYPE html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>관리자 페이지</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
 
-<!-- Bootstrap core CSS -->
-<link rel="stylesheet" href="/bootstrap/vendor/bootstrap/css/bootstrap.min.css">
-<!-- Font Awesome -->
-<link rel="stylesheet" href="/bootstrap/vendor/fontawesome-free/css/all.min.css">
-<!-- Google Fonts - Nunito -->
-<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-<!-- Custom styles for this template -->
-<link rel="stylesheet" href="/bootstrap/css/sb-admin-2.min.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/bootstrap/vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/bootstrap/vendor/fontawesome-free/css/all.min.css">
+    <!-- Google Fonts - Nunito -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="/bootstrap/css/sb-admin-2.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.css">
 
+    <style>
+        .admin-row {
+            background-color: #ffe5e5; /* 연한 빨간색 배경 */
+            font-weight: bold; /* 굵은 글꼴 */
+        }
+        .chart-container {
+            width: 100%;
+            height: 300px; /* 차트 크기 조정 */
+        }
+    </style>
 </head>
 <body>
 
-<div class="container-fluid">
-
-   	<!-- 메인 페이지로 이동하는 버튼 -->
+<div class="container-fluid mt-4">
+    <!-- 메인 페이지로 이동하는 버튼 -->
     <a href="/" class="btn btn-primary mb-3">메인 페이지로 돌아가기</a>
-    
+
     <!-- Page Heading -->
-      <h1 class="h3 mb-2 text-gray-800" style="padding: 10px 20px; border-bottom: 1px solid #ddd; margin-bottom: 20px;">관리자 페이지</h1>
-    
+    <h1 class="h3 mb-4 text-gray-800">관리자 페이지</h1>
+
     <!-- Tab Navigation -->
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="user-management-tab" data-toggle="tab" href="#user-management" role="tab" aria-controls="user-management" aria-selected="true">유저 관리</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="section1-tab" data-toggle="tab" href="#section1" role="tab" aria-controls="section1" aria-selected="false">추가 섹션 1</a>
+            <a class="nav-link" id="post-management-tab" data-toggle="tab" href="#post-management" role="tab" aria-controls="post-management" aria-selected="false">게시글 목록</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="section2-tab" data-toggle="tab" href="#section2" role="tab" aria-controls="section2" aria-selected="false">추가 섹션 2</a>
+            <a class="nav-link" id="analytics-tab" data-toggle="tab" href="#analytics" role="tab" aria-controls="analytics" aria-selected="false">통계 및 분석</a>
         </li>
     </ul>
 
     <!-- Tab Content -->
-    <div class="tab-content" id="myTabContent">
+    <div class="tab-content mt-4" id="myTabContent">
         <!-- User Management Section -->
         <div class="tab-pane fade show active" id="user-management" role="tabpanel" aria-labelledby="user-management-tab">
             <div class="card shadow mb-4">
@@ -48,7 +60,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
+                            <thead class="thead-light">
                                 <tr style="text-align: center;">
                                     <th style="width: 80px;">번호</th>
                                     <th>ID</th>
@@ -62,8 +74,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="user : ${users}" style="text-align: center;">
-                                    <td th:text="${user.userIdx}"></td>
+                                <tr th:each="user, iterStat : ${users}" th:classappend="${user.userRole == 'ADMIN'} ? 'admin-row' : ''" style="text-align: center;">
+                                    <td th:text="${iterStat.count}"></td>
                                     <td th:text="${user.userId}"></td>
                                     <td th:text="${user.userName}"></td>
                                     <td th:text="${user.userPhone}"></td>
@@ -71,18 +83,21 @@
                                     <td th:text="${user.userRole}"></td>
                                     <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
                                     <td th:text="${#temporals.format(user.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                                    <td style="display: flex; gap: 10px; align-items: center;">
-                                        <form th:action="@{/user/editRole/{userId}(userId=${user.userId})}" method="post">
-                                            <select name="newRole" class="form-control" style="display: inline-block; width: auto; margin-right: 5px;">
-                                                <option value="ADMIN" th:selected="${user.userRole == 'ADMIN'}">ADMIN</option>
-                                                <option value="PET_MANAGER" th:selected="${user.userRole == 'PET_MANAGER'}">PET_MANAGER</option>
-                                                <option value="USER" th:selected="${user.userRole == 'USER'}">USER</option>
-                                            </select>
-                                            <button type="submit" class="btn btn-primary btn-sm">변경</button>
-                                        </form>
-                                        <form th:action="@{/user/delete/{userId}(userId=${user.userId})}" method="post" onsubmit="return confirm('정말 탈퇴시키겠습니까?');">
-                                            <button type="submit" class="btn btn-danger btn-sm">회원 탈퇴</button>
-                                        </form>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#changePasswordModal" th:attr="data-user-id=${user.userId}">비밀번호 변경</button>
+                                            <form th:action="@{/user/editRole/{userId}(userId=${user.userId})}" method="post" class="ml-2">
+                                                <select name="newRole" class="form-control form-control-sm" style="display: inline-block; width: auto; margin-right: 5px;">
+                                                    <option value="ADMIN" th:selected="${user.userRole == 'ADMIN'}">ADMIN</option>
+                                                    <option value="PET_MANAGER" th:selected="${user.userRole == 'PET_MANAGER'}">PET_MANAGER</option>
+                                                    <option value="USER" th:selected="${user.userRole == 'USER'}">USER</option>
+                                                </select>
+                                                <button type="submit" class="btn btn-primary btn-sm">변경</button>
+                                            </form>
+                                            <form th:action="@{/user/delete/{userId}(userId=${user.userId})}" method="post" onsubmit="return confirm('정말 탈퇴시키겠습니까?');" class="ml-2">
+                                                <button type="submit" class="btn btn-danger btn-sm">회원 탈퇴</button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -92,29 +107,66 @@
             </div>
         </div>
 
-        <!-- Additional Section 1 -->
-        <div class="tab-pane fade" id="section1" role="tabpanel" aria-labelledby="section1-tab">
-            <div class="row">
-                <div class="col-lg-6 mb-4">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">추가 섹션 1</h6>
-                        </div>
-                        <div class="card-body">내용을 추가할 수 있는 섹션 예시입니다.</div>
+        <!-- 게시글 목록 섹션 -->
+        <div class="tab-pane fade" id="post-management" role="tabpanel" aria-labelledby="post-management-tab">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">게시글 목록</h6>
+                    <div>
+                        <a href="/board/write" class="btn btn-success btn-sm">
+                            <i class="fas fa-plus"></i> 새 게시글 작성
+                        </a>
+                        <a href="/board/list" class="btn btn-primary btn-sm">
+                            <i class="fas fa-list"></i> 게시글 목록 보기
+                        </a>
                     </div>
+                </div>
+                <div class="card-body">
+                    <p>게시글 목록을 관리하거나 새로운 게시글을 추가할 수 있습니다.</p>
+                    <a href="/board/list" class="btn btn-primary btn-lg btn-block">
+                        <i class="fas fa-list"></i> 게시글 목록 전체 보기
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Additional Section 2 -->
-        <div class="tab-pane fade" id="section2" role="tabpanel" aria-labelledby="section2-tab">
+        <!-- 통계 및 분석 섹션 -->
+        <div class="tab-pane fade" id="analytics" role="tabpanel" aria-labelledby="analytics-tab">
             <div class="row">
-                <div class="col-lg-6 mb-4">
-                    <div class="card shadow mb-4">
+                <div class="col-lg-4 mb-4">
+                    <div class="card shadow">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">추가 섹션 2</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">입양 통계</h6>
                         </div>
-                        <div class="card-body">또 다른 추가 섹션 예시입니다.</div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="adoptionStatsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">유저 통계</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="userStatsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">기부 통계</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="donationStatsChart"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,18 +174,182 @@
     </div>
 </div>
 
+<!-- 비밀번호 변경 모달 -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">비밀번호 변경</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="changePasswordForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="modalUserId">사용자 ID</label>
+                        <input type="text" class="form-control" id="modalUserId" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">새 비밀번호</label>
+                        <input type="password" class="form-control" id="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmNewPassword">새 비밀번호 확인</label>
+                        <input type="password" class="form-control" id="confirmNewPassword" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    <button type="submit" class="btn btn-primary">비밀번호 변경</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Bootstrap core JavaScript-->
 <script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
 <script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- Core plugin JavaScript-->
 <script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
-<!-- Custom scripts for all pages-->
 <script src="/bootstrap/js/sb-admin-2.min.js"></script>
-<!-- Page level plugins -->
+
+<!-- DataTables JavaScript -->
 <script src="/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<!-- Page level custom scripts -->
-<script src="/bootstrap/js/demo/datatables-demo.js"></script>
 
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true
+        });
+
+        $('#changePasswordModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var userId = button.data('user-id');
+            var modal = $(this);
+            modal.find('#modalUserId').val(userId);
+        });
+
+        $('#changePasswordForm').on('submit', function(event) {
+            event.preventDefault();
+
+            var userId = $('#modalUserId').val();
+            var newPassword = $('#newPassword').val();
+            var confirmNewPassword = $('#confirmNewPassword').val();
+
+            if (newPassword !== confirmNewPassword) {
+                alert("비밀번호 확인이 일치하지 않습니다.");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/admin/changePassword",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    userId: userId,
+                    newPassword: newPassword
+                }),
+                success: function(response) {
+                    alert(response.message);
+                    $('#changePasswordModal').modal('hide');
+                },
+                error: function(error) {
+                    alert(error.responseJSON.message);
+                }
+            });
+        });
+
+        // 통계 및 분석 차트 데이터 설정
+        var adoptionStatsData = {
+            labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
+            datasets: [{
+                label: "입양 수",
+                data: [12, 18, 31, 42, 55, 80],
+                backgroundColor: "rgba(78, 115, 223, 0.5)",
+                borderColor: "rgba(78, 115, 223, 1)",
+                borderWidth: 1
+            }]
+        };
+
+        var userStatsData = {
+            labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
+            datasets: [{
+                label: "가입 유저 수",
+                data: [5, 16, 21, 26, 31, 35],
+                backgroundColor: "rgba(54, 185, 204, 0.5)",
+                borderColor: "rgba(54, 185, 204, 1)",
+                borderWidth: 1
+            }]
+        };
+
+        var donationStatsData = {
+            labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
+            datasets: [{
+                label: "기부 금액",
+                data: [112, 232, 355, 465, 587, 698],
+                backgroundColor: "rgba(28, 200, 138, 0.5)",
+                borderColor: "rgba(28, 200, 138, 1)",
+                borderWidth: 1
+            }]
+        };
+
+        var adoptionStatsChart = new Chart(document.getElementById('adoptionStatsChart'), {
+            type: 'bar',
+            data: adoptionStatsData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var userStatsChart = new Chart(document.getElementById('userStatsChart'), {
+            type: 'line',
+            data: userStatsData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var donationStatsChart = new Chart(document.getElementById('donationStatsChart'), {
+            type: 'pie',
+            data: donationStatsData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': $' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
