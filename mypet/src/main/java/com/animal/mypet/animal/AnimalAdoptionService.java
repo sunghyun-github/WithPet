@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AnimalAdoptionService {
-
+ 
     private final AnimalAdoptionRepository repository;
 
     public AnimalAdoptionService(AnimalAdoptionRepository repository) {
@@ -12,24 +12,23 @@ public class AnimalAdoptionService {
     }
 
     public boolean processAdoptionApplication(
-            Long animalId, String animalNo, String abdmIdntfyNo,
+           String animalNo, String abdmIdntfyNo,
             String applicantName, String applicantEmail, 
             String applicantPhone, String applicantAddress,
             String adoptionReason, String adoptionExperience) {
-
+     
         try {
-            AnimalAdoptionApplication application = new AnimalAdoptionApplication();
-            application.setAnimalId(animalId);
-            application.setAnimalNo(animalNo);
-            application.setAbdmIdntfyNo(abdmIdntfyNo);
-            application.setApplicantName(applicantName);
-            application.setApplicantEmail(applicantEmail);
-            application.setApplicantPhone(applicantPhone);
-            application.setApplicantAddress(applicantAddress);
-            application.setAdoptionReason(adoptionReason);
-            application.setAdoptionExperience(adoptionExperience);
+            AnimalAdoptionApplication animalAdoptionApplication = new AnimalAdoptionApplication();
+            animalAdoptionApplication.setAnimalNo(animalNo);
+            animalAdoptionApplication.setAbdmIdntfyNo(abdmIdntfyNo);
+            animalAdoptionApplication.setApplicantName(applicantName);
+            animalAdoptionApplication.setApplicantEmail(applicantEmail);
+            animalAdoptionApplication.setApplicantPhone(applicantPhone);
+            animalAdoptionApplication.setApplicantAddress(applicantAddress);
+            animalAdoptionApplication.setAdoptionReason(adoptionReason);
+            animalAdoptionApplication.setAdoptionExperience(adoptionExperience);
 
-            repository.save(application);
+            repository.save(animalAdoptionApplication);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,4 +44,5 @@ public class AnimalAdoptionService {
             return false;
         }
     }
+   
 }

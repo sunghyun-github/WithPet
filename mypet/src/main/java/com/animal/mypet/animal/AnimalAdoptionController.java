@@ -33,7 +33,7 @@ public class AnimalAdoptionController {
         ModelAndView mav = new ModelAndView("animal/animalAdoption");
         ApiEntity animal = apiService.getAnimalDetails(animalId);
         mav.addObject("animal", animal);
-        mav.addObject("application", new AnimalAdoptionApplication()); // Add empty entity object
+        mav.addObject("application", new AnimalAdoptionApplication()); // 빈 신청서 객체 추가
         return mav;
     }
 
@@ -42,15 +42,28 @@ public class AnimalAdoptionController {
             @ModelAttribute @Valid AnimalAdoptionApplication application, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("animal/animalAdoption");
+            ModelAndView mav = new ModelAndView("animal/animalAdoption");
+            ApiEntity animal = apiService.getAnimalDetails(application.getAnimalId());
+            mav.addObject("animal", animal);
+            return mav;
         }
 
         boolean success = animalAdoptionService.processAdoptionApplication(application);
 
         if (success) {
-            return new ModelAndView("animal/adoptionSuccess");
+            ModelAndView mav = new ModelAndView("animal/adoptionSuccess");
+            mav.addObject("application", application); // 제출한 신청서의 내용을 전달
+            return mav;
         } else {
             return new ModelAndView("animal/adoptionError");
         }
+    }
+    
+    @GetMapping("/animalBoard")
+    public ModelAndView showAnimalBoard() {
+        // 실제로는 동물 리스트를 가져와서 모델에 추가해야 합니다.
+        ModelAndView mav = new ModelAndView("animal/animalBoard");
+        // 예: mav.addObject("animals", animalService.getAllAnimals());
+        return mav;
     }
 }
