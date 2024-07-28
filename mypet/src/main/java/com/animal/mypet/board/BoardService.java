@@ -10,11 +10,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.animal.mypet.DataNotFoundException;
 import com.animal.mypet.comment.Comment;
 import com.animal.mypet.user.User;
+import com.animal.mypet.user.UserRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -23,8 +25,6 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-
-import org.springframework.data.jpa.domain.Specification;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardService {
 	
 	private final BoardRepository boardRepository;
+	private final UserRepository userRepository;
 	
 	 private Specification<Board> search(String kw) {
 	        return new Specification<>() {
@@ -125,5 +126,11 @@ public class BoardService {
     	board.getVoter().remove(user);
         this.boardRepository.save(board);
     }
-	
+    
+
+    public List<Board> getBoardsByAuthor(String userId) {
+        User author = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + userId));
+        return boardRepository.findByAuthor(author);
+    }
 }
