@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.animal.mypet.board.Board;
 import com.animal.mypet.board.BoardService;
+import com.animal.mypet.qna.question.Question;
+import com.animal.mypet.qna.question.QuestionRepository;
+import com.animal.mypet.qna.question.QuestionService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,6 +37,7 @@ public class UserController {
 	private final UserService userService;
 	private final UserRepository userRepository;
 	private final BoardService boardService;
+	private final QuestionService questionService;
 
 	@GetMapping("/signup")
 	public String signup(UserCreateForm userCreateForm) {
@@ -225,21 +229,28 @@ public class UserController {
 	}
 
 //    마이페이지로 이동
-	@GetMapping("/mypage")
-	public String getUserMypage(Model model) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String userId = authentication.getName();
 
-		// 사용자 정보 가져오기
-		User user = userService.findByUserId(userId);
-		if (user == null) {
-			return "redirect:/error";
-		}
+	 @GetMapping("/mypage")
+	    public String getUserMypage(Model model) {
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String userId = authentication.getName();
 
-		model.addAttribute("user", user);
+	        // 사용자 정보 가져오기
+	        User user = userService.findByUserId(userId);
+	        if (user == null) {
+	            return "redirect:/error";
+	        }
 
-		return "mypage/form";
-	}
+	        // 사용자가 작성한 게시물 가져오기
+	        List<Board> userBoards = boardService.getBoardsByAuthor(userId);
+	        List<Question> userQuestions = questionService.getQuestionsByAuthor(userId);
+
+	        model.addAttribute("user", user);
+	        model.addAttribute("userBoards", userBoards);
+	        model.addAttribute("userQuestions", userQuestions);
+
+	        return "mypage/form";
+	    }
 
 //    정보수정 페이지로 이동
 	@GetMapping("/editProfile")

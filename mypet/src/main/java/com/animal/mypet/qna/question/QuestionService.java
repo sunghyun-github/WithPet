@@ -19,6 +19,7 @@ import com.animal.mypet.qna.answer.Answer;
 import com.animal.mypet.qna.file.File;
 import com.animal.mypet.qna.file.FileService;
 import com.animal.mypet.user.User;
+import com.animal.mypet.user.UserRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -34,6 +35,7 @@ public class QuestionService {
 
 	private final QuestionRepository questionRepository;
 	private final FileService fileService;
+	private final UserRepository userRepository;
 
 	public List<Question> getList() {
 		return this.questionRepository.findAll();
@@ -151,5 +153,11 @@ public class QuestionService {
 				return cb.and(predicates.toArray(new Predicate[0]));
 			}
 		};
+		
+	}
+	public List<Question> getQuestionsByAuthor(String userId) {
+		User author = userRepository.findByUserId(userId)
+				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + userId));
+		return questionRepository.findByAuthor(author);
 	}
 }

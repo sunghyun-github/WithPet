@@ -21,12 +21,38 @@
 			<p><strong>전화번호:</strong> <span th:text="${user.userPhone}"></span></p>
 			<p><strong>가입일자:</strong> <span th:text="${user.createdAt}"></span></p>
 		</div>
-			
-		<!--이전페이지로 이동-->
+		<!--정보 수정하기 버튼-->
 		<div>
-			<a href="javascript:history.back()" class="btn">이전 페이지로 이동</a>
+			<a th:href="@{/user/editProfile}" class="btn">개인정보 수정하기</a>
 		</div>
 
+		<div>
+			<a th:href="@{/user/changePassword}">비밀번호 변경하기</a>
+		</div>
+
+		<!--자유게시판 내가 쓴 글-->
+		<div>
+			<h3>내가 쓴 자유게시판 글</h3>
+			<ul>
+				<li th:each="board : ${userBoards}">
+					<a th:href="@{'/board/detail/' + ${board.idx}}">
+						<span th:text="${board.title}"></span>
+					</a> - <span th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd')}"></span>
+				</li>
+			</ul>
+		</div>
+
+		<!--QnA 내가 쓴 글-->
+		<div>
+			<h3>내가 쓴 QnA 글</h3>
+			<ul>
+				<li th:each="question : ${userQuestions}">
+					<a th:href="@{'/qna_question/detail/' + ${question.questionIdx}}">
+						<span th:text="${question.subject}"></span>
+					</a> - <span th:text="${#temporals.format(question.createdAt, 'yyyy-MM-dd')}"></span>
+				</li>
+			</ul>
+		</div>
 
 		<!--회원탈퇴 버튼-->
 		<button type="button" class="btn" onclick="confirmDeleteAccount()">회원탈퇴</button>
@@ -37,11 +63,14 @@
 				<button type="submit" class="btn">계정 삭제</button>
 			</form>
 		</div>
+		
 
-		<!--정보 수정하기 버튼-->
+		<!--이전페이지로 이동-->
 		<div>
-			<a th:href="@{/user/editProfile}" class="btn">정보 수정하기</a>
+			<a href="javascript:history.back()" class="btn">이전 페이지로 이동</a>
 		</div>
+
+
 	</div>
 	<script>
 		function confirmDeleteAccount() {
