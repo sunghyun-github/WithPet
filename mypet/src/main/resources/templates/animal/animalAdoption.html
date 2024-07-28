@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -14,7 +13,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Use min-height to ensure full viewport height */
+            min-height: 100vh;
         }
 
         .container {
@@ -24,7 +23,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 600px;
-            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            box-sizing: border-box;
         }
 
         h1 {
@@ -45,17 +44,17 @@
         input[type="email"],
         input[type="tel"],
         textarea {
-            width: 100%; /* Use full width of the container */
+            width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             margin-bottom: 15px;
-            box-sizing: border-box; /* Include padding and border in the element's total width */
+            box-sizing: border-box;
         }
 
         textarea {
             height: 100px;
-            resize: vertical; /* Allow vertical resize */
+            resize: vertical;
         }
 
         button {
@@ -68,7 +67,7 @@
             font-size: 16px;
             margin-top: 10px;
             text-align: center;
-            display: inline-block; /* Ensure button is displayed */
+            display: inline-block;
         }
 
         button:hover {
@@ -116,7 +115,7 @@
             <label for="adoptionReason">입양 이유:</label>
             <textarea id="adoptionReason" name="adoptionReason" required></textarea>
 
-            <label>입양 경험 유무</label>
+            <label>입양 경험 유무:</label>
             <div class="radio-group">
                 <input type="radio" id="adoptionExperienceYes" name="adoptionExperience" value="YES" />
                 <label for="adoptionExperienceYes">있음</label>
