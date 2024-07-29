@@ -88,7 +88,7 @@ public class AnimalController {
             return "animal/animalNotFound";
         }
 
-        return "animal/animalDetails";
+        return "/animal/animalDetails";
     }
 
     @GetMapping("/animalNum")
