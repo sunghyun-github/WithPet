@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>주문 성공</title>
-</head>
-<body>
-    <h1>주문 완료</h1>
-    <p>주문 결제가 완료되었습니다</p>
-    <a href="/items">상품목록 보러가기</a>
-</body>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+   <div class="inner item_wrap">
+	    <h2>주문 완료</h2>
+	    <p class="success_msg">주문 결제가 완료되었습니다!</p>
+	    <div class="btn_wrap_B">
+	    	<a href="/items" class="btn">상품목록 보러가기</a>
+	    </div>
+    </div>
+</div>
 </html>

@@ -1,122 +1,22 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container">
+<div layout:fragment="content" class="container main_container">
    <div class="inner main">
    		<h2 class="blind">메인 홈</h2>
        <section class="main_slide">
-         <h1>index 페이지 입니다.</h1>
-       </section>
-       <section class="main_adoption">
-       		<div class="title_wrap">
-				<h2>입양 대기 유기동물</h2>
-				<p>143마리의 친구들이 보호자를 기다리고 있어요.</p>
-				<p>멍냥 친구들에게 새로운 가족을 찾아주세요!</p>
-			</div>
-			<div id="randomAnimals" class="animal-list"></div>
-			<div class="region_wrap seoul_wrap">
-    <div class="animal-list" id="seoulAnimals">
-		    <div th:each="animal : ${seoulAnimals}" class="animal-item" 
-             th:data-species="${animal.spcs}" 
-             th:data-region="seoul" 
-             th:data-sex="${animal.sexdstn}"
-             th:if="${!#strings.contains(animal.nm, '마감')}">
-		        <a th:href="@{'/animal/animalDetails/' + ${animal.animalNo}}">
-			        <div class="animal_img" th:if="${!animal.photoUrl.startsWith('http') && !#strings.isEmpty(animal.photoUrl)}" 
-			          th:style="'background:url(' + 'http://' + ${animal.photoUrl} + ') no-repeat center / cover;'" 
-			          aria-label="유기동물 이미지" ></div>
-			        <div class="animal_img empty" th:if="${#strings.isEmpty(animal.photoUrl)}" ></div>
-			        <div class="text_wrap">
-			        	<span class="spcs">
-			        		<p th:if="${#strings.equals(animal.spcs, 'DOG')}">강아지</p>
-			        		<p th:if="${#strings.equals(animal.spcs, 'CAT')}">고양이</p>
-			        	</span>
-			        	<ul class="info_title">
-				        	<li th:text="${animal.breeds}"></li>		        	
-				        	<li th:text="|${#strings.substringBefore(animal.age, '(세)')}세|"></li>	
-				        	<li th:if="${#strings.equals(animal.sexdstn, 'M')}">수컷</li>		        	
-				        	<li th:if="${#strings.equals(animal.sexdstn, 'W')}">암컷</li>		        	
-			        	</ul>
-				        <p>지역: 서울특별시 
-				        	<span th:text="|(${#strings.substringAfter(animal.nm, '(')}|"></span>
-				        </p>
-			        </div>
-		        </a>
-		    </div>
-		</div>
-</div>
-
-<div class="region_wrap gyeonggi_wrap">
-    <div class="animal-list" id="gyeonggiAnimals">
-		    <div th:each="animal : ${gyeonggiAnimals}" class="animal-item" 
-		    th:data-species="${animal.speciesNm}" th:data-region="gyeonggi" th:data-sex="${animal.sexNm}">
-		        <a th:href="@{'/animal/animalDetails/' + ${animal.abdmIdntfyNo}}">
-			       <div class="animal_img" th:style="'background:url(' + ${animal.imageCours} + ') no-repeat center / cover;'" 
-			       aria-label="동물 이미지"></div>
-			        <div class="text_wrap">
-			        	<span class="spcs">
-			        		<p th:if="${#strings.contains(animal.speciesNm, '개')}">강아지</p>
-			        		<p th:if="${#strings.contains(animal.speciesNm, '고양이')}">고양이</p>
-			        		<p th:unless="${#strings.contains(animal.speciesNm, '개') || #strings.contains(animal.speciesNm, '고양이')}">기타축종</p>
-			        	</span>
-			        	<ul class="info_title">
-				        	<li th:text="${#strings.substringAfter(animal.speciesNm, '] ')}"></li>		        	
-				        	<li th:text="2025 - |${#numbers.formatInteger(#strings.substringBefore(animal.ageInfo, '('), 4)}세|"></li>		        	
-				        	<li th:if="${#strings.equals(animal.sexNm, 'M')}">수컷</li>		        	
-				        	<li th:if="${#strings.equals(animal.sexNm, 'F')}">암컷</li>		        	
-				        	<li th:if="${#strings.equals(animal.sexNm, 'Q')}">성별미상</li>		        	
-			        	</ul>
-				        <p>지역: <span th:text="${animal.jurisdInstNm}"></span></p>
-			        </div>
-		        </a>
-		    </div>
-		</div>
-</div>
+       		<div class="main_title">
+       			<h3>함께하개냥</h3>
+       			<p>143마리의 친구들이 보호자를 기다리고 있어요.</p>
+       			<p>멍냥 친구들에게 새로운 가족을 찾아주세요<strong>!</strong></p>
+       			<div class="btn_wrap">
+	       			<ul>
+	       				<li><a th:href="@{|/animal/animalBoard|}" class="btn">입양 알아보기<i class="fa-solid fa-arrow-right"></i></a></li>
+						<li><a th:href="@{|/qna_question/list|}" class="btn">1:1 상담</a></li>
+	       			</ul>
+	       		</div>
+       		</div>
+       		<div class="screen"></div>
        </section>
     </div>
 </div>
-<script layout:fragment="script" type="text/javascript">
-document.addEventListener("DOMContentLoaded", function() {
-    function getRandomElements(arr, num) {
-        const shuffled = arr.slice(0);
-        let i = arr.length;
-        let min = i - num;
-        let temp;
-        let index;
-    
-        while (i-- > min) {
-            index = Math.floor((i + 1) * Math.random());
-            temp = shuffled[index];
-            shuffled[index] = shuffled[i];
-            shuffled[i] = temp;
-        }
-    
-        return shuffled.slice(min);
-    }
-
-    function displayRandomAnimals() {
-        const seoulAnimals = Array.from(document.querySelectorAll('#seoulAnimals .animal-item'));
-        const gyeonggiAnimals = Array.from(document.querySelectorAll('#gyeonggiAnimals .animal-item'));
-        const allAnimals = [...seoulAnimals, ...gyeonggiAnimals];
-        
-        if (allAnimals.length === 0) {
-            console.warn('동물 목록이 비어있습니다.');
-            return;
-        }
-
-        const randomAnimals = getRandomElements(allAnimals, Math.min(6, allAnimals.length));
-        const randomAnimalsContainer = document.getElementById('randomAnimals');
-
-        randomAnimalsContainer.innerHTML = ''; // Clear existing content
-
-        randomAnimals.forEach(animal => {
-            if (animal) {
-                const clonedAnimal = animal.cloneNode(true); // Clone and add the element
-                randomAnimalsContainer.appendChild(clonedAnimal);
-            }
-        });
-    }
-
-    displayRandomAnimals();
-});
-</script>
 
 </html>

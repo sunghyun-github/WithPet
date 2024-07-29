@@ -1,11 +1,13 @@
 <header th:fragment="navbarfragment" id="header">
 	<div class="inner">
-		<h1><a href="/">LOGO</a></h1>
-		
+		<h1 class="logo">
+			<a href="/"><span class="logo_image"></span><span>함께하개냥</span></a>
+		</h1>
 		<nav class="gnb_wrap">
 			<ul class="gnb">
 				<li><a href="/">홈</a></li>
 				<li><a th:href="@{|/animal/animalBoard|}">입양</a></li>
+				<li><a th:href="@{|/items|}">반려동물 용품</a></li>
 				<li><a th:href="@{|/board/list|}">커뮤니티</a></li>
 				<li><a th:href="@{|/qna_question/list|}">Q&A</a></li>
 			</ul>

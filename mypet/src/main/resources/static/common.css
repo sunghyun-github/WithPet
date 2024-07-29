@@ -25,6 +25,15 @@
     url(../fonts/Pretendard-Bold.woff) format('woff'),
     url(../fonts/Pretendard-Bold.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'Kkwabaegi';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/Kkwabaegi.eot);
+  src: url(../fonts/Kkwabaegi.eot?#iefix) format('embedded-opentype'),
+    url(../fonts/Kkwabaegi.woff) format('woff'),
+    url(../fonts/Kkwabaegi.ttf) format('truetype');
+}
 
 /* 반응형, 모바일에서 모든요소의 패딩,선을 크기안에 포함시킴 */
 *,

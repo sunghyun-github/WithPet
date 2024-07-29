@@ -1,29 +1,27 @@
 :root {
-  --point-color1: #D4D2E3;
-  --point-color2: #AFACD9;
-  --point-color3: #635f95;
-  --point-color4: #f5f5ff;
-
-  --txt-color-400: #999;
-  --txt-color-500: #666;
-  --txt-color-600: #635f95;
-
-  --border-color: #eee;
-  --danger-color: #ff6666;
-  --gray-color: #9795b5;
+	--point-color1: #D4D2E3;
+	--point-color2: #AFACD9;
+	--point-color3: #635f95;
+	--point-color4: #f5f5ff;
+	--txt-color-400: #999;
+	--txt-color-500: #666;
+	--txt-color-600: #635f95;
+	--border-color: #eee;
+	--danger-color: #ff6666;
+	--gray-color: #9795b5;
 }
 
 /*-------------------기본 설정------------------------*/
 #header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 9999;
-  transition: all 0.3s ease-in-out;
-  background: #fff;
-  
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 9999;
+	transition: all 0.3s ease;
+	background: #fff;
 }
+
 #header.scrolltop {
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.07);
 }
@@ -31,139 +29,163 @@
 #header.active {
 	transform: translateY(-120%);
 }
+
 #header .inner {
-  max-width: 1440px;
-  height: 65px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 auto;
-  position: relative;
-  padding: 0 20px;
+	max-width: 1440px;
+	height: 65px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0 auto;
+	position: relative;
+	padding: 0 20px;
 }
 
 #header h1 {
-  width: 150px;
-  /*   position: absolute; */
-  /*   left: 20px; */
-  /*   top: 50%; */
-  /*   transform: translateY(-50%); */
+	width: 200px;
 }
+
 #header h1 a {
-  display: block;
-  /*   height: 70px; */
-  /*   background: url(../images/pjt_logo.png) no-repeat center / contain; */
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font-family: Kkwabaegi;
+	font-size: 20px;
+	color: var(--txt-color-600);
 }
+
+#header h1 .logo_image {
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: url(../images/logo.png) no-repeat center/contain;
+}
+
 #header .gnb_wrap {
-  display: flex;
-  gap: 20px;
+	display: flex;
+	gap: 20px;
 }
+
 #header .gnb {
-  display: flex;
-  transition: all 0.2s;
+	display: flex;
+	transition: all 0.2s;
 }
-#header .gnb > li > a {
-  display: block;
-  color: var(--txt-color-600);
-  line-height: 80px;
-  font-weight: 500;
-  transition: all 0.2s;
-  padding: 0 15px;
-  white-space: nowrap;
+
+#header .gnb>li>a {
+	display: block;
+	color: var(--txt-color-600);
+	line-height: 80px;
+	font-weight: 500;
+	transition: all 0.2s;
+	padding: 0 15px;
+	white-space: nowrap;
 }
-#header .gnb > li > a:hover {
-  color: var(--point-color2);
+
+#header .gnb>li>a:hover {
+	color: var(--point-color2);
 }
+
 #header .log_wrap {
-  display: flex;
+	display: flex;
 }
-#header .log_wrap > li {
-  padding: 0 5px;
-  position: relative;
+
+#header .log_wrap>li {
+	padding: 0 5px;
+	position: relative;
 }
-#header .log_wrap > li > a {
-  color: var(--txt-color-600);
-  font-weight: 500;
+
+#header .log_wrap>li>a {
+	color: var(--txt-color-600);
+	font-weight: 500;
 }
 
 #header .log_area {
-  display: flex;
+	display: flex;
 }
+
 #header .log_wrap {
-  align-items: center;
+	align-items: center;
 }
 
 #header .log_wrap a {
-  width: 100%;
-  height: 35px;
-  gap: 0 10px;
+	width: 100%;
+	height: 35px;
+	gap: 0 10px;
 }
+
 #header .log_wrap li:nth-child(2) a {
-  background: var(--point-color3);
-  border: 1px solid var(--point-color3);
-  color: #fff;
+	background: var(--point-color3);
+	border: 1px solid var(--point-color3);
+	color: #fff;
 }
+
 #header .log_wrap a:hover {
-  background: var(--point-color3);
-  border: 1px solid var(--point-color3);
-  color: #fff;
+	background: var(--point-color3);
+	border: 1px solid var(--point-color3);
+	color: #fff;
 }
 
 h2 {
-  color: var(--txt-color-600);
-  text-align: center;
-  font-size: 36px;
-  font-style: normal;
-  font-weight: 700;
-  padding: 0 0 60px;
-  border-bottom: 1px solid var(--border-color);
-  margin-bottom: 100px;
+	color: var(--txt-color-600);
+	text-align: center;
+	font-size: 36px;
+	font-style: normal;
+	font-weight: 700;
+	padding: 0 0 60px;
+	border-bottom: 1px solid var(--border-color);
+	margin-bottom: 100px;
 }
+
 .container {
-  /*   position: relative; */
-  padding-top: 80px;
+	/*   position: relative; */
+	padding: 70px 0 0;
 }
+
 .inner {
-  width: 1220px;
-  margin: 0 auto;
-  padding: 50px 0;
+	/*   width: 1220px; */
+	margin: 0 auto;
+	padding: 50px 0;
 }
 
 .btn_wrap .detail_btn {
-  border: none;
-  color: var(--txt-color-400);
+	border: none;
+	color: var(--txt-color-400);
 }
+
 .detail_btn:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+	text-decoration: underline;
+	text-underline-offset: 4px;
 }
+
 .detail_btn i {
-  padding-right: 5px;
+	padding-right: 5px;
 }
+
 .btn_wrap .delete {
-  position: relative;
-  padding-left: 12px;
-  margin-left: 9px;
+	position: relative;
+	padding-left: 12px;
+	margin-left: 9px;
 }
+
 .btn_wrap .delete::before {
-  content: '';
-  position: absolute;
-  width: 1px;
-  height: 14px;
-  top: 1px;
-  left: 0;
-  background: var(--txt-color-400);
+	content: '';
+	position: absolute;
+	width: 1px;
+	height: 14px;
+	top: 1px;
+	left: 0;
+	background: var(--txt-color-400);
 }
 
 .recommend i {
-  padding-right: 5px;
-  /* 	color: var(--txt-color-600); */
+	padding-right: 5px;
+	/* 	color: var(--txt-color-600); */
 }
 
 .disabled {
-  /* 클릭 이벤트 무시 */
-  pointer-events: none;
-  opacity: 0.6;
+	/* 클릭 이벤트 무시 */
+	pointer-events: none;
+	opacity: 0.6;
 }
 
 .alert {
@@ -176,113 +198,205 @@ h2 {
 }
 
 /*---------------- 메인 ----------------*/
+.main_container {
+	padding: 0;
+	width: 100%;
+}
+
+.main {
+	padding: 0;
+}
+
+.main .main_slide {
+	height: 100vh;
+	background: url('images/main_banner.jpg') no-repeat left center/cover;
+	overflow: hidden;
+	position: relative;
+}
+
+.main_slide .main_title {
+	color: #fff;
+	font-size: 21px;
+	text-align: center;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 10;
+	font-weight: 400;
+}
+
+.main_slide .main_title h3 {
+	font-size: 60px;
+	font-weight: 700;
+	padding: 0 0 30px;
+	font-family: Kkwabaegi;
+}
+
+.main_slide .main_title strong {
+	font-style: italic;
+}
+
+.main_slide .screen {
+	width: 100%;
+	height: 100%;
+	background: #000;
+	opacity: 0.3;
+}
+
+.main_slide .btn_wrap {
+	margin-top: 30px;
+}
+
+.main_slide .btn_wrap ul {
+	display: flex;
+	gap: 15px;
+	justify-content: center;
+}
+
+.main_slide li i {
+	padding-left: 15px;
+}
+
+.main_slide li .btn {
+	font-size: 17px;
+	padding: 15px 30px;
+	border: 2px solid #fff;
+}
+
+.main_slide li:last-child .btn {
+	background: none;
+	color: #fff;
+}
+
+.main_slide li .btn:hover {
+	border-color: var(--point-color3);
+}
+
+.main_slide li:last-child .btn:hover {
+	border-color: #fff;
+}
+
+.main_adoption {
+	padding: 90px 0 0;
+}
+
 .main_adoption .title_wrap h2 {
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	border: none;
 	padding-bottom: 20px;
 }
 
-
-
-
 /*---------------- 로그인 ----------------*/
 .login_wrap h2 {
-  margin-bottom: 40px;
+	margin-bottom: 40px;
 }
 
 .login_wrap .login_area {
-  width: 600px;
-  margin: 0 auto;
+	width: 600px;
+	margin: 0 auto;
 }
+
 .login_area form {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 30px;
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
+	border-bottom: 1px solid var(--border-color);
+	padding-bottom: 30px;
 }
+
 .login_wrap .input_wrap input {
-  width: 100%;
-  height: 50px;
-  margin-top: 15px;
-  border: none;
-  border-radius: 7px;
-  padding: 0 30px;
-  background: var(--point-color4);
+	width: 100%;
+	height: 50px;
+	margin-top: 15px;
+	border: none;
+	border-radius: 7px;
+	padding: 0 30px;
+	background: var(--point-color4);
 }
 
 .find_wrap ul {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
+
 .login_wrap .find_wrap a {
-  padding: 0 10px;
-  color: var(--txt-color-400);
+	padding: 0 10px;
+	color: var(--txt-color-400);
 }
+
 .find_wrap li {
-  position: relative;
+	position: relative;
 }
+
 .find_wrap li:nth-child(2) a:before {
-  content: '';
-  position: absolute;
-  width: 1px;
-  height: 13px;
-  top: 4px;
-  left: 0;
-  background: var(--txt-color-400);
+	content: '';
+	position: absolute;
+	width: 1px;
+	height: 13px;
+	top: 4px;
+	left: 0;
+	background: var(--txt-color-400);
 }
 
 .login_area .btn_wrap .btn {
-  width: 100%;
-  height: 50px;
-  background: var(--point-color3);
-  border: var(--point-color3);
-  color: #fff;
+	width: 100%;
+	height: 50px;
+	background: var(--point-color3);
+	border: var(--point-color3);
+	color: #fff;
 }
 
 .login_wrap .social-media-icon {
-  width: 20px;
-  height: 20px;
-  margin-left: 10px;
+	width: 20px;
+	height: 20px;
+	margin-left: 10px;
 }
 
 .sns_login {
-  padding-top: 40px;
+	padding-top: 40px;
 }
+
 .sns_wrap ul {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
 }
+
 .sns_wrap .btn {
-  width: 100%;
-  height: 48px;
-  border-radius: 7px;
-  padding: 0 40px;
-  text-align: center;
-  position: relative;
-  border: none;
+	width: 100%;
+	height: 48px;
+	border-radius: 7px;
+	padding: 0 40px;
+	text-align: center;
+	position: relative;
+	border: none;
 }
+
 .sns_wrap .btn:hover {
-  background: none;
-  color: var(--txt-color-600);
+	background: none;
+	color: var(--txt-color-600);
 }
+
 .sns_wrap .kakao_btn {
 	background: #FEE500;
-	color: rgba(0,0,0,0.85);
+	color: rgba(0, 0, 0, 0.85);
 }
+
 .sns_wrap .kakao_btn:hover {
 	background: #FEE500;
 	color: #000;
 }
+
 .sns_wrap .btn img {
 	width: 20px;
 	height: 20px;
 	position: absolute;
 	top: 50%;
 	left: 28px;
-	transform:translateY(-50%);
+	transform: translateY(-50%);
 }
+
 .sns_wrap .btn span {
 	margin: 0 auto;
 }
@@ -291,6 +405,7 @@ h2 {
 	background: #03C75A;
 	color: #fff;
 }
+
 .sns_wrap .naver_btn:hover {
 	background: #03C75A;
 	color: #fff;
@@ -306,6 +421,7 @@ h2 {
 .login_wrap .signup_wrap input {
 	margin: 0 0 4px;
 }
+
 .signup_wrap .btn {
 	height: 40px;
 }
@@ -315,420 +431,458 @@ h2 {
 	gap: 15px;
 	align-items: center;
 }
+
 .signup_wrap .message {
 	font-size: 12px;
 	color: var(--txt-color-400);
 }
+
 .login_area .create-user-form {
 	border-bottom: none;
 }
 
 /*---------------- 자유게시판 ----------------*/
-
 .board_wrap {
-  text-align: right;
+	text-align: right;
 }
+
 .board_list_area {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
 }
+
 .board_list_area .btn {
-  border-radius: 10px;
+	border-radius: 10px;
 }
+
 .board_list_area .btn_search {
-  padding: 13px 15px;
+	padding: 13px 15px;
 }
+
 .board_list_wrap {
-  font-size: 12px;
+	font-size: 12px;
 }
+
 .board_list_wrap th {
-  font-size: 14px;
+	font-size: 14px;
 }
 
 .board_list_wrap th:nth-child(1) {
-  width: 80px;
+	width: 80px;
 }
+
 .board_list_wrap th:nth-child(2) {
-  width: 50%;
+	width: 50%;
 }
+
 .board_list_wrap th:last-child {
 	width: 140px;
 }
 
 .board_list_wrap td a:hover .title {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+	text-decoration: underline;
+	text-underline-offset: 4px;
 }
+
 .board_list_wrap .title_td {
-  text-align: left;
-  align-content: center;
+	text-align: left;
+	align-content: center;
 }
+
 .board_list_wrap .title_td a {
-  display: flex;
+	display: flex;
 }
+
 .board_list_wrap .title_td .title {
-  max-width: 90%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 5px;
+	max-width: 90%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding-right: 5px;
 }
 
 .board_list_wrap .top {
-  background: #fafafa;
+	background: #fafafa;
 }
 
 .board_list_wrap .hot {
-  color: var(--danger-color);
-  font-weight: 700;
+	color: var(--danger-color);
+	font-weight: 700;
 }
+
 .board_list_wrap .hot b {
-  font-style: italic;
+	font-style: italic;
 }
+
 .board_list_wrap .top .title {
-  font-weight: 700;
+	font-weight: 700;
 }
 
 .board_wrap .form_control {
-  width: 300px;
-  border: 0;
-  margin-right: 10px;
-  border-bottom: 1px solid var(--border-color);
+	width: 300px;
+	border: 0;
+	margin-right: 10px;
+	border-bottom: 1px solid var(--border-color);
 }
+
 .write_btn {
-  padding: 10px 30px;
-  border-radius: 10px;
+	padding: 10px 30px;
+	border-radius: 10px;
 }
+
 .comment_size {
-  color: var(--danger-color);
-  font-size: 12px;
-  text-align: left;
+	color: var(--danger-color);
+	font-size: 12px;
+	text-align: left;
 }
 
 .comment {
-  border-top: dotted 1px #ddd;
-  font-size: 0.7em;
+	border-top: dotted 1px #ddd;
+	font-size: 0.7em;
 }
 
 /*---------------- 게시글 쓰기 ----------------*/
 .write_wrap {
-  text-align: left;
+	text-align: left;
 }
 
 .write_wrap .title_wrap {
-  margin-bottom: 10px;
-  padding: 0;
+	margin-bottom: 10px;
+	padding: 0;
 }
+
 .write_wrap .title_wrap input {
-  width: 100%;
-  border: 1px solid #ddd;
-  font-size: 16px;
-  height: 50px;
-  border-radius: 5px;
+	width: 100%;
+	border: 1px solid #ddd;
+	font-size: 16px;
+	height: 50px;
+	border-radius: 5px;
 }
+
 .write_wrap .btn_wrap {
-  text-align: right;
+	text-align: right;
 }
 
 .note-editor .btn {
-  border-color: #ccc;
-  font-size: 12px;
-  padding: 5px 15px;
+	border-color: #ccc;
+	font-size: 12px;
+	padding: 5px 15px;
 }
 
 /*---------------- 게시글 상세보기 ----------------*/
 .detail_wrap td {
-  text-align: left;
-  border: none;
+	text-align: left;
+	border: none;
 }
+
 .detail_title {
-  border-top: 1px solid var(--txt-color-400);
-  border-bottom: 1px solid var(--border-color);
-  padding: 5px 0;
+	border-top: 1px solid var(--txt-color-400);
+	border-bottom: 1px solid var(--border-color);
+	padding: 5px 0;
 }
+
 .detail_title td {
-  border: none;
-  text-align: left;
-  padding: 5px 20px;
-  color: var(--txt-color-400);
+	border: none;
+	text-align: left;
+	padding: 5px 20px;
+	color: var(--txt-color-400);
 }
+
 .detail_title td.date {
-  width: 160px;
-  text-align: right;
+	width: 160px;
+	text-align: right;
 }
+
 .detail_title .bottom {
-  display: flex;
-  gap: 10px;
-  justify-content: space-between;
-  color: var(--txt-color-500);
+	display: flex;
+	gap: 10px;
+	justify-content: space-between;
+	color: var(--txt-color-500);
 }
+
 .detail_title .bottom li span {
-  padding-left: 10px;
+	padding-left: 10px;
 }
+
 .detail_title .bottom li span strong {
-  padding-left: 5px;
+	padding-left: 5px;
 }
 
 .detail_title .title {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--txt-color-600);
+	font-size: 18px;
+	font-weight: 700;
+	color: var(--txt-color-600);
 }
 
 .detail_content {
-  padding: 10px 20px;
-  border-bottom: 1px solid var(--border-color);
+	padding: 10px 20px;
+	border-bottom: 1px solid var(--border-color);
 }
 
 .detail_content .content {
-  padding: 20px 0 100px;
+	padding: 20px 0 100px;
 }
-.detail_content .content table,
-.detail_content .content td {
-  border: 1px solid var(--txt-color-400);
+
+.detail_content .content table, .detail_content .content td {
+	border: 1px solid var(--txt-color-400);
 }
+
 .detail_content .btn_wrap {
-  text-align: right;
-  color: var(--txt-color-400);
-  padding-right: 0;
+	text-align: right;
+	color: var(--txt-color-400);
+	padding-right: 0;
 }
+
 .detail_content .content_bottom {
-  text-align: center;
+	text-align: center;
 }
 
 .detail_wrap .list {
 	margin-bottom: 10px;
 	text-align: right;
 }
+
 .detail_wrap .list i {
 	padding-right: 5px;
 }
 
 /* 댓글 */
-
 .board_comment .name {
-  font-weight: 700;
+	font-weight: 700;
 }
+
 .board_comment .name i {
-  margin-right: 5px;
+	margin-right: 5px;
 }
+
 .comment_form {
-  padding: 20px 10px;
-  border-radius: 20px;
+	padding: 20px 10px;
+	border-radius: 20px;
 }
+
 .comment_form form {
-  margin: 10px 0;
-  text-align: center;
+	margin: 10px 0;
+	text-align: center;
 }
+
 .comment_form textarea {
-  height: 80px;
-  border: 1px solid var(--border-color);
-  border-bottom: none;
-  border-radius: 10px 10px 0 0;
+	height: 80px;
+	border: 1px solid var(--border-color);
+	border-bottom: none;
+	border-radius: 10px 10px 0 0;
 }
+
 .comment_form .submit_btn {
-  width: 100%;
-  cursor: pointer;
-  background: none;
-  border: 1px solid var(--border-color);
-  border-top: none;
-  padding: 10px;
-  border-radius: 0 0 10px 10px;
+	width: 100%;
+	cursor: pointer;
+	background: none;
+	border: 1px solid var(--border-color);
+	border-top: none;
+	padding: 10px;
+	border-radius: 0 0 10px 10px;
 }
 
 .board_comment .comment_size {
-  padding: 10px;
-  color: var(--txt-color-600);
-  border-bottom: 1px solid var(--border-color);
+	padding: 10px;
+	color: var(--txt-color-600);
+	border-bottom: 1px solid var(--border-color);
 }
 
 .comment_list_wrap li {
-  padding: 15px 10px 5px;
-  border-bottom: 1px solid var(--border-color);
+	padding: 15px 10px 5px;
+	border-bottom: 1px solid var(--border-color);
 }
+
 .comment_list_wrap .comment_header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
 }
+
 .comment_header .comment_size {
-  border: none;
-  padding: 0 0 0 7px;
-  color: var(--txt-color-400);
-  font-weight: 400;
+	border: none;
+	padding: 0 0 0 7px;
+	color: var(--txt-color-400);
+	font-weight: 400;
 }
+
 .comment_list_wrap .comment_header div {
-  flex-grow: 1;
+	flex-grow: 1;
 }
+
 .comment_header .date {
-  text-align: right;
-  font-size: 12px;
-  color: var(--txt-color-400);
+	text-align: right;
+	font-size: 12px;
+	color: var(--txt-color-400);
 }
 
 .comment_bottom {
-  display: flex;
-  padding: 20px 0;
-}
-.comment_bottom .comment_content {
-  width: calc(100% - 80px);
-}
-.comment_actions {
-  width: 125px;
-  text-align: right;
-}
-.comment_actions button {
-  background: none;
-  border: none;
-  font-size: 12px;
-}
-.comment_actions button:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.comment_actions .detail_btn i {
-  margin: 0;
+	display: flex;
+	padding: 20px 0;
 }
 
+.comment_bottom .comment_content {
+	width: calc(100% - 80px);
+}
+
+.comment_actions {
+	width: 125px;
+	text-align: right;
+}
+
+.comment_actions button {
+	background: none;
+	border: none;
+	font-size: 12px;
+}
+
+.comment_actions button:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.comment_actions .detail_btn i {
+	margin: 0;
+}
 
 /* ---------------- Q&A ----------------*/
-
 .qna_form {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
 }
+
 .qna_detail .content {
 	padding: 20px 0 30px;
 }
+
 .qna_detail .detail_content {
 	padding: 10px 20px 100px;
 }
+
 .qna_detail .title {
 	padding-left: 20px;
 	margin-left: 5px;
 	position: relative;
 }
+
 .qna_detail .title::before {
 	content: '';
 	position: absolute;
- 	width: 1px;
- 	height: 14px;
+	width: 1px;
+	height: 14px;
 	top: 5px;
 	left: 0;
 	background: var(--txt-color-400);
 }
 
-
-
 /* ---------------- 아이디 찾기 ----------------*/
-
 .find_wrap .find_area {
-   width: 600px;
-   margin: 0 auto;
+	width: 600px;
+	margin: 0 auto;
 }
+
 .find_wrap h2 {
-    margin-bottom: 40px;
+	margin-bottom: 40px;
 }
 
 .find_area form {
-   display: flex;
-   flex-direction: column;
-   gap: 25px;
-   padding-bottom: 40px;
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
+	padding-bottom: 40px;
 }
 
 .find_wrap .input_wrap input {
-   width: 100%;
-   height: 50px;
-   margin-top: 15px;
-   border: none;
-   border-radius: 7px;
-   padding: 0 30px;
-   background: var(--point-color4);
+	width: 100%;
+	height: 50px;
+	margin-top: 15px;
+	border: none;
+	border-radius: 7px;
+	padding: 0 30px;
+	background: var(--point-color4);
 }
 
 .find_wrap .input_wrap label {
-   font-size: 16px;
-   color: var(--txt-color-600);
-   margin-bottom: 8px;
+	font-size: 16px;
+	color: var(--txt-color-600);
+	margin-bottom: 8px;
 }
 
 .find_wrap .btn_wrap .btn {
-   width: 100%;
-   height: 50px;
-   background: var(--point-color3);
-   border: var(--point-color3);
-   color: #fff;
+	width: 100%;
+	height: 50px;
+	background: var(--point-color3);
+	border: var(--point-color3);
+	color: #fff;
 }
 
 .error-message p {
-   color: red;
-   text-align: center;
-   margin-top: 20px;
+	color: red;
+	text-align: center;
+	margin-top: 20px;
 }
-
 
 /*---------------- 아이디 찾기 결과 ----------------*/
 .find_wrap .result_wrap {
-    text-align: center;
-    width: 100%;
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 40px;
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    background: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	width: 100%;
+	max-width: 600px;
+	margin: 40px auto;
+	padding: 40px;
+	border: 1px solid var(--border-color);
+	border-radius: 10px;
+	background: #fff;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .result_wrap p {
-    font-size: 18px;
-    margin-bottom: 30px;
+	font-size: 18px;
+	margin-bottom: 30px;
 }
+
 .result_wrap .id_result {
 	font-size: 30px;
-    font-weight: 700;
-    color: var(--txt-color-600);
-    padding: 0 20px;
+	font-weight: 700;
+	color: var(--txt-color-600);
+	padding: 0 20px;
 }
+
 .result_wrap .btn {
 	margin: 0 3px;
 }
-
 
 /*---------------- 비밀번호 변경----------------*/
 .change_pw .input_wrap input {
 	margin-top: 0;
 	margin-bottom: 15px;
 }
+
 .change_pw .input_wrap div {
 	margin-bottom: 15px;
 	text-align: left;
 }
 
 .cp-error-message p, .cp-success-message p {
-    font-size: 18px;
-    margin-top: 20px;
-    font-weight: 500;
-    padding: 10px;
-    border-radius: 5px;
+	font-size: 18px;
+	margin-top: 20px;
+	font-weight: 500;
+	padding: 10px;
+	border-radius: 5px;
 }
 
 .cp-error-message p {
-    color: var(--danger-color);
-    background: rgba(255, 0, 0, 0.1);
-    border: 1px solid var(--danger-color);
+	color: var(--danger-color);
+	background: rgba(255, 0, 0, 0.1);
+	border: 1px solid var(--danger-color);
 }
 
 .cp-success-message p {
-    color: var(--success-color);
-    background: rgba(0, 255, 0, 0.1);
-    border: 1px solid var(--success-color);
+	color: var(--success-color);
+	background: rgba(0, 255, 0, 0.1);
+	border: 1px solid var(--success-color);
 }
-
-
 
 /*-------------------입양 페이지------------------------*/
 .animal_wrap h2 {
@@ -736,11 +890,13 @@ h2 {
 	padding: 0 0 30px;
 	margin-bottom: 0;
 }
+
 .title_wrap {
 	text-align: center;
 	padding: 0 0 50px;
 	color: var(--gray-color);
 }
+
 .title_wrap p {
 	font-size: 16px;
 	padding-bottom: 5px;
@@ -753,6 +909,7 @@ h2 {
 	border-top: 1px solid var(--border-color);
 	border-bottom: 1px solid var(--border-color);
 }
+
 .sub_wrap a {
 	white-space: nowrap;
 	color: var(--txt-color-600);
@@ -760,6 +917,7 @@ h2 {
 	padding: 10px 5px;
 	position: relative;
 }
+
 .sub_wrap a::before {
 	content: '';
 	position: absolute;
@@ -769,55 +927,60 @@ h2 {
 	height: 1px;
 	border-radius: 1px;
 }
+
 .sub_wrap a.active::before {
 	background: var(--point-color3);
 }
 
 .filter_area {
 	margin: 50px 0;
-    border: 1px solid var(--gray-color);
-    border-radius: 10px;
-    padding: 27px;
-    display: flex;
-    flex-direction: column;
+	border: 1px solid var(--gray-color);
+	border-radius: 10px;
+	padding: 27px;
+	display: flex;
+	flex-direction: column;
 	gap: 20px;
 }
 
 .filter_wrap span {
 	display: inline-block;
-    font-weight: 700;
-    color: var(--txt-color-600);
-    margin-bottom: 0;
-    width: 50px;
+	font-weight: 700;
+	color: var(--txt-color-600);
+	margin-bottom: 0;
+	width: 50px;
 }
+
 .filter_wrap input[type="checkbox"] {
 	display: none;
 }
-input[type='checkbox'] + label.long {
+
+input[type='checkbox']+label.long {
 	width: 90px;
 }
 
 .animal-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
 }
 
 .animal-item {
-    flex: 0 0 calc(33.33% - 20px);
-    margin-bottom: 20px;
-    border-radius: 20px;
+	flex: 0 0 calc(33.33% - 20px);
+	margin-bottom: 20px;
+	border-radius: 20px;
 	border: 1px solid var(--point-color1);
 	overflow: hidden;
 	transition: all 0.2s;
 }
+
 .animal-item a {
 	display: block;
 	height: 460px;
 	color: var(--txt-color-600);
 }
+
 .animal-item:hover {
-	box-shadow: 0 7px 26px rgba(0,0,0,0.1), 0 1px 6px rgba(0,0,0,0.15);
+	box-shadow: 0 7px 26px rgba(0, 0, 0, 0.1), 0 1px 6px rgba(0, 0, 0, 0.15);
 }
 
 .animal-item .animal_img {
@@ -825,16 +988,19 @@ input[type='checkbox'] + label.long {
 	width: 100%;
 	height: 300px;
 }
+
 .animal-item .empty {
-	background:url(images/image-solid.svg) no-repeat center/ 30%;
+	background: url(images/image-solid.svg) no-repeat center/30%;
 	background-color: #f9f9f9;
 }
+
 .animal-item .text_wrap {
 	display: flex;
 	flex-direction: column;
 	gap: 13px;
 	padding: 20px;
 }
+
 .animal-item .spcs {
 	width: 80px;
 	text-align: center;
@@ -843,16 +1009,19 @@ input[type='checkbox'] + label.long {
 	padding: 2px;
 	overflow: hidden;
 }
+
 .animal-item .info_title {
 	display: flex;
 	font-weight: 700;
 	font-size: 20px;
 }
+
 .animal-item .info_title li {
 	position: relative;
 	padding-left: 15px;
 	margin-left: 15px;
 }
+
 .animal-item .info_title li:before {
 	content: '';
 	position: absolute;
@@ -862,19 +1031,19 @@ input[type='checkbox'] + label.long {
 	left: 0;
 	background: var(--gray-color);
 }
+
 .animal-item .info_title li:first-child {
 	padding-left: 0;
 	margin-left: 0;
 }
+
 .animal-item .info_title li:first-child:before {
 	display: none;
-	
 }
+
 .animal-item .text_wrap>p {
 	color: var(--gray-color);
 }
-
-
 
 /*-------------------보호소 검색------------------------*/
 .animal_num .title_wrap p {
@@ -885,15 +1054,18 @@ input[type='checkbox'] + label.long {
 	flex: none;
 	width: 400px;
 }
+
 .animal_num .animal-list {
 	justify-content: center;
-}   
+}
+
 .animal_wrap .search_wrap {
 	display: flex;
 	justify-content: center;
 	gap: 15px;
 	padding: 40px 0;
 }
+
 .animal_wrap .search_wrap input {
 	border: none;
 	background: var(--point-color4);
@@ -901,6 +1073,7 @@ input[type='checkbox'] + label.long {
 	padding: 14px 24px;
 	border-radius: 50px;
 }
+
 .animal_wrap .search_wrap .btn {
 	padding: 6px 35px;
 }
@@ -912,116 +1085,139 @@ input[type='checkbox'] + label.long {
 	border-radius: 20px;
 	overflow: hidden;
 }
+
 .animal_wrap .search-results {
 	width: 350px;
 	height: 500px;
-	overflow:auto;
+	overflow: auto;
 	background: #f5f5f5;
 }
+
 .search-item {
-    padding: 10px;
-    margin-bottom: 5px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+	padding: 10px;
+	margin-bottom: 5px;
+	background-color: #f9f9f9;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
 }
 
 .animal_wrap #map {
 	width: 860px;
 	height: 500px;
 }
+
 .search-item:hover {
-    background-color: #e9e9e9;
-}
-#map .info-window {
-    width: 250px;
-    padding: 10px;
-    background: #fff;
-}
-.info-window button {
-	padding: 2px 5px;
-    background: none;
-    border: none;
-    position: absolute;
-    top: 8px;
-    right: 10px;
-}
-.info-header {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-.info-body {
-    margin-bottom: 10px;
-}
-.info-item {
-    margin-bottom: 5px;
-}
-.info-label {
-    font-weight: 700;
-}
-.info-image {
-    width: 100%;
+	background-color: #e9e9e9;
 }
 
+#map .info-window {
+	width: 250px;
+	padding: 10px;
+	background: #fff;
+}
+
+.info-window button {
+	padding: 2px 5px;
+	background: none;
+	border: none;
+	position: absolute;
+	top: 8px;
+	right: 10px;
+}
+
+.info-header {
+	font-size: 16px;
+	font-weight: 700;
+	margin-bottom: 10px;
+}
+
+.info-body {
+	margin-bottom: 10px;
+}
+
+.info-item {
+	margin-bottom: 5px;
+}
+
+.info-label {
+	font-weight: 700;
+}
+
+.info-image {
+	width: 100%;
+}
 
 /*-------------------마이페이지------------------------*/
 .mypage_area h2 {
 	margin-bottom: 0;
 }
+
 .hidden {
 	display: none;
 }
+
 .mypage_wrap {
-  display: flex;
-  gap: 20px;
+	display: flex;
+	gap: 20px;
 }
+
 .mypage_wrap .right {
-  width: 100%;
-  margin: 0;
+	width: 100%;
+	margin: 0;
 }
+
 .tab_menu {
 	background: #fafafa;
 	padding: 20px;
 }
+
 .tab_menu ul li {
-  margin-bottom: 10px;
-  width: 100%;
-  text-align: left;
-  overflow: hidden;
+	margin-bottom: 10px;
+	width: 100%;
+	text-align: left;
+	overflow: hidden;
 }
+
 .tab_menu ul li a {
-  display: block;
-  border-radius: 5px;
-  padding: 10px 30px;
-   width: 220px;
-  color: var(--point-color2);
+	display: block;
+	border-radius: 5px;
+	padding: 10px 30px;
+	width: 220px;
+	color: var(--point-color2);
 }
+
 .tab_menu ul li.on a {
-  background-color: var(--point-color4);
-  color: var(--txt-color-600);
-  font-weight: 700;
+	background-color: var(--point-color4);
+	color: var(--txt-color-600);
+	font-weight: 700;
 }
+
 .tab_menu ul li.on a:hover {
 	text-decoration: none;
 }
+
 .mypage_wrap i {
 	margin-right: 5px;
 }
+
 .side_menu {
-  display: none;
+	display: none;
 }
+
 .side_menu.on {
-  display: block;
+	display: block;
 }
+
 .side_menu .board_list_wrap th:nth-child(2) {
 	width: 40%;
 }
+
 .right {
 	padding: 20px 0 50px 30px;
 }
+
 .right h3 {
 	font-size: 16px;
 	font-weight: 700;
@@ -1036,76 +1232,91 @@ input[type='checkbox'] + label.long {
 	font-weight: 700;
 	color: var(--txt-color-600);
 }
+
 .user_info li span {
 	padding-left: 10px;
 	font-weight: 400;
 	color: var(--txt-color-500);
 }
+
 .btn_wrap_B {
 	text-align: right;
 	padding: 30px 0 30px;
 	border-bottom: 1px solid var(--border-color);
 	margin-bottom: 20px;
 }
+
 .btn_wrap_B .btn {
 	border-radius: 10px;
 	padding: 10px 20px;
 }
+
 .btn_wrap_B .btn:first-child {
 	margin-right: 5px;
 }
+
 .right .delete_btn {
 	border: none;
 	background: none;
 	margin-left: auto;
 	color: #cbcbcb;
 }
+
 .right .delete_btn:hover {
 	text-decoration: underline;
-  	text-underline-offset: 3px;
+	text-underline-offset: 3px;
 }
+
 .delete_wrap {
 	display: flex;
 	justify-content: flex-end;
 }
+
 .confirm_delete {
 	padding: 10px 0;
 	font-weight: 700;
-    color: var(--txt-color-600);
+	color: var(--txt-color-600);
 }
+
 .confirm_delete input {
 	margin: 0 10px;
 	padding: 0 20px;
 	border: none;
 	background: var(--border-color);
 }
+
 .side_menu .board_list_wrap {
 	margin-bottom: 50px;
 }
 
 /*-------------------정보수정------------------------*/
-.user_modify ul{
+.user_modify ul {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
 }
-.user_modify .result_wrap  {
+
+.user_modify .result_wrap {
 	text-align: left;
 }
+
 .user_modify .btn_wrap_B {
 	border: none;
 	margin: 0;
 	padding: 30px 0 0 0;
 	text-align: center;
 }
+
 .user_modify .btn_wrap_B .btn {
 	padding: 10px 40px;
 }
+
 .user_modify .result_wrap label {
 	font-weight: 700;
 	color: var(--txt-color-600);
 	padding-right: 10px;
 }
+
 .user_modify .result_wrap input {
 	width: 100%;
 	border: 1px solid var(--border-color);
@@ -1116,155 +1327,273 @@ input[type='checkbox'] + label.long {
 }
 /* application-wrap 클래스 스타일 */
 .application-wrap {
-   max-width: 800px;
-   margin: 20px auto;
-   padding: 30px;
-   background: #fff;
-   border-radius: 8px;
-   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-   box-sizing: border-box;
+	max-width: 800px;
+	margin: 20px auto;
+	padding: 30px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
 }
 
 /* 입력 필드 및 텍스트 영역 스타일 */
 .application-wrap .input label {
-   font-weight: bold;
-   color: var(--txt-color-600);
-   margin-bottom: 8px;
-   font-size: 16px;
+	font-weight: bold;
+	color: var(--txt-color-600);
+	margin-bottom: 8px;
+	font-size: 16px;
 }
 
 .application-wrap .input input, .application-wrap .input textarea {
-   width: 100%;
-   padding: 12px;
-   border: 1px solid var(--border-color);
-   border-radius: 4px;
-   margin-bottom: 15px;
-   box-sizing: border-box;
-   font-size: 16px;
+	width: 100%;
+	padding: 12px;
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
+	margin-bottom: 15px;
+	box-sizing: border-box;
+	font-size: 16px;
 }
 
 .application-wrap .radio-item {
-   height: 100%;
-   display: flex;
+	height: 100%;
+	display: flex;
 }
 
 .application-wrap .input textarea {
-   resize: vertical;
-   height: 100px;
+	resize: vertical;
+	height: 100px;
 }
 
 .application-wrap button[type="submit"] {
-   width: 100%;
-   height: 50px;
-   background: var(--point-color3);
-   border: var(--point-color3);
-   color: #fff;
-   border-radius: 30px;
+	width: 100%;
+	height: 50px;
+	background: var(--point-color3);
+	border: var(--point-color3);
+	color: #fff;
+	border-radius: 30px;
 }
 
 /* 라디오 버튼 그룹 스타일 */
 .application-wrap .radio-group {
-   display: flex;
-   gap: 20px;
-   margin-bottom: 20px;
+	display: flex;
+	gap: 20px;
+	margin-bottom: 20px;
 }
 
 /* 라디오 버튼 스타일 */
 .application-wrap .radio-group input[type="radio"] {
-   appearance: none;
-   width: 20px;
-   height: 20px;
-   border: 2px solid var(--border-color);
-   border-radius: 50%;
-   position: relative;
-   cursor: pointer;
-   margin-right: 8px;
-   outline: none;
+	appearance: none;
+	width: 20px;
+	height: 20px;
+	border: 2px solid var(--border-color);
+	border-radius: 50%;
+	position: relative;
+	cursor: pointer;
+	margin-right: 8px;
+	outline: none;
 }
 
 /* 체크 표시 스타일 */
 .application-wrap .radio-group input[type="radio"]:checked::before {
-   content: '';
-   position: absolute;
-   top: 50%;
-   left: 50%;
-   width: 12px;
-   height: 12px;
-   background: var(--point-color3);
-   border-radius: 50%;
-   transform: translate(-50%, -50%);
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 12px;
+	height: 12px;
+	background: var(--point-color3);
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
 }
 
 /* 라벨 스타일 */
 .application-wrap .radio-group label {
-   font-size: 16px;
-   color: var(--txt-color-600);
-   cursor: pointer;
-   display: flex;
-   align-items: center;
-   gap: 8px;
+	font-size: 16px;
+	color: var(--txt-color-600);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
 
 /*------------------- 유기동물 입양 신청서 완료 ------------------------*/
+.animal-container .animal-info td {
+	border: 1px solid var(--border-color);
+	text-align: left;
+	padding-left: 15px;
+}
+
+.animal-container .animal-info td:nth-child(odd) {
+	background: #fafafa;
+	font-weight: 700;
+}
+
+.animal-photo {
+	position: relative;
+	width: 100%;
+}
+
+.animal-photo img {
+	width: 100%;
+}
+
+.animal-info {
+	margin: 20px 0;
+}
+
+.like-button {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	background-color: transparent;
+	border: none;
+	color: #ff6f61;
+	font-size: 36px;
+	cursor: pointer;
+	transition: color 0.3s;
+}
+
+.like-button:hover {
+	color: #ff4d4d;
+}
+
+.animal-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 20px;
+	max-width: 800px;
+	margin: auto;
+}
+
+.list_btn {
+	text-align: right;
+	font-size: 12px;
+	color: var(--txt-color-400);
+}
+/*------------------- 유기동물 입양 신청서 완료 ------------------------*/
 .ado-success-container {
-   background: #f8f9fa;
+	background: #f8f9fa;
 }
 
 .ado-success-main {
-   padding: 2em;
-   max-width: 800px;
-   margin: auto;
-   background-color: white;
-   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	padding: 2em;
+	max-width: 800px;
+	margin: auto;
+	background-color: white;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .ado-success-title, .ado-success-subtitle {
-   color: var(--txt-color-600);
+	color: var(--txt-color-600);
 }
 
 .ado-success-table {
-   width: 100%;
-   border-collapse: collapse;
-   margin-top: 1em;
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 1em;
 }
 
 .ado-success-table th, .ado-success-table td {
-   padding: 0.75em;
-   text-align: left;
-   border-bottom: 1px solid #ddd;
+	padding: 0.75em;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
 }
 
 .ado-success-table th {
-   background-color: #f2f2f2;
+	background-color: #f2f2f2;
 }
 
 .ado-success-btn-wrap {
-   text-align: end;
-   padding-top: 20px;
+	text-align: end;
+	padding-top: 20px;
 }
 
 .ado-success-inner .btn {
-   display: inline-block;
-   padding: 12px 24px;
-   border-radius: 7px;
-   text-align: center;
-   font-size: 16px;
-   font-weight: 500;
-   text-decoration: none;
-   color: #fff;
-   background: var(--point-color3);
-   transition: background-color 0.3s ease, transform 0.3s ease;
-   margin: 10px 5px; /* Add margin for spacing between buttons */
+	display: inline-block;
+	padding: 12px 24px;
+	border-radius: 7px;
+	text-align: center;
+	font-size: 16px;
+	font-weight: 500;
+	text-decoration: none;
+	color: #fff;
+	background: var(--point-color3);
+	transition: background-color 0.3s ease, transform 0.3s ease;
+	margin: 10px 5px; /* Add margin for spacing between buttons */
 }
+
 .ado-success-inner {
 	width: 744px;
 	padding: 50px 0 0;
 }
+
 .ado-success-inner .btn:hover {
-   background: var(--point-color2);
+	background: var(--point-color2);
 }
 
 .ado-success-main h2 {
-   border: none;
-   margin-bottom: 0;
+	border: none;
+	margin-bottom: 0;
+}
+
+
+/*------------------- 쇼핑몰 ------------------------*/
+.item_wrap h2, .add_item h2 {
+	margin-bottom: 40px;
+}
+.item_wrap input {
+	border: 1px solid var(--txt-color-400);
+	outline: none;
+	margin-bottom: 10px;
+}
+.item_wrap .btn_wrap {
+	text-align: right;
+	margin-top: 20px;
+}
+.item_wrap .btn_wrap_B a {
+	margin-left: 5px;
+}
+.item_wrap .btn i {
+	margin-right: 5px;
+}
+.item_wrap .delete_btn {
+	background: none;
+	border: none;
+}
+.item_wrap p {
+	font-weight: 700;
+	font-size: 20px;
+	color: var(--txt-color-600);
+	padding: 20px 0;
+	text-align: right;
+}
+.item_wrap .btn_wrap_B {
+	padding: 15px 0 30px;
+	border-top: 1px solid var(--border-color);
+	border-bottom: none;
+}
+.order_id {
+	background: var(--point-color4);
+	border-radius: 5px;
+	padding: 10px;
+	color: var(--txt-color-600);
+	font-weight: 700;
+}
+.item_wrap .success_msg {
+	font-weight: 500;
+	text-align: center;
+	padding: 0 0 40px;
+}
+.add_item  .add_form {
+	width: 500px;
+	margin: 0 auto;
+}
+.add_item input {
+	width: 100%;
+	border-color: #ddd;
+	margin-bottom: 20px;
+}
+.add_item .add_form .btn {
+	margin-top: 20px;
 }
