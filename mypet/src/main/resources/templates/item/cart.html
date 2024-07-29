@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>장바구니</title>
+</head>
+<body>
+    <h1>장바구니</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>상품명</th>
+                <th>수량</th>
+                <th>가격</th>
+                <th>총 가격</th>
+                <th>상품 삭제</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="cartItem : ${cartItems}">
+                <td th:text="${cartItem.item.name}"></td>
+                <td th:text="${cartItem.quantity}"></td>
+                <td th:text="${cartItem.item.price}"></td>
+                <td th:text="${cartItem.item.price * cartItem.quantity}"></td>
+                <td>
+                    <form th:action="@{/remove-from-cart}" method="post">
+                        <input type="hidden" name="cartItemId" th:value="${cartItem.id}" />
+                        <button type="submit">지우기</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>총 합계: <span th:text="${totalPrice}"></span></h2>
+    <form th:action="@{/checkout}" method="post">
+        <button type="submit">결제창 이동</button>
+    </form>
+    <a href="/items">상품 목록 이동</a>
+</body>
+</html>

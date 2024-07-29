@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>쇼핑 품목 추가하기</title>
+</head>
+<body>
+    <h1>쇼핑 품목 추가하기</h1>
+    <form th:action="@{/add-item}" method="post" enctype="multipart/form-data">
+        <label for="name">상품명:</label>
+        <input type="text" id="name" name="name" th:value="*{name}" required />
+        <br>
+        <label for="price">가격:</label>
+        <input type="number" id="price" name="price" th:value="*{price}" step="100" required />
+        <br>
+        <label for="file">Image:</label>
+        <input type="file" id="file" name="file" />
+        <button type="submit">상품 추가</button>
+    </form>
+    <a href="/items">상품 목록 이동</a>
+</body>
+</html>
+
