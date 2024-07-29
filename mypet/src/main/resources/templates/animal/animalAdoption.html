@@ -1,131 +1,54 @@
-<!DOCTYPE html>
-<html lang="ko">
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+	<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animal Adoption Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
-            box-sizing: border-box;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin: 10px 0 5px;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-        }
-
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
-
-        button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-            text-align: center;
-            display: inline-block;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .radio-group {
-            display: flex;
-            align-items: center;
-        }
-
-        .radio-group input[type="radio"] {
-            margin-right: 10px;
-        }
-
-        .radio-group label {
-            margin-right: 20px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animal Adoption Form</title>
+<style>
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>유기동물 입양 신청서</h1>
-        <form id="adoptionForm" action="/adopt/submit" method="post">
-            <input type="hidden" name="animalId" th:value="${animal.id}" />
-            
-            <label for="animalNo">유기고유번호(서울):</label>
-            <input type="text" id="animalNo" name="animalNo" th:value="${animal.animalNo}" readonly />
-            
-            <label for="abdmIdntfyNo">유기고유번호(경기):</label>
-            <input type="text" id="abdmIdntfyNo" name="abdmIdntfyNo" th:value="${animal.abdmIdntfyNo}" readonly />
-            
-            <label for="applicantName">신청자명:</label>
-            <input type="text" id="applicantName" name="applicantName" required />
+	<div class="inner application-wrap">
+		<h2>유기동물 입양 신청서</h2>
+		<form id="adoptionForm" action="/adopt/submit" method="post">
+			<div class="input">
+				<input type="hidden" name="animalId" th:value="${animal.id}" />
+				
+				 <label
+					for="animalNo">유기고유번호(서울):</label> <input type="text" id="animalNo"
+					name="animalNo" th:value="${animal.animalNo}" readonly /> <label
+					for="abdmIdntfyNo">유기고유번호(경기):</label> <input type="text"
+					id="abdmIdntfyNo" name="abdmIdntfyNo"
+					th:value="${animal.abdmIdntfyNo}" readonly /> <label
+					for="applicantName">신청자명:</label> <input type="text"
+					id="applicantName" name="applicantName" required /> <label
+					for="applicantEmail">신청자 이메일:</label> <input type="email"
+					id="applicantEmail" name="applicantEmail" required /> <label
+					for="applicantPhone">신청자 연락처:</label> <input type="tel"
+					id="applicantPhone" name="applicantPhone" required /> <label
+					for="applicantAddress">신청자 주소:</label> <input type="text"
+					id="applicantAddress" name="applicantAddress" required /> <label
+					for="adoptionReason">입양 이유:</label>
+				<textarea id="adoptionReason" name="adoptionReason" required></textarea>
 
-            <label for="applicantEmail">신청자 이메일:</label>
-            <input type="email" id="applicantEmail" name="applicantEmail" required />
-
-            <label for="applicantPhone">신청자 연락처:</label>
-            <input type="tel" id="applicantPhone" name="applicantPhone" required />
-
-            <label for="applicantAddress">신청자 주소:</label>
-            <input type="text" id="applicantAddress" name="applicantAddress" required />
-
-            <label for="adoptionReason">입양 이유:</label>
-            <textarea id="adoptionReason" name="adoptionReason" required></textarea>
-
-            <label>입양 경험 유무:</label>
-            <div class="radio-group">
-                <input type="radio" id="adoptionExperienceYes" name="adoptionExperience" value="YES" />
-                <label for="adoptionExperienceYes">있음</label>
-
-                <input type="radio" id="adoptionExperienceNo" name="adoptionExperience" value="NO" />
-                <label for="adoptionExperienceNo">없음</label>
-            </div>
-
-            <button type="submit">신청서 제출하기</button>
-        </form>
-    </div>
+				<label for="adoptionExperience">입양 경험 유무:</label>
+				<div class="radio-group">
+					<div class="radio-item">
+						<input type="radio" id="adoptionExperienceYes"
+							name="adoptionExperience" value="YES" required /> <label
+							for="adoptionExperienceYes">있음</label>
+					</div>
+					<div class="radio-item">
+						<input type="radio" id="adoptionExperienceNo"
+							name="adoptionExperience" value="NO" required /> <label
+							for="adoptionExperienceNo">없음</label>
+					</div>
+				</div>
+				<button type="submit">신청서 제출하기</button>
+			</div>
+		</form>
+	</div>
 </body>
-</html>
+</body>
+	</html>

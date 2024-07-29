@@ -1,119 +1,64 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adoption Success</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        header, footer {
-            background-color: #343a40;
-            color: white;
-            text-align: center;
-            padding: 1em 0;
-        }
-        main {
-            padding: 2em;
-            max-width: 800px;
-            margin: auto;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2 {
-            color: #007bff;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1em;
-        }
-        th, td {
-            padding: 0.75em;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        a {
-            display: inline-block;
-            margin-top: 1em;
-            text-decoration: none;
-            color: #007bff;
-            border: 1px solid #007bff;
-            padding: 0.5em 1em;
-            border-radius: 4px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        a:hover {
-            background-color: #007bff;
-            color: white;
-        }
-    </style>
 </head>
-<body>
-    <header>
-        <h1>유기동물 입양 신청서</h1>
-    </header>
-    <main>
-        <section>
-            <h2>성공적으로 제출되었습니다.</h2>
-            <p>작성하신 신청서 상세 정보입니다.:</p>
 
-            <table>
-                <tbody>
-                    <tr>
-                        <th>유기동물 ID</th>
-                        <td th:text="${animalAdoptionApplication.animalId}">Animal ID</td>
-                    </tr>
-                    <tr>
-                        <th>유기고유번호(서울)</th>
-                        <td th:text="${animalAdoptionApplication.animalNo}">Animal Number</td>
-                    </tr>
-                    <tr>
-                        <th>유기고유번호(경기)</th>
-                        <td th:text="${animalAdoptionApplication.abdmIdntfyNo}">Identification Number</td>
-                    </tr>
-                    <tr>
-                        <th>신청자명</th>
-                        <td th:text="${animalAdoptionApplication.applicantName}">Applicant Name</td>
-                    </tr>
-                    
-                    <tr>
-                        <th>신청자 이메일</th>
-                        <td th:text="${animalAdoptionApplication.applicantEmail}">Applicant Email</td>
-                    </tr>
-                    <tr>
-                        <th>신청자 휴대번호</th>
-                        <td th:text="${animalAdoptionApplication.applicantPhone}">Applicant Phone</td>
-                    </tr>
-                    <tr>
-                        <th>신청자 주소</th>
-                        <td th:text="${animalAdoptionApplication.applicantAddress}">Applicant Address</td>
-                    </tr>
-                    <tr>
-                        <th>입양 이유</th>
-                        <td th:text="${animalAdoptionApplication.adoptionReason}">Reason for Adoption</td>
-                    </tr>
-                    <tr>
-                        <th>입양 경험</th>
-                        <td th:text="${animalAdoptionApplication.adoptionExperience}">Experience with Animals</td>
-                    </tr>
-                </tbody>
-            </table>
+<body class="ado-success-container">
+    <main class="ado-success-main">
+        <div class="inner ado-success-inner">
+            <section>
+                <h2 class="ado-success-title">신청서가 성공적으로 제출되었습니다.</h2>
+                <p class="ado-success-subtitle">작성하신 신청서 상세 정보입니다.</p>
 
-            <a th:href="@{/animal/animalBoard}">입양게시판으로 돌아가기</a>
-        </section>
+                <table class="ado-success-table">
+                    <tbody>
+                        <tr>
+                            <th>유기동물 ID</th>
+                            <td th:text="${animalAdoptionApplication.animalId}">Animal ID</td>
+                        </tr>
+                        <tr>
+                            <th>유기고유번호(서울)</th>
+                            <td th:text="${animalAdoptionApplication.animalNo}">Animal Number</td>
+                        </tr>
+                        <tr>
+                            <th>유기고유번호(경기)</th>
+                            <td th:text="${animalAdoptionApplication.abdmIdntfyNo}">Identification Number</td>
+                        </tr>
+                        <tr>
+                            <th>신청자명</th>
+                            <td th:text="${animalAdoptionApplication.applicantName}">Applicant Name</td>
+                        </tr>
+                        <tr>
+                            <th>신청자 이메일</th>
+                            <td th:text="${animalAdoptionApplication.applicantEmail}">Applicant Email</td>
+                        </tr>
+                        <tr>
+                            <th>신청자 휴대번호</th>
+                            <td th:text="${animalAdoptionApplication.applicantPhone}">Applicant Phone</td>
+                        </tr>
+                        <tr>
+                            <th>신청자 주소</th>
+                            <td th:text="${animalAdoptionApplication.applicantAddress}">Applicant Address</td>
+                        </tr>
+                        <tr>
+                            <th>입양 이유</th>
+                            <td th:text="${animalAdoptionApplication.adoptionReason}">Reason for Adoption</td>
+                        </tr>
+                        <tr>
+                            <th>입양 경험</th>
+                            <td th:text="${animalAdoptionApplication.adoptionExperience}">Experience with Animals</td>
+                        </tr>
+                    </tbody>
+                </table>
+				<div class="ado-success-btn-wrap">
+                <a th:href="@{/animal/animalBoard}" class="btn">입양게시판으로 돌아가기</a>
+                </div>
+            </section>
+        </div>
     </main>
-
-    <footer>
-        <p>&copy; 2024 Animal Adoption Service</p>
-    </footer>
 </body>
 </html>
