@@ -1,31 +1,35 @@
-<!DOCTYPE html>
-
-<head>
-	<title>정보 수정</title>
-</head>
-
-<body>
-	<div class="container">
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+	<div class="inner find_wrap user_modify">
 		<h2>정보 수정</h2>
+		<div class="result_wrap">
 		<form th:action="@{/user/editProfile}" method="post">
 			<input type="hidden" name="userId" th:value="${user.userId}">
-
-			<label for="userName">이름:</label>
-			<input type="text" id="userName" name="userName" th:value="${user.userName}" required>
-
-			<label for="userEmail">이메일:</label>
-			<input type="email" id="userEmail" name="userEmail" th:value="${user.userEmail}" required>
-
-			<label for="userPhone">전화번호:</label>
-			<input type="text" id="userPhone" name="userPhone" th:value="${user.userPhone}" required>
-
-			<button type="submit" class="btn">저장</button>
+			<ul>
+				<li>
+					<label for="userName">이름</label>
+					<input type="text" id="userName" name="userName" th:value="${user.userName}" required>
+				</li>
+				<li>
+					<label for="userEmail">이메일</label>
+					<input type="email" id="userEmail" name="userEmail" th:value="${user.userEmail}" required>
+				</li>
+				<li>
+					<label for="userPhone">전화번호</label>
+					<input type="text" id="userPhone" name="userPhone" th:value="${user.userPhone}" required>
+				</li>
+			
+			</ul>
+			<div class="btn_wrap_B">
+				<button type="submit" class="btn">저장</button>
+				<a href="javascript:history.back()" class="btn">취소</a>
+			</div>
 		</form>
 		<!--이전페이지로 이동-->
 		<div>
-			<a href="javascript:history.back()" class="btn">이전 페이지로 이동</a>
+			
+		</div>
 		</div>
 	</div>
-</body>
 
 </html>

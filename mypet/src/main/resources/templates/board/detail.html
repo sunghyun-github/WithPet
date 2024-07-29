@@ -36,8 +36,8 @@
                     <a th:href="@{|/board/modify/${board.idx}|}" class="detail_btn" sec:authorize="isAuthenticated()"
                         th:if="${board.author != null and #authentication.getPrincipal().getUsername() == board.author.userId}"
                         ><i class="fa-solid fa-pen-to-square"></i>수정</a>
-                    <a href="javascript:void(0);" th:data-uri="@{|/board/delete/${board.idx}|}" class="delete detail_btn" sec:authorize="isAuthenticated()"
-                        th:if="${board.author != null and #authentication.getPrincipal().getUsername() == board.author.userId}">
+                    <a href="javascript:void(0);" th:data-idx="${board.idx}" th:data-uri="@{|/board/delete/${board.idx}|}" class="delete board-delete detail_btn" sec:authorize="isAuthenticated()"
+                        th:if="${board.author != null and #authentication.getPrincipal().getUsername() == board.author.userId}" >
                         <i class="fa-solid fa-trash-can"></i>삭제</a>
                 </td>
             </tr>
@@ -100,7 +100,7 @@
 				                    <i class="fa-solid fa-pen-to-square"></i>
 				                    수정
 				                </button>
-				                <button class="delete detail_btn" th:data-idx="${comment.idx}" sec:authorize="isAuthenticated()"
+				                <button class="delete comment-delete detail_btn" th:data-idx="${comment.idx}" sec:authorize="isAuthenticated()"
 				                    th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.userId}">
 				                    <i class="fa-solid fa-trash-can"></i>
 				                    삭제
@@ -162,8 +162,7 @@ $(document).ready(function() {
         $(this).html('저장'); // 수정 버튼을 저장 버튼으로 변경
         $(this).removeClass("modify").addClass("save"); // 클래스를 수정 버튼에서 저장 버튼으로 변경
     });
-
-    // 저장 버튼 클릭 시
+    
     $(".comment_actions").on("click", ".save", function() {
         var commentIdx = $(this).data("idx");
         var newContent = $("#comment-" + commentIdx + " .edit-content").val();
@@ -183,14 +182,46 @@ $(document).ready(function() {
                 $("#comment-" + commentIdx + " .edit-content").replaceWith(updatedCommentDiv);
                 $(this).html('<i class="fa-solid fa-pen-to-square"></i> 수정'); // 저장 버튼을 수정 버튼으로 변경
                 $(this).removeClass("save").addClass("modify"); // 클래스를 저장 버튼에서 수정 버튼으로 변경
-            },
+            }.bind(this),
             error: function(xhr, status, error) {
                 alert("댓글 수정에 실패했습니다: " + error);
             }
         });
     });
 
-    $(".delete").click(function(e) {
+    $(".board-delete").click(function(e) {
+        e.preventDefault();
+
+        if (!confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
+            return;
+        }
+
+        var boardIdx = $(this).data("idx");
+        var deleteUri = "/board/delete/" + boardIdx;
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        $.ajax({
+            url: deleteUri,
+            type: 'DELETE',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function(response) {
+                if (response === "success") {
+                    window.location.href = "/board/list";  // 삭제 후 목록 페이지로 리다이렉션
+                } else {
+                    alert("게시글 삭제에 실패했습니다.");
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("처리 중 오류가 발생했습니다: " + error);
+            }
+        });
+    });
+
+    // 댓글 삭제 버튼 클릭 시
+    $(".comment-delete").click(function(e) {
         e.preventDefault();
 
         if (!confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
@@ -199,12 +230,14 @@ $(document).ready(function() {
 
         var commentIdx = $(this).data("idx");
         var deleteUri = "/comment/delete/" + commentIdx;
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
 
         $.ajax({
             url: deleteUri,
-            type: 'POST',  // DELETE 대신 POST 방식 사용
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')
+            type: 'DELETE',  // DELETE 방식으로 변경
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
             },
             success: function(response) {
                 if (response === "success") {
@@ -219,6 +252,7 @@ $(document).ready(function() {
             }
         });
     });
+    
     
     // 페이지 로드 시 추천 상태 확인
     $('.recommend').each(function() {

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.animal.mypet.DataNotFoundException;
 import com.animal.mypet.board.Board;
 import com.animal.mypet.user.User;
+import com.animal.mypet.user.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class CommentService {
 	
 	private final CommentRepository commentRepository;
+	private final UserRepository userRepository;
 	
 	public Comment create(Board board, String content, User user) {
         Comment comment = new Comment();
@@ -69,6 +71,12 @@ public class CommentService {
     public void cancelVote(Comment comment, User user) {
     	comment.getVoter().remove(user);
         this.commentRepository.save(comment);
+    }
+    
+    public List<Comment> getCommentsByAuthor(String userId) {
+        User author = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + userId));
+        return commentRepository.findByAuthor(author);
     }
     
     

@@ -51,59 +51,13 @@
 	margin: 5px 0;
 }
 </style>
-<script>
-    function addLike(animalId) {
-        const userIdx = document.getElementById('userIdx').value;
-        console.log('UserIdx:', userIdx); // userIdx 값 확인
-        if (!userIdx) {
-            console.error('User index is empty');
-            return;
-        }
 
-        fetch(`/api/animals/${animalId}/like?userIdx=${encodeURIComponent(userIdx)}`, {
-            method: 'POST',
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log('Like added successfully');
-            } else {
-                console.log('Failed to add like');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-
-    function removeLike(animalId) {
-        const userIdx = document.getElementById('userIdx').value;
-        console.log('UserIdx:', userIdx); // userIdx 값 확인
-        if (!userIdx) {
-            console.error('User index is empty');
-            return;
-        }
-
-        fetch(`/api/animals/${animalId}/like?userIdx=${encodeURIComponent(userIdx)}`, {
-            method: 'DELETE',
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log('Like removed successfully');
-            } else {
-                console.log('Failed to remove like');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-</script>
 
 </head>
 <body>
 	<div layout:fragment="content" class="container">
 		<div class="inner board_wrap">
-			<h1>Animal Details</h1>
+			<h2></h2>
 
 			<div th:if="${location == 'Seoul'}" class="animal-container">
 				<div class="animal-photo">
@@ -114,33 +68,18 @@
 					</button>
 				</div>
 				<div class="animal-info">
-					<p>
-						<strong>동물 번호:</strong> <span th:text="${animal.animalNo}"></span>
-					</p>
-					<p>
-						<strong>이름:</strong> <span th:text="${animal.nm}"></span>
-					</p>
-					<p>
-						<strong>입양 날짜:</strong> <span th:text="${animal.entrncDate}"></span>
-					</p>
-					<p>
-						<strong>종:</strong> <span th:text="${animal.spcs}"></span>
-					</p>
-					<p>
-						<strong>품종:</strong> <span th:text="${animal.breeds}"></span>
-					</p>
-					<p>
-						<strong>성별:</strong> <span th:text="${animal.sexdstn}"></span>
-					</p>
-					<p>
-						<strong>나이:</strong> <span th:text="${animal.age}"></span>
-					</p>
-					<p>
-						<strong>입양 상태:</strong> <span th:text="${animal.adpSttus}"></span>
-					</p>
-					<p>
-						<strong>임시 보호 상태:</strong> <span th:text="${animal.tmprPrtcSttus}"></span>
-					</p>
+					<ul>
+						<li>동물번호: <span th:text="${animal.animalNo}"></span></li>
+						<li>이름: <span th:text="${animal.nm}"></span></li>
+						<li>입양 날짜: <span th:text="${animal.entrncDate}"></span></li>
+						<li>종: <span th:text="${animal.spcs}"></span></li>
+						<li>품종: <span th:text="${animal.breeds}"></span></li>
+						<li>성별: <span th:text="${animal.sexdstn}"></span></li>
+						<li>나이: <span th:text="${animal.age}"></span></li>
+						<li>입양 상태: <span th:text="${animal.adpSttus}"></span></li>
+						<li>임시보호 상태: <span th:text="${animal.tmprPrtcSttus}"></span></li>
+						<li></li>
+					</ul>
 					<p>
 						<strong>소개:</strong>
 					<div th:utext="${animal.intrcnCn}"></div>
@@ -202,5 +141,52 @@
 		</div>
 		<input type="hidden" id="userIdx" th:value="${userIdx}" />
 	</div>
+<script>
+    function addLike(animalId) {
+        const userIdx = document.getElementById('userIdx').value;
+        console.log('UserIdx:', userIdx); // userIdx 값 확인
+        if (!userIdx) {
+            console.error('User index is empty');
+            return;
+        }
+
+        fetch(`/api/animals/${animalId}/like?userIdx=${encodeURIComponent(userIdx)}`, {
+            method: 'POST',
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Like added successfully');
+            } else {
+                console.log('Failed to add like');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function removeLike(animalId) {
+        const userIdx = document.getElementById('userIdx').value;
+        console.log('UserIdx:', userIdx); // userIdx 값 확인
+        if (!userIdx) {
+            console.error('User index is empty');
+            return;
+        }
+
+        fetch(`/api/animals/${animalId}/like?userIdx=${encodeURIComponent(userIdx)}`, {
+            method: 'DELETE',
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Like removed successfully');
+            } else {
+                console.log('Failed to remove like');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
 </body>
 </html>

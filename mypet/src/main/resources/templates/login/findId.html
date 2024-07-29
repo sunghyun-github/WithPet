@@ -1,37 +1,22 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-      layout:decorate="~{layout}">
-<head>
-    <title>아이디 찾기</title>
-</head>
-<body>
-    <div layout:fragment="content" class="container">
-        <div class="inner find_id_wrap">
-            <h2>아이디 찾기</h2>
-            <div class="find_id_area">
-                <form th:action="@{/user/findId}" method="post" class="find_id_form">
-                    <div class="input_wrap">
-                        <label for="userName">이름:</label>
-                        <input type="text" id="userName" name="userName" required>
-                    </div>
-                    <div class="input_wrap">
-                        <label for="userEmail">이메일:</label>
-                        <input type="email" id="userEmail" name="userEmail" required>
-                    </div>
-                    <div class="input_wrap">
-                        <label for="userPhone">전화번호:</label>
-                        <input type="tel" id="userPhone" name="userPhone" required>
-                    </div>
-                    <div class="btn_wrap">
-                        <input type="submit" value="아이디 찾기" class="btn">
-                    </div>
-                </form>
-                <div th:if="${errorMessage}" class="error-message">
-                    <p th:text="${errorMessage}"></p>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+    <div class="inner find_wrap">
+        <h2>아이디 찾기</h2>
+        <div class="find_area">
+            <form th:action="@{/user/findId}" method="post">
+                <div class="input_wrap">
+                    <input type="text" id="userName" name="userName" placeholder="이름" required>
+                    <input type="email" id="userEmail" name="userEmail" placeholder="이메일" required>
+                    <input type="tel" id="userPhone" name="userPhone" placeholder="전화번호" required>
                 </div>
+                <div class="btn_wrap">
+                    <input type="submit" value="아이디 찾기" class="btn">
+                </div>
+            </form>
+            <div th:if="${errorMessage}" class="error-message">
+                <p th:text="${errorMessage}"></p>
             </div>
         </div>
     </div>
-</body>
+</div>
 </html>

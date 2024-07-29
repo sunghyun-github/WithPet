@@ -1,55 +1,48 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adoption Success</title>
-</head>
-
 <body class="ado-success-container">
     <main class="ado-success-main">
         <div class="inner ado-success-inner">
             <section>
                 <h2 class="ado-success-title">신청서가 성공적으로 제출되었습니다.</h2>
-                <p class="ado-success-subtitle">작성하신 신청서 상세 정보입니다.</p>
 
                 <table class="ado-success-table">
                     <tbody>
+                    	
                         <tr>
-                            <th>유기동물 ID</th>
+                            <td>유기동물 ID</td>
                             <td th:text="${animalAdoptionApplication.animalId}">Animal ID</td>
                         </tr>
                         <tr>
-                            <th>유기고유번호(서울)</th>
+                            <th>유기고유번호(서울)</td>
                             <td th:text="${animalAdoptionApplication.animalNo}">Animal Number</td>
                         </tr>
                         <tr>
-                            <th>유기고유번호(경기)</th>
+                            <td>유기고유번호(경기)</td>
                             <td th:text="${animalAdoptionApplication.abdmIdntfyNo}">Identification Number</td>
                         </tr>
                         <tr>
-                            <th>신청자명</th>
+                            <td>신청자명</td>
                             <td th:text="${animalAdoptionApplication.applicantName}">Applicant Name</td>
                         </tr>
                         <tr>
-                            <th>신청자 이메일</th>
+                            <td>신청자 이메일</td>
                             <td th:text="${animalAdoptionApplication.applicantEmail}">Applicant Email</td>
                         </tr>
                         <tr>
-                            <th>신청자 휴대번호</th>
+                            <td>신청자 휴대번호</td>
                             <td th:text="${animalAdoptionApplication.applicantPhone}">Applicant Phone</td>
                         </tr>
                         <tr>
-                            <th>신청자 주소</th>
+                            <td>신청자 주소</td>
                             <td th:text="${animalAdoptionApplication.applicantAddress}">Applicant Address</td>
                         </tr>
                         <tr>
-                            <th>입양 이유</th>
+                            <td>입양 이유</td>
                             <td th:text="${animalAdoptionApplication.adoptionReason}">Reason for Adoption</td>
                         </tr>
                         <tr>
-                            <th>입양 경험</th>
+                            <td>입양 경험</td>
                             <td th:text="${animalAdoptionApplication.adoptionExperience}">Experience with Animals</td>
                         </tr>
                     </tbody>

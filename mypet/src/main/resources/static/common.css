@@ -34,17 +34,18 @@
 }
 
 :root {
-  --point-color1: #f5e4c1;
-  --point-color2: #767494;
-  --point-color3: #5d5a88;
-  --point-color4: #f2f1fa;
+  --point-color1: #D4D2E3;
+  --point-color2: #AFACD9;
+  --point-color3: #635f95;
+  --point-color4: #f9f9ff;
 
   --txt-color-400: #999;
-  --txt-color-500: #555;
-  --txt-color-600: #5d5a88;
+  --txt-color-500: #666;
+  --txt-color-600: #635f95;
 
   --border-color: #eee;
   --danger-color: #ff6666;
+  --gray-color: #9795b5;
 }
 
 /* html {
@@ -157,6 +158,7 @@ a {
 }
 a:hover {
   text-decoration: none;
+  color: var(--txt-color-500);
 }
 
 /* iframe으로 외부컨텐츠 연결시 외부컨텐츠 안쪽내용이 페이지에 영향을 주지못하도록 가려줌*/
@@ -382,28 +384,38 @@ input[type='number'] {
 .checkbox_wrap {
   display: inline-block;
 }
+input[type=checkbox] {
+	margin: 0;
+}
 input[type='checkbox'] + label {
-  color: #333;
   cursor: pointer;
   position: relative;
+  font-weight: 400;
+  margin: 0 15px 0 0; 
+  margin-bottom: 0;
+  width: 60px;
 }
 input[type='checkbox'] + label:before {
   content: '';
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border: 1px solid #dddddd;
   vertical-align: middle;
   margin-right: 6px;
+  border-radius: 3px;
+}
+input[type='checkbox']:checked {
+	border: 1px solid red;
 }
 input[type='checkbox']:checked + label:after {
   content: '';
   position: absolute;
-  left: 1px;
-  top: 4px;
-  width: 24px;
-  height: 24px;
-  background: url(../images/common/check.svg) no-repeat 0 0 / 18px;
+  left: 3px;
+  top: 6px;
+  width: 16px;
+  height: 16px;
+  background: url(../images/check.svg) no-repeat 0 0 / 10px;
 }
 
 /* radio 공통 

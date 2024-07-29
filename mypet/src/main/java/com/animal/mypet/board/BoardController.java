@@ -124,14 +124,14 @@ public class BoardController {
     }
 	
 	@PreAuthorize("isAuthenticated()")
-    @GetMapping("/delete/{idx}")
-    public String boardDelete(Principal principal, @PathVariable("idx") Integer idx) {
-		Board board = this.boardService.getBoard(idx);
+    @DeleteMapping("/delete/{idx}")
+    public ResponseEntity<String> deleteBoard(@PathVariable("idx") Integer idx, Principal principal) {
+        Board board = boardService.getBoard(idx);
         if (!board.getAuthor().getUserId().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
-        this.boardService.delete(board);
-        return "redirect:/board/list";
+        boardService.delete(board);
+        return ResponseEntity.ok("success");
     }
 	
 	@PreAuthorize("isAuthenticated()")
