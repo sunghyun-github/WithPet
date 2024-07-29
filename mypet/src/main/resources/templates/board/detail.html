@@ -34,10 +34,10 @@
    			 <tr>
                 <td class="btn_wrap">
                     <a th:href="@{|/board/modify/${board.idx}|}" class="detail_btn" sec:authorize="isAuthenticated()"
-                        th:if="${board.author != null and #authentication.getPrincipal().getUsername() == board.author.userId}"
+                        th:if="${board.author != null and currentUserId == board.author.userId}"
                         ><i class="fa-solid fa-pen-to-square"></i>수정</a>
                     <a href="javascript:void(0);" th:data-idx="${board.idx}" th:data-uri="@{|/board/delete/${board.idx}|}" class="delete board-delete detail_btn" sec:authorize="isAuthenticated()"
-                        th:if="${board.author != null and #authentication.getPrincipal().getUsername() == board.author.userId}" >
+                        th:if="${board.author != null and currentUserId == board.author.userId}" >
                         <i class="fa-solid fa-trash-can"></i>삭제</a>
                 </td>
             </tr>
@@ -47,7 +47,7 @@
             <tr>
             	<td class="content_bottom">
             		<a href="javascript:void(0);" class="btn recommend" th:data-uri="@{|/board/vote/${board.idx}|}"
-            		th:data-status-uri="@{|/board/vote/status/${board.idx}|}" th:if="${board.author != null and #authentication.name != board.author.userId}">
+            		th:data-status-uri="@{|/board/vote/status/${board.idx}|}" th:if="${board.author != null and currentUserId != board.author.userId}">
             			<i class="fa-regular fa-thumbs-up"></i>
 						<span class="count" th:text="${#lists.size(board.voter)}"></span>
             		</a>
@@ -65,7 +65,7 @@
             <form th:action="@{|/comment/create/${board.idx}|}" th:object="${commentForm}" method="post" id="commentForm">
                 <div th:replace="~{form_errors :: formErrorsFragment}"></div>
                 <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" placeholder="로그인 후 이용 가능합니다."></textarea>
-                <textarea sec:authorize="isAuthenticated()" th:field="*{content}" id="commentContent" th:placeholder="|${#authentication.getPrincipal().getUsername()}으로 댓글 작성|"></textarea>
+                <textarea sec:authorize="isAuthenticated()" th:field="*{content}" id="commentContent" th:placeholder="|${currentUserId}으로 댓글 작성|"></textarea>
                 <input type="submit" value="확인" class="submit_btn" />
             </form>
         </div>
@@ -80,7 +80,7 @@
 		            <div class="comment_header">
 		            	<div th:if="${comment.author != null}" class="name" ><i class="fa-solid fa-user"></i>
 		            		<span th:text="${comment.author.userId}"></span>
-		            		<span th:if="${#authentication.name == comment.author.userId}" class="comment_size">내 댓글</span>
+		            		<span th:if="${currentUserId == comment.author.userId}" class="comment_size">내 댓글</span>
 		            	</div>
 		                <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}" class="date"></div>
 		            </div>
@@ -91,17 +91,17 @@
 			            </div>
 			            <div class="comment_actions">
 			                <a href="javascript:void(0);" class="btn recommend" th:data-uri="@{|/comment/vote/${comment.idx}|}"
-			                    th:if="${#authentication.name != comment.author.userId}" th:data-status-uri="@{|/comment/vote/status/${comment.idx}|}">
+			                    th:if="${currentUserId != comment.author.userId}" th:data-status-uri="@{|/comment/vote/status/${comment.idx}|}">
 			                    <i class="fa-light fa-thumbs-up"></i><span class="count" th:text="${#lists.size(comment.voter)}"></span>
 			                </a>
 			                <div class="btn_wrap">
 				                <button class="modify detail_btn" th:data-idx="${comment.idx}" sec:authorize="isAuthenticated()"
-				                    th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.userId}">
+				                    th:if="${comment.author != null and currentUserId == comment.author.userId}">
 				                    <i class="fa-solid fa-pen-to-square"></i>
 				                    수정
 				                </button>
 				                <button class="delete comment-delete detail_btn" th:data-idx="${comment.idx}" sec:authorize="isAuthenticated()"
-				                    th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.userId}">
+				                    th:if="${comment.author != null and currentUserId == comment.author.userId}">
 				                    <i class="fa-solid fa-trash-can"></i>
 				                    삭제
 				                </button>

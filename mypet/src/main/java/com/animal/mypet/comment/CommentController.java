@@ -8,6 +8,9 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,7 +40,25 @@ public class CommentController {
     private final CommentService commentService;
     private final UserService userService;
 
-  
+    private String getCurrentUserId(Principal principal) {
+        if (principal instanceof OAuth2AuthenticationToken) {
+            OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) principal;
+            OAuth2User oauth2User = oauth2Token.getPrincipal();
+            Map<String, Object> attributes = oauth2User.getAttributes();
+            String provider = oauth2Token.getAuthorizedClientRegistrationId();
+
+            if ("kakao".equals(provider)) {
+                return provider + "_" + attributes.get("id").toString();
+            } else if ("naver".equals(provider)) {
+                Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+                return provider + "_" + response.get("id").toString();
+            }
+        } else if (principal instanceof UsernamePasswordAuthenticationToken) {
+            return principal.getName();
+        }
+        return null;
+    }
+    
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create/{idx}")
     public String createComment(CommentForm commentForm) {
@@ -49,7 +70,7 @@ public class CommentController {
     public String createComment(Model model, @PathVariable("idx") Integer idx, @Valid CommentForm commentForm,
             BindingResult bindingResult, Principal principal) {
         Board board = this.boardService.getBoard(idx);
-        User user = this.userService.getUser(principal.getName());
+        User user = this.userService.getUser(getCurrentUserId(principal));
         
         if (bindingResult.hasErrors()) {
             return "comment/form";
@@ -67,7 +88,8 @@ public class CommentController {
     @GetMapping("/modify/{idx}")
     public ResponseEntity<Comment> modifyCommentForm(@PathVariable("idx") Integer idx, Principal principal) {
         Comment comment = commentService.getComment(idx);
-        if (!comment.getAuthor().getUserId().equals(principal.getName())) {
+        String currentUserId = getCurrentUserId(principal);
+        if (!comment.getAuthor().getUserId().equals(currentUserId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
         return ResponseEntity.ok(comment);
@@ -78,7 +100,8 @@ public class CommentController {
     public ResponseEntity<?> modifyComment(@Valid @RequestBody CommentForm commentForm, Principal principal,
                                            @PathVariable("idx") Integer idx) {
         Comment comment = commentService.getComment(idx);
-        if (!comment.getAuthor().getUserId().equals(principal.getName())) {
+        String currentUserId = getCurrentUserId(principal);
+        if (!comment.getAuthor().getUserId().equals(currentUserId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정권한이 없습니다.");
         }
         commentService.modify(comment, commentForm.getContent());
@@ -90,7 +113,8 @@ public class CommentController {
     @ResponseBody
     public String deleteComment(@PathVariable("idx") Integer idx, Principal principal) {
         Comment comment = commentService.getComment(idx);
-        if (!comment.getAuthor().getUserId().equals(principal.getName())) {
+        String currentUserId = getCurrentUserId(principal);
+        if (!comment.getAuthor().getUserId().equals(currentUserId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "삭제권한이 없습니다.");
         }
         commentService.delete(comment);
@@ -103,7 +127,7 @@ public class CommentController {
     @PostMapping("/vote/{idx}")
     public ResponseEntity<Integer> voteComment(@PathVariable("idx") Integer idx, Principal principal) {
         Comment comment = commentService.getComment(idx);
-        User user = userService.getUser(principal.getName());
+        User user = userService.getUser(getCurrentUserId(principal));
 
         commentService.vote(comment, user);
 
@@ -115,7 +139,7 @@ public class CommentController {
     @DeleteMapping("/vote/{idx}")
     public ResponseEntity<Integer> cancelVoteComment(@PathVariable("idx") Integer idx, Principal principal) {
         Comment comment = commentService.getComment(idx);
-        User user = userService.getUser(principal.getName());
+        User user = userService.getUser(getCurrentUserId(principal));
 
         commentService.cancelVote(comment, user);
 
@@ -127,7 +151,7 @@ public class CommentController {
     @GetMapping("/vote/status/{idx}")
     public ResponseEntity<Map<String, Object>> getVoteStatus(@PathVariable("idx") Integer idx, Principal principal) {
         Comment comment = commentService.getComment(idx);
-        User user = userService.getUser(principal.getName());
+        User user = userService.getUser(getCurrentUserId(principal));
 
         boolean isActive = comment.getVoter().contains(user);
         int voteCount = comment.getVoter().size();

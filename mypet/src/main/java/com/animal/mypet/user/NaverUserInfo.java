@@ -1,27 +1,19 @@
 package com.animal.mypet.user;
 
-import java.util.Map;
-
 import com.animal.mypet.social.OAuth2UserInfo;
 
+import java.util.Map;
 
 public class NaverUserInfo implements OAuth2UserInfo {
     private Map<String, Object> attributes;
-//    private String id;
-    
+
     public NaverUserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;
-//        this.id = id;
-    }
-    
-    @Override
-    public String getProvider() {
-        return "naver";
     }
 
     @Override
-    public String getName() {
-        return (String) attributes.get("name");
+    public String getProvider() {
+        return "naver";
     }
 
     @Override
@@ -30,7 +22,17 @@ public class NaverUserInfo implements OAuth2UserInfo {
     }
 
     @Override
+    public String getName() {
+        return (String) attributes.get("name");
+    }
+
+    @Override
     public String getPhone() {
-    	return (String) attributes.get("mobile");
+        return (String) attributes.get("mobile");
+    }
+
+    @Override
+    public String getProviderId() {
+        return attributes.get("id") != null ? attributes.get("id").toString() : null;
     }
 }

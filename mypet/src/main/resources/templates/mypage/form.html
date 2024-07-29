@@ -20,7 +20,7 @@
         <li>전화번호 <span th:text="${user.userPhone}"></span></li>
         <li>가입일자 <span th:text="${#temporals.format(user.createdAt, 'yyyy년 MM월 dd일')}"></span></li>
       </ul>
-      <div class="btn_wrap_B">
+      <div class="btn_wrap_B" th:if="${!isSocialUser}">
         <a th:href="@{/user/editProfile}" class="btn">개인정보 수정</a>
         <a th:href="@{/user/changePassword}" class="btn">비밀번호 변경</a>
       </div>
