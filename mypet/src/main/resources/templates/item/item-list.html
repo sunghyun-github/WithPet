@@ -1,45 +1,38 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>쇼핑 품목</title>
-     <style>
-        .item-image {
-            width: 100px; /* 원하는 너비로 조절 */
-            height: auto; /* 자동 높이 조절 */
-            max-width: 50%; /* 컨테이너 너비에 맞게 조절 */
-        }
-    </style>
-</head>
-<body>
-    <h1>쇼핑 품목</h1>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+   <div class="inner item_wrap">
+    <h2>쇼핑 품목</h2>
     <table>
         <thead>
             <tr>
+                <th>상품사진</th>
                 <th>상품명</th>
                 <th>가격</th>
-                <th>사진</th>
                 <th>수량</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="item : ${items}">
-                <td th:text="${item.name}"></td>
-                <td th:text="${item.price}"></td>
                  <td>
                     <img th:if="${item.imageUrl}" th:src="@{${item.imageUrl}}" alt="Item Image" class="item-image" />
                     <span th:unless="${item.imageUrl}">No Image</span>
                 </td>
+                <td th:text="${item.name}"></td>
+                <td><span th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')}"></span>원</td>
                 <td>
                     <form th:action="@{/add-to-cart}" method="post">
                         <input type="hidden" name="itemId" th:value="${item.id}" />
                         <input type="number" name="quantity" min="1" value="1" />
-                        <button type="submit">장바구니 추가</button>
+                        <button type="submit" class="btn">장바구니 추가</button>
                     </form>
                 </td>
             </tr>
         </tbody>
     </table>
-    <a href="/cart">장바구니 보기</a>
-    <a href="/add-item">품목 추가하기</a>
+    <div class="btn_wrap_B">
+    	<a href="/cart" class="btn">장바구니 보기</a>
+    	<a href="/add-item" class="btn">품목 추가하기</a>
+    </div>
+    
 </body>
 </html>

@@ -1,64 +1,6 @@
-<!DOCTYPE html>
 <html layout:decorate="~{layout}">
-<head>
-<title>Animal Details</title>
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<style>
-.animal-container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin-bottom: 20px;
-	max-width: 800px;
-	margin: auto;
-}
-
-.animal-photo {
-	position: relative;
-	width: 100%;
-	max-width: 600px;
-}
-
-.animal-photo img {
-	width: 100%;
-	height: auto;
-}
-
-.like-button {
-	position: absolute;
-	bottom: 10px;
-	right: 10px;
-	background-color: transparent;
-	border: none;
-	color: #ff6f61;
-	font-size: 36px;
-	cursor: pointer;
-	transition: color 0.3s;
-}
-
-.like-button:hover {
-	color: #ff4d4d;
-}
-
-.animal-info {
-	text-align: left;
-	margin-top: 20px;
-	width: 100%;
-}
-
-.animal-info p {
-	margin: 5px 0;
-}
-</style>
-
-
-</head>
-<body>
-	<div layout:fragment="content" class="container">
-		<div class="inner board_wrap">
-			<h2></h2>
-
+<div layout:fragment="content" class="container">
+		<div class="inner animal_detail">
 			<div th:if="${location == 'Seoul'}" class="animal-container">
 				<div class="animal-photo">
 					<img th:src="@{'http://' + ${animal.photoUrl}}" alt="동물 이미지" />
@@ -67,23 +9,37 @@
 						<i class="fas fa-heart"></i>
 					</button>
 				</div>
-				<div class="animal-info">
-					<ul>
-						<li>동물번호: <span th:text="${animal.animalNo}"></span></li>
-						<li>이름: <span th:text="${animal.nm}"></span></li>
-						<li>입양 날짜: <span th:text="${animal.entrncDate}"></span></li>
-						<li>종: <span th:text="${animal.spcs}"></span></li>
-						<li>품종: <span th:text="${animal.breeds}"></span></li>
-						<li>성별: <span th:text="${animal.sexdstn}"></span></li>
-						<li>나이: <span th:text="${animal.age}"></span></li>
-						<li>입양 상태: <span th:text="${animal.adpSttus}"></span></li>
-						<li>임시보호 상태: <span th:text="${animal.tmprPrtcSttus}"></span></li>
-						<li></li>
-					</ul>
-					<p>
-						<strong>소개:</strong>
+				<table class="animal-info">
+					<tr>
+						<td>동물번호</td>
+						<td colspan="3" th:text="${animal.animalNo}"></td>
+					</tr>
+					<tr>
+						<td>이름</td>
+						<td th:text="${animal.nm}"></td>
+						<td>입양 날짜</td>
+						<td th:text="${animal.entrncDate}"></td>
+					</tr>
+					<tr>
+						<td>종</td>
+						<td th:text="${animal.spcs}"></td>
+						<td>품종</td>
+						<td th:text="${animal.breeds}"></td>
+					</tr>
+					<tr>
+						<td>성별</td>
+						<td th:text="${animal.sexdstn}"></td>
+						<td>나이</td>
+						<td th:text="${animal.age}"></td>
+					</tr>
+					<tr>
+						<td>입양 상태</td>
+						<td th:text="${animal.adpSttus}"></td>
+						<td>임시보호 상태</td>
+						<td th:text="${animal.tmprPrtcSttus}"></td>
+					</tr>
+				</table>
 					<div th:utext="${animal.intrcnCn}"></div>
-					</p>
 				</div>
 			</div>
 
@@ -97,47 +53,49 @@
 						<i class="fas fa-heart"></i>
 					</button>
 				</div>
-				<div class="animal-info">
-					<p>
-						<strong>동물 번호:</strong> <span th:text="${animal.abdmIdntfyNo}"></span>
-					</p>
-					<p>
-						<strong>입양 날짜:</strong> <span th:text="${animal.receptDe}"></span>
-					</p>
-					<p>
-						<strong>종:</strong> <span th:text="${animal.speciesNm}"></span>
-					</p>
-					<p>
-						<strong>성별:</strong> <span th:text="${animal.sexNm}"></span>
-					</p>
-					<p>
-						<strong>보호여부:</strong> <span th:text="${animal.stateNm}"></span>
-					</p>
-					<p>
-						<strong>보호장소:</strong> <span th:text="${animal.protectPlc}"></span>
-					</p>
-				</div>
+				<table class="animal-info">
+					<tr>
+						<td>동물번호</td>
+						<td colspan="3" th:text="${animal.abdmIdntfyNo}"></td>
+					</tr>
+					<tr>
+						<td>입양 날짜</td>
+						<td colspan="3" th:text="${animal.entrncDate}"></td>
+					</tr>
+					<tr>
+						<td>종</td>
+						<td colspan="3" th:text="${animal.speciesNm}"></td>
+					</tr>
+					<tr>
+						<td>성별</td>
+						<td colspan="3" th:text="${animal.sexNm}"></td>
+					</tr>
+					<tr>
+						<td>보호 여부</td>
+						<td th:text="${animal.stateNm}"></td>
+						<td>보호 장소</td>
+						<td th:text="${animal.protectPlc}"></td>
+					</tr>
+				</table>
 			</div>
 
 			<div th:unless="${location}">
 				<p>동물 정보를 찾을 수 없습니다.</p>
 			</div>
-
-			<div th:if="${location == 'Seoul'}" class="animal-container">
-				<a th:href="@{/adopt/adoptForm(animalId=${animal.id})}"
-					class="adopt-link">입양 신청하기</a>
+			<div class="btn_wrap_B">
+				<div th:if="${location == 'Seoul'}" class="animal-container">
+					<a th:href="@{/adopt/adoptForm(animalId=${animal.id})}"
+						class="btn">입양 신청하기</a>
+				</div>
+		
+				<div th:if="${location == 'Gyeonggi'}" class="animal-container">
+					<a th:href="@{/adopt/adoptForm(animalId=${animal.id})}"
+						class="btn">입양 신청하기</a>
+				</div>
 			</div>
-
-
-			<div th:if="${location == 'Gyeonggi'}" class="animal-container">
-				<a th:href="@{/adopt/adoptForm(animalId=${animal.id})}"
-					class="adopt-link">입양 신청하기</a>
+			<div class="list_btn">
+				<a href="/animal/animalBoard"><i class="fa-solid fa-list"></i> 목록으로 돌아가기</a>		
 			</div>
-
-
-
-
-			<a href="/animal/animalBoard">동물 목록으로 돌아가기</a>
 		</div>
 		<input type="hidden" id="userIdx" th:value="${userIdx}" />
 	</div>
@@ -188,5 +146,4 @@
         });
     }
 </script>
-</body>
 </html>

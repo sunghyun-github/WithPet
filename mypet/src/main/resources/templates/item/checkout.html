@@ -1,31 +1,30 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Checkout</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
-</head>
-<body>
-    <h1>결제창</h1>
-
-   
-    <p>주문 번호: <span th:text="${order.id}"></span></p>
-   
-    <h2>주문 목록:</h2>
-    <ul>
-        <li th:each="item : ${order.items}">
-            <span th:text="${item.item.name}"></span> - 
-            <span th:text="${item.quantity}"></span> x 
-            <span th:text="${item.item.price}"></span>
-        </li>
-    </ul>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+   <div class="inner item_wrap">
+    <span class="order_id">주문 번호: <span th:text="${order.id}"></span></span>
+    <h2>주문 목록</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>상품명</th>
+                <th>수량</th>
+                <th>가격</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${order.items}">
+                <td th:text="${item.item.name}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td><span th:text="${#numbers.formatInteger(item.item.price, 3, 'COMMA')}"></span>원</td>
+            </tr>
+        </tbody>
+    </table>
+     <p>총 가격: <span id="totalPrice" th:text="${#numbers.formatInteger(order.totalPrice, 3, 'COMMA')}"></span></p>
     
-     <p>총 가격: <span id="totalPrice" th:text="${order.totalPrice}"></span></p>
-    
-     <!-- 결제 버튼 -->
-    <button id="payBtn">결제하기</button>
-
-    <!-- 결제 완료 후 리디렉션 또는 결과를 처리하는 부분 -->
+    <div class="btn_wrap_B">
+    	<button id="payBtn" class="btn">결제하기</button>
+	</div>
+	
     <script>
         document.getElementById('payBtn').addEventListener('click', function() {
             var totalPriceElement = document.getElementById('totalPrice');
@@ -80,8 +79,7 @@
             }
         });
     </script>
-    
-    
-    <a href="/items">상품 목록 이동</a>
-</body>
+
+</div>
+</div>
 </html>
