@@ -1,10 +1,14 @@
 package com.animal.mypet.qna.question;
 
 import java.security.Principal;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +35,25 @@ public class QuestionController {
 	private final QuestionService questionService;
 	private final UserService userService;
 
+	private String getCurrentUserId(Principal principal) {
+		if (principal instanceof OAuth2AuthenticationToken) {
+			OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) principal;
+			OAuth2User oauth2User = oauth2Token.getPrincipal();
+			Map<String, Object> attributes = oauth2User.getAttributes();
+			String provider = oauth2Token.getAuthorizedClientRegistrationId();
+
+			if ("kakao".equals(provider)) {
+				return provider + "_" + attributes.get("id").toString();
+			} else if ("naver".equals(provider)) {
+				Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+				return provider + "_" + response.get("id").toString();
+			}
+		} else if (principal instanceof UsernamePasswordAuthenticationToken) {
+			return principal.getName();
+		}
+		return null;
+	}
+
 	@GetMapping("/list")
 	public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "kw", defaultValue = "") String kw,
@@ -43,9 +66,13 @@ public class QuestionController {
 	}
 
 	@GetMapping("/detail/{question_idx}")
-	public String detail(Model model, @PathVariable("question_idx") Integer questionIdx, AnswerForm answerForm) {
+	public String detail(Model model, @PathVariable("question_idx") Integer questionIdx, AnswerForm answerForm, Principal principal) {
 		Question question = this.questionService.getQuestion(questionIdx);
 		model.addAttribute("question", question);
+
+		String currentUserId = getCurrentUserId(principal);
+		model.addAttribute("currentUserId", currentUserId);
+
 		return "/qna/question_detail";
 	}
 
@@ -58,24 +85,40 @@ public class QuestionController {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/create")
 	public String create(@Valid QuestionForm questionForm, BindingResult bindingResult,
-			@RequestParam("files") MultipartFile[] files, Principal principal) {
-		if (bindingResult.hasErrors()) {
-			return "qna/question_form";
-		}
-		User user = this.userService.getUser(principal.getName());
-		this.questionService.create(questionForm.getCategory(), questionForm.getSubject(), questionForm.getContent(),
-				files, user);
-		return "redirect:/qna_question/list";
+	                     @RequestParam("files") MultipartFile[] files,
+	                     Principal principal) {
+	    if (bindingResult.hasErrors()) {
+	        return "qna/question_form";
+	    }
+
+	    User user = null;
+	    String currentUserId = getCurrentUserId(principal);
+
+	    if (currentUserId != null) {
+	        user = this.userService.getUser(currentUserId);
+	    }
+
+	    if (user == null) {
+	        // 사용자 정보가 없는 경우 로그인 페이지로 리디렉션
+	        return "redirect:/user/login";
+	    }
+
+	    // 게시글 생성 처리
+	    this.questionService.create(questionForm.getCategory(), questionForm.getSubject(), questionForm.getContent(), files, user);
+
+	    return "redirect:/qna_question/list";
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/modify/{question_idx}")
-	public String modify(QuestionForm questionForm, @PathVariable("question_idx") Integer questionIdx,
-			Principal principal) {
+	public String modify(QuestionForm questionForm, @PathVariable("question_idx") Integer questionIdx, Principal principal) {
 		Question question = this.questionService.getQuestion(questionIdx);
-		if (!question.getAuthor().getUserId().equals(principal.getName())) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+		String currentUserId = getCurrentUserId(principal);
+
+		if (!question.getAuthor().getUserId().equals(currentUserId)) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
 		}
+
 		questionForm.setCategory(question.getCategory());
 		questionForm.setSubject(question.getSubject());
 		questionForm.setContent(question.getContent());
@@ -92,7 +135,9 @@ public class QuestionController {
 		}
 
 		Question question = this.questionService.getQuestion(questionIdx);
-		if (!question.getAuthor().getUserId().equals(principal.getName())) {
+		String currentUserId = getCurrentUserId(principal);
+
+		if (!question.getAuthor().getUserId().equals(currentUserId)) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
 		}
 
@@ -105,8 +150,10 @@ public class QuestionController {
 	@GetMapping("/delete/{question_idx}")
 	public String questionDelete(Principal principal, @PathVariable("question_idx") Integer questionIdx) {
 		Question question = this.questionService.getQuestion(questionIdx);
-		if (!question.getAuthor().getUserId().equals(principal.getName())) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+		String currentUserId = getCurrentUserId(principal);
+
+		if (!question.getAuthor().getUserId().equals(currentUserId)) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
 		}
 		this.questionService.delete(question);
 		return "redirect:/";

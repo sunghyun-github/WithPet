@@ -1,5 +1,6 @@
 package com.animal.mypet.user;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,8 +8,11 @@ import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.animal.mypet.board.Board;
 import com.animal.mypet.board.BoardService;
+import com.animal.mypet.comment.Comment;
+import com.animal.mypet.comment.CommentService;
 import com.animal.mypet.qna.question.Question;
 import com.animal.mypet.qna.question.QuestionRepository;
 import com.animal.mypet.qna.question.QuestionService;
@@ -38,7 +44,28 @@ public class UserController {
 	private final UserRepository userRepository;
 	private final BoardService boardService;
 	private final QuestionService questionService;
+	private final CommentService commentService;
 
+
+	private String getCurrentUserId(Principal principal) {
+        if (principal instanceof OAuth2AuthenticationToken) {
+            OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) principal;
+            OAuth2User oauth2User = oauth2Token.getPrincipal();
+            Map<String, Object> attributes = oauth2User.getAttributes();
+            String provider = oauth2Token.getAuthorizedClientRegistrationId();
+
+            if ("kakao".equals(provider)) {
+                return provider + "_" + attributes.get("id").toString();
+            } else if ("naver".equals(provider)) {
+                Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+                return provider + "_" + response.get("id").toString();
+            }
+        } else if (principal instanceof UsernamePasswordAuthenticationToken) {
+            return principal.getName();
+        }
+        return null;
+    }
+	
 	@GetMapping("/signup")
 	public String signup(UserCreateForm userCreateForm) {
 		return "signup/form";
@@ -231,9 +258,9 @@ public class UserController {
 //    마이페이지로 이동
 
 	 @GetMapping("/mypage")
-	    public String getUserMypage(Model model) {
-	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	        String userId = authentication.getName();
+	    public String getUserMypage(Model model, Principal principal) {
+	        boolean isSocialUser = principal instanceof OAuth2AuthenticationToken;
+	        String userId = getCurrentUserId(principal);
 
 	        // 사용자 정보 가져오기
 	        User user = userService.findByUserId(userId);
@@ -244,9 +271,13 @@ public class UserController {
 	        // 사용자가 작성한 게시물 가져오기
 	        List<Board> userBoards = boardService.getBoardsByAuthor(userId);
 	        List<Question> userQuestions = questionService.getQuestionsByAuthor(userId);
+	        List<Comment> userComments = commentService.getCommentsByAuthor(userId);
 
+	        		
+	        model.addAttribute("isSocialUser", isSocialUser);
 	        model.addAttribute("user", user);
 	        model.addAttribute("userBoards", userBoards);
+	        model.addAttribute("userComments", userComments);
 	        model.addAttribute("userQuestions", userQuestions);
 
 	        return "mypage/form";

@@ -33,12 +33,12 @@
    			 <tr>
                 <td class="btn_wrap">
                     <a th:href="@{|/qna_question/modify/${question.questionIdx}|}" sec:authorize="isAuthenticated()"
-                        th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.userId and #lists.size(question.answerList) == 0}"
+                        th:if="${question.author != null and currentUserId == question.author.userId and #lists.size(question.answerList) == 0}"
                         class="detail_btn">
                         <i class="fa-solid fa-pen-to-square"></i>
                     수정</a>
                     <a href="javascript:void(0);" th:data-uri="@{|/qna_question/delete/${question.questionIdx}|}" sec:authorize="isAuthenticated()"
-                        th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.userId}"
+                        th:if="${question.author != null and currentUserId == question.author.userId}"
                         class="delete detail_btn">
                         <i class="fa-solid fa-trash-can"></i>
                     삭제</a>
@@ -100,12 +100,12 @@
 			            <div class="comment_actions">
 			                <div class="btn_wrap">
 								<a th:href="@{|/qna_answer/modify/${answer.answerIdx}|}" sec:authorize="isAuthenticated()"
-									th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.userId}"
+									th:if="${answer.author != null and currentUserId == answer.author.userId}"
 									class="modify detail_btn"><i class="fa-solid fa-pen-to-square"></i>
 				                    수정</a>
 								<a href="javascript:void(0);" th:data-uri="@{|/qna_answer/delete/${answer.answerIdx}|}"
 									sec:authorize="isAuthenticated()"
-									th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.userId}"
+									th:if="${answer.author != null and currentUserId == answer.author.userId}"
 									class="delete detail_btn"><i class="fa-solid fa-trash-can"></i>
 				                    삭제</a>
 							</div>
