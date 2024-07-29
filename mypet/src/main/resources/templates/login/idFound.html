@@ -1,18 +1,14 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-      layout:decorate="~{layout}">
-<head>
-    <title>아이디 찾기 결과</title>
-</head>
-<body>
-    <div layout:fragment="content" class="container">
-        <div class="inner find_id_result_wrap">
-            <h1>아이디 찾기 결과</h1>
-            <p>회원님의 아이디는: <span th:text="${userId}" class="user-id"></span></p>
-            <a href="/user/login" class="btn btn-primary">로그인하러 가기</a>
-            <a href="/user/findPassword" class="btn btn-primary">비밀번호 찾기</a>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+    <div class="inner find_wrap">
+        <h2>아이디 찾기 결과</h2>
+        <div class="result_wrap">
+        	<p>회원님의 아이디는<span th:text="${userId}" class="id_result"></span> 입니다.</p>
+        	<div>
+        		<a href="/user/login" class="btn">로그인</a>
+        		<a href="/user/findPassword" class="btn">비밀번호 찾기</a>
+        	</div>
         </div>
     </div>
-</body>
+</div>
 </html>

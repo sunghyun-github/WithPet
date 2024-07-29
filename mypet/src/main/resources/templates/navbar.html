@@ -5,13 +5,9 @@
 		<nav class="gnb_wrap">
 			<ul class="gnb">
 				<li><a href="/">홈</a></li>
-				<li><a href="/">입양</a></li>
-				<li><a href="/">반려동물 용품</a></li>
+				<li><a th:href="@{|/animal/animalBoard|}">입양</a></li>
 				<li><a th:href="@{|/board/list|}">커뮤니티</a></li>
 				<li><a th:href="@{|/qna_question/list|}">Q&A</a></li>
-				<li><a href="/user/changePassword">비밀번호 변경</a></li>
-<!--                     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/user/changePassword|}">비밀번호 변경</a> 추가된 링크 -->
-<!--                     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/user/deleteAccount|}">회원 탈퇴</a> -->
 			</ul>
 			<div class="log_area">
 				<ul class="log_wrap">

@@ -1,42 +1,47 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container">
     <div class="inner login_wrap">
-        <h2>로그인</h2>
-        <div class="login_area">
-            <form th:action="@{/user/login}" method="post">
-                <div th:if="${param.error}" class="alert alert-danger">아이디 및 비밀번호가 다릅니다</div>
-                <div class="input_wrap">
-                    <div class="login_id">
-                        <input type="text" name="userId" placeholder="아이디" th:value="${param.userId}" required>
-                    </div>
-                    <div class="login_pw">
-                        <input type="password" name="password" placeholder="비밀번호" required>
-                    </div>
+       	<h2>로그인</h2>
+       	<div class="login_area">
+        <form th:action="@{/user/login}" method="post">
+            <div class="input_wrap">
+	            <div th:if="${param.error}" class="alert alert-danger">아이디 및 비밀번호를 확인해주세요.</div>
+                <div class="login_id">
+                    <input type="text" name="userId" placeholder="아이디" th:value="${param.userId}" required>
                 </div>
-                <div class="btn_wrap">
-                    <input type="submit" value="로그인" class="btn">
-                </div>
-                <div class="find_wrap">
-                    <ul>
-                        <li><a href="/user/findId">아이디 찾기</a></li>
-                        <li><a href="/user/findPassword">비밀번호 찾기</a></li>
-                    </ul>
-                </div>
-            </form>
-            <div class="sns_login">
-                <h3>소셜로그인</h3>
-                <div class="sns_wrap">
-                    <ul>
-                        <li><a th:href="@{/oauth2/authorization/kakao}" class="btn">
-                            <img th:src="@{/images/kakaologin.png}" alt="카카오톡 로그인">
-                        </a></li>
-                        <li><a th:href="@{/oauth2/authorization/naver}" class="btn">
-                            <img th:src="@{/images/naverlogin.png}" alt="네이버 로그인">
-                        </a></li>
-                    </ul>
+                <div class="login_pw">
+                    <input type="password" name="password"  placeholder="비밀번호" required>
                 </div>
             </div>
+            <div class="btn_wrap">
+                <input type="submit" value="로그인" class="btn">
+            </div>
+            <div class="find_wrap">
+            	<ul>
+            		<li><a href="/user/findId">아이디 찾기</a></li>
+            		<li><a href="/user/findPassword">비밀번호 찾기</a></li>
+            	</ul>       
+            </div>
+        </form>
+        <div class="sns_login">
+            <div class="sns_wrap">
+            	<ul>
+            		<li class="kakao">
+            			<a th:href="@{/oauth2/authorization/kakao}" class="btn kakao_btn">
+	            			<img th:src="@{/images/kakao_logo.png}">
+	            			<span>카카오 로그인</span>
+            			</a>
+                    </li>
+            		<li class="naver">
+            			<a th:href="@{/oauth2/authorization/naver}" class="btn naver_btn">
+                			<img th:src="@{/images/naver_logo.png}">
+                			<span>네이버 로그인</span>
+                    	</a>
+                    </li>
+            	</ul>
+            </div>
         </div>
+    </div>
     </div>
 </div>
 </html>

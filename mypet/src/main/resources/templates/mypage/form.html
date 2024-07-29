@@ -1,92 +1,167 @@
-<!DOCTYPE html>
-
-<head>
-	<title>마이페이지</title>
-</head>
-
-<body>
-	<div class="container">
-		<h2>마이페이지</h2>
-		<style>
-			.hidden {
-				display: none;
-			}
-		</style>
-
-		<!--로그인회원 정보출력-->
-		<div>
-			<p><strong>아이디:</strong> <span th:text="${user.userId}"></span></p>
-			<p><strong>이름:</strong> <span th:text="${user.userName}"></span></p>
-			<p><strong>이메일:</strong> <span th:text="${user.userEmail}"></span></p>
-			<p><strong>전화번호:</strong> <span th:text="${user.userPhone}"></span></p>
-			<p><strong>가입일자:</strong> <span th:text="${user.createdAt}"></span></p>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+  <div class="inner mypage_area">
+    <h2>마이페이지</h2>
+    <div class="mypage_wrap">
+        <div class="tab_menu">
+        	<ul>
+		      <li class="on"><a href="#menu1" class="menu_btn"><i class="fa-solid fa-circle-user"></i>회원 정보</a></li>
+		      <li><a href="#menu2" class="menu_btn"><i class="fa-solid fa-pen-nib"></i>내가 쓴 글/댓글</a></li>
+		      <li><a href="#menu3" class="menu_btn"><i class="fa-solid fa-comments"></i>1:1문의 내역</a></li>
+		    </ul>
 		</div>
-		<!--정보 수정하기 버튼-->
-		<div>
-			<a th:href="@{/user/editProfile}" class="btn">개인정보 수정하기</a>
-		</div>
-
-		<div>
-			<a th:href="@{/user/changePassword}">비밀번호 변경하기</a>
-		</div>
-
-		<!--자유게시판 내가 쓴 글-->
-		<div>
-			<h3>내가 쓴 자유게시판 글</h3>
-			<ul>
-				<li th:each="board : ${userBoards}">
-					<a th:href="@{'/board/detail/' + ${board.idx}}">
-						<span th:text="${board.title}"></span>
-					</a> - <span th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd')}"></span>
-				</li>
-			</ul>
-		</div>
-
-		<!--QnA 내가 쓴 글-->
-		<div>
-			<h3>내가 쓴 QnA 글</h3>
-			<ul>
-				<li th:each="question : ${userQuestions}">
-					<a th:href="@{'/qna_question/detail/' + ${question.questionIdx}}">
-						<span th:text="${question.subject}"></span>
-					</a> - <span th:text="${#temporals.format(question.createdAt, 'yyyy-MM-dd')}"></span>
-				</li>
-			</ul>
-		</div>
-
-		<!--회원탈퇴 버튼-->
-		<button type="button" class="btn" onclick="confirmDeleteAccount()">회원탈퇴</button>
-		<div id="deleteAccountForm" class="hidden">
+      <div class="right">
+    <div id="menu1" class="side_menu on user_info">
+      <h3><i class="fa-solid fa-circle-user"></i>회원 정보</h3>
+      <ul>
+		<li>아이디 <span th:text="${user.userId}"></span></li>
+        <li>이름 <span th:text="${user.userName}"></span></li>
+        <li>이메일 <span th:text="${user.userEmail}"></span></li>
+        <li>전화번호 <span th:text="${user.userPhone}"></span></li>
+        <li>가입일자 <span th:text="${#temporals.format(user.createdAt, 'yyyy년 MM월 dd일')}"></span></li>
+      </ul>
+      <div class="btn_wrap_B">
+        <a th:href="@{/user/editProfile}" class="btn">개인정보 수정</a>
+        <a th:href="@{/user/changePassword}" class="btn">비밀번호 변경</a>
+      </div>
+      <div class="delete_wrap">
+	      <button type="button" class="delete_btn" onclick="confirmDeleteAccount()">회원탈퇴</button>
+	      <div id="deleteAccountForm" class="hidden">
 			<form th:action="@{/user/deleteAccount}" method="post">
 				<label for="confirmPassword">비밀번호 확인:</label>
 				<input type="password" id="confirmPassword" name="confirmPassword" required>
 				<button type="submit" class="btn">계정 삭제</button>
 			</form>
 		</div>
-		
+	  </div>
+    </div>
+    <div id="menu2" class="side_menu">
+      <h3><i class="fa-solid fa-pen-nib"></i>내가 쓴 글</h3>
+      <table class="board_list_wrap">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>제목</th>
+              <th>조회수</th>
+              <th>추천수</th>
+              <th>작성일</th>
+            </tr>
+          </thead>
+          <tbody>
+          	<tr th:each="board : ${userBoards}">
+              <td th:text="${board.idx}"></td>
+              <td class="title_td">
+                <a th:href="@{'/board/detail/' + ${board.idx}}">
+                 <span th:text="${board.title}" class="title"></span>
+                 <span class="comment_size" th:if="${#lists.size(board.commentList) > 0}" th:text="${#lists.size(board.commentList)}"></span>
+                </a>
+                
+              </td>
+              <td th:text="${board.views}"></td>
+              <td th:text="${#lists.size(board.voter)}"></td>
+              <td th:text="${#temporals.format(board.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+          </tbody>
+      
+      </table>
+		<h3><i class="fa-solid fa-comment-dots"></i>내가 쓴 댓글</h3>
+		<table class="board_list_wrap">
+              <thead>
+                <tr>
+                  <th>번호</th>
+                  <th>게시글 제목</th>
+                  <th>내 댓글</th>
+                  <th>작성일</th>
+                </tr>
+              </thead>
+              <tbody>
+              	<tr th:if="${userComments == null or userComments.empty}">
+	              <td colspan="4">작성한 댓글이 없습니다.</td>
+	            </tr>
+                <tr th:each="comment : ${userComments}">
+                  <td th:text="${comment.idx}"></td>
+                  <td class="title_td">
+                    <a th:href="@{'/board/detail/' + ${comment.board.idx}}">
+                      <span th:text="${comment.board.title}" class="title"></span>
+                    </a>
+                  </td>
+                  <td th:text="${comment.content}"></td>
+                  <td th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                </tr>
+              </tbody>
+          </table>
+    </div>
+    <div id="menu3" class="side_menu">
+      <h3><i class="fa-solid fa-comments"></i>1:1문의 내역</h3>
+      <table class="board_list_wrap">
+      	<thead>
+			<tr>
+				<th>카테고리</th>
+				<th>제목</th>
+				<th>작성자</th>
+				<th>작성일시</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:if="${userQuestions == null or userQuestions.empty}">
+              <td colspan="5">게시글이 없습니다.</td>
+            </tr>
+			<tr th:each="question : ${userQuestions}">
+				<td th:text="${question.category}"></td>
+				<td class="title_td">
+					<a th:href="@{'/qna_question/detail/' + ${question.questionIdx}}">
+						<span th:text="${question.subject}" class="title"></span>
+						<span class="comment_size" th:if="${#lists.size(question.answerList) > 0}"
+						th:text="'답변 완료'"></span>
+					</a>
+				</td>
+				<td><span th:if="${question.author != null}" th:text="${question.author.userId}"></span></td>
+				<td th:text="${#temporals.format(question.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+			</tr>
+		</tbody>
+	</table>
+     
+    </div>
+    
+  </div>
+</div>
 
-		<!--이전페이지로 이동-->
-		<div>
-			<a href="javascript:history.back()" class="btn">이전 페이지로 이동</a>
-		</div>
+<script layout:fragment="script" type="text/javascript">
+document.addEventListener("DOMContentLoaded", function() {
+	  const tabList = document.querySelectorAll('.tab_menu ul li');
+	  const contents = document.querySelectorAll('.side_menu');
 
+	  tabList.forEach(function(tab) {
+	    tab.querySelector('.menu_btn').addEventListener('click', function(e) {
+	      e.preventDefault();
 
-	</div>
-	<script>
-		function confirmDeleteAccount() {
-			// 탈퇴 여부 확인
-			var confirmation = confirm("탈퇴하시겠습니까?");
-			if (confirmation) {
-				// 비밀번호 확인 폼을 표시
-				toggleDeleteAccountForm();
-			}
+	      tabList.forEach(function(item) {
+	        item.classList.remove('on');
+	      });
+
+	      contents.forEach(function(content) {
+	        content.classList.remove('on');
+	      });
+
+	      tab.classList.add('on');
+	      const activeContent = document.querySelector(this.getAttribute('href'));
+	      activeContent.classList.add('on');
+	    });
+	  });
+	});
+	
+	function confirmDeleteAccount() {
+		// 탈퇴 여부 확인
+		var confirmation = confirm("탈퇴하시겠습니까?");
+		if (confirmation) {
+			// 비밀번호 확인 폼을 표시
+			toggleDeleteAccountForm();
 		}
-
-		function toggleDeleteAccountForm() {
-			var form = document.getElementById("deleteAccountForm");
-			form.classList.toggle("hidden");
-		}
-	</script>
-</body>
-
+	}
+	
+	function toggleDeleteAccountForm() {
+		var form = document.getElementById("deleteAccountForm");
+		form.classList.toggle("hidden");
+	}
+</script>
 </html>

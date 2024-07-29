@@ -86,14 +86,14 @@ public class CommentController {
     }
     
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/delete/{idx}")
+    @DeleteMapping("/delete/{idx}")
     @ResponseBody
     public String deleteComment(@PathVariable("idx") Integer idx, Principal principal) {
-        Comment comment = this.commentService.getComment(idx);
+        Comment comment = commentService.getComment(idx);
         if (!comment.getAuthor().getUserId().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "삭제권한이 없습니다.");
         }
-        this.commentService.delete(comment);
+        commentService.delete(comment);
         return "success";
     }
 
