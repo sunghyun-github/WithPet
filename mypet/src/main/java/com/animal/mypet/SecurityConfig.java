@@ -75,6 +75,7 @@ public class SecurityConfig {
             .exceptionHandling(exceptionHandling -> exceptionHandling
                 .accessDeniedPage("/access_denied")  // 접근 거부 페이지
             );
+        
         return http.build();
     }
 
