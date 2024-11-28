@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -48,6 +49,14 @@ public class SecurityConfig {
                     .defaultSuccessUrl("/")
                     .usernameParameter("userId") // userId 필드 사용
                     .permitAll())
+            .sessionManagement(session -> session
+            	    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 세션이 필요한 경우에만 생성
+            	    .invalidSessionUrl("/")  // 세션 만료 시 이동할 URL
+            	    .maximumSessions(1)  // 최대 세션 수
+            	    .expiredUrl("/user/login")  // 세션 만료 시 리디렉션할 URL
+            	    .and()
+            	    .sessionFixation().migrateSession()  // 세션 고정 공격 방지
+            	)
             .oauth2Login(oauth2 -> oauth2
                     .loginPage("/user/login")
                     .defaultSuccessUrl("/")
@@ -58,9 +67,11 @@ public class SecurityConfig {
                     .userService(oAuth2UserService())
                 )
             .logout(logout -> logout
-                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true))
+            	    .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+            	    .logoutSuccessUrl("/")  // 로그아웃 후 이동할 URL
+            	    .invalidateHttpSession(true)  // 세션 무효화
+            	    .deleteCookies("JSESSIONID")  // JSESSIONID 쿠키 삭제
+            	)
             .exceptionHandling(exceptionHandling -> exceptionHandling
                 .accessDeniedPage("/access_denied")  // 접근 거부 페이지
             );
