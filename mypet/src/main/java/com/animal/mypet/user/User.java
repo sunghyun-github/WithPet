@@ -36,7 +36,7 @@ public class User {
     @Column
     private String provider;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private String userPhone;
 
     @Column(nullable = false)

@@ -104,7 +104,7 @@ public class UserController {
 			return "signup/form";
 		}
 
-		return "redirect:/";
+		return "redirect:/user/login";
 	}
 
 	@GetMapping("/login")
