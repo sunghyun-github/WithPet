@@ -90,7 +90,7 @@ public class UserController {
 		userForm.put("userName", userCreateForm.getUserName());
 		userForm.put("userPhone", userCreateForm.getUserPhone());
 		userForm.put("userEmail", userEmail);
-		userForm.put("userRole", "USER");
+		userForm.put("userRole", UserRole.USER.toString());
 
 		try {
 			userService.create(userForm);

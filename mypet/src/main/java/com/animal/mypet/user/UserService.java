@@ -34,7 +34,7 @@ public class UserService {
         user.setUserName(userForm.get("userName"));
         user.setUserPhone(userForm.get("userPhone"));
         user.setUserEmail(userForm.get("userEmail"));
-        user.setUserRole("USER");
+        user.setUserRole(UserRole.USER.toString());
         
         userRepository.save(user);
     }
