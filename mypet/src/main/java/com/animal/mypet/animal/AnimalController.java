@@ -39,7 +39,7 @@ public class AnimalController {
 
         model.addAttribute("seoulAnimals", seoulAnimals);
         model.addAttribute("gyeonggiAnimals", gyeonggiAnimals);
-        return "/animal/animalBoard";
+        return "animal/animalBoard";
     }
 
     private List<ApiEntity> filterSeoulAnimalsByType(List<ApiEntity> animals, String type) {
@@ -93,17 +93,17 @@ public class AnimalController {
 
     @GetMapping("/animalNum")
     public String showAnimalNumPage() {
-        return "/animal/animalNum";
+        return "animal/animalNum";
     }
 
     @GetMapping("/animalDetails")
     public String showAnimalBoard() {
-        return "/animal/animalBoard";
+        return "animal/animalBoard";
     }
     
     @GetMapping("/animalShelters")
     public String showAnimalShelters() {
-        return "/animal/animalShelters";
+        return "animal/animalShelters";
     }
     
     @GetMapping("{abdmId}")

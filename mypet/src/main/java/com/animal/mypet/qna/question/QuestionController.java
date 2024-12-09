@@ -62,7 +62,7 @@ public class QuestionController {
 		model.addAttribute("paging", paging);
 		model.addAttribute("category", category); // 카테고리 추가
 		model.addAttribute("kw", kw);
-		return "/qna/question_list";
+		return "qna/question_list";
 	}
 
 	@GetMapping("/detail/{question_idx}")

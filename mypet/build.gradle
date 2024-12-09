@@ -53,6 +53,7 @@ dependencies {
     implementation 'commons-fileupload:commons-fileupload:1.5'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 }	
+
 tasks.named('test') {
     useJUnitPlatform()
 }
