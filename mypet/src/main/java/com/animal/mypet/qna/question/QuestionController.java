@@ -79,7 +79,7 @@ public class QuestionController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/create")
 	public String create(QuestionForm questionForm) {
-		return "/qna/question_form";
+		return "qna/question_form";
 	}
 
 	@PreAuthorize("isAuthenticated()")
@@ -131,7 +131,7 @@ public class QuestionController {
 			@PathVariable("question_idx") Integer questionIdx,
 			@RequestParam(value = "files", required = false) MultipartFile[] files) {
 		if (bindingResult.hasErrors()) {
-			return "/qna/question_form";
+			return "qna/question_form";
 		}
 
 		Question question = this.questionService.getQuestion(questionIdx);
