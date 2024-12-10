@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE = 'myapp:latest'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
+
+            }
+        }
+        stage('Build') {
+            steps {
+                bat 'gradle build'
+            }
+        }
+        stage('Test') {
+            steps {
+                bat 'gradle test'
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                bat 'docker build -t %DOCKER_IMAGE% .'
+            }
+        }
+        stage('Docker Deploy') {
+            steps {
+                bat 'docker-compose up -d'
+            }
+        }
+    }
+}
