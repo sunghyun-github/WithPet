@@ -12,14 +12,14 @@ pipeline {
         stage('Build') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'gradlew.bat build'
+                    bat './gradlew.bat build'
                 }
             }
         }
         stage('Test') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'gradlew.bat test'
+                    bat './gradlew.bat test'
                 }
             }
         }
