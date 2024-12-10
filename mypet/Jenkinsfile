@@ -13,10 +13,10 @@ pipeline {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
                     bat """
-                        ./gradlew.bat build \
-                        -Dspring.datasource.url=%SPRING_DATASOURCE_URL% \
-                        -Dspring.datasource.username=%SPRING_DATASOURCE_USERNAME% \
-                        -Dspring.datasource.password=%SPRING_DATASOURCE_PASSWORD%
+                        ./gradlew.bat build ^
+                        -Dspring.datasource.url="jdbc:mysql://localhost:3306/fpjt?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8" ^
+                        -Dspring.datasource.username="root" ^
+                        -Dspring.datasource.password="rpass"
                     """
                 }
             }
@@ -25,10 +25,10 @@ pipeline {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
                     bat """
-                        ./gradlew.bat test \
-                        -Dspring.datasource.url=%SPRING_DATASOURCE_URL% \
-                        -Dspring.datasource.username=%SPRING_DATASOURCE_USERNAME% \
-                        -Dspring.datasource.password=%SPRING_DATASOURCE_PASSWORD%
+                        ./gradlew.bat test ^
+                        -Dspring.datasource.url="jdbc:mysql://localhost:3306/fpjt?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8" ^
+                        -Dspring.datasource.username="root" ^
+                        -Dspring.datasource.password="rpass"
                     """
                 }
             }
