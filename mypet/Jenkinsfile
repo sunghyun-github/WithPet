@@ -3,7 +3,8 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'myapp:latest'
         SPRING_DATASOURCE_URL = 'jdbc:mysql://localhost:3306/fpjt?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8'
-        SPRING_DATASOURCE_DRIVER_CLASS_NAME = 'com.mysql.cj.jdbc.Driver'
+        SPRING_DATASOURCE_USERNAME = 'root'  
+        SPRING_DATASOURCE_PASSWORD = 'rpass' 
     }
     stages {
         stage('Checkout') {
@@ -13,13 +14,6 @@ pipeline {
         }
         stage('Build') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'my-database-credentials', usernameVariable: 'DB_USER', passwordVariable: 'DB_PASSWORD')]) {
-                    script {
-                        // 데이터베이스 설정값 환경 변수로 주입
-                        env.SPRING_DATASOURCE_USERNAME = DB_USER
-                        env.SPRING_DATASOURCE_PASSWORD = DB_PASSWORD
-                    }
-                }
                 dir('mypet') {  // 'mypet' 폴더로 이동
                     bat './gradlew.bat build'
                 }
