@@ -13,8 +13,6 @@ class MypetApplicationTests {
     private UserService userService;
 	 @Test
 	    void contextLoads() {
-	        // 130명의 사용자 생성
-	        userService.createUsers(130);
 	    }
 	
 }
