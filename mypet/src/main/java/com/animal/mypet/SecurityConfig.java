@@ -92,4 +92,5 @@ public class SecurityConfig {
     public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
         return new CustomOAuth2UserService();
     }
+    
 }
