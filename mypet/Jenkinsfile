@@ -2,10 +2,6 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE = 'myapp:latest'
-        DB_URL = 'jdbc:mysql://localhost:3306/mydb'  // MySQL 연결 URL
-        DB_USERNAME = 'root'  // MySQL 사용자 이름
-        DB_PASSWORD = 'rpass'  // MySQL 비밀번호
-        DB_DRIVER = 'com.mysql.cj.jdbc.Driver'  // MySQL JDBC 드라이버
     }
     stages {
         stage('Checkout') {
