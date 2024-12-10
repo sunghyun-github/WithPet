@@ -1,40 +1,28 @@
 pipeline {
     agent any
-    environment {
-        DOCKER_IMAGE = 'myapp:latest'
-    }
+
     stages {
         stage('Checkout') {
             steps {
+                // GitHub에서 코드 클론
                 git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
             }
         }
         stage('Build') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'gradlew.bat build'
-                }
+                // 빌드 실행
+                bat 'gradlew.bat build'
             }
         }
         stage('Test') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'gradlew.bat test'
-                }
+                // 테스트 실행
+                bat 'gradlew.bat test'
             }
         }
-        stage('Docker Build') {
+        stage('Success') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'docker build -t %DOCKER_IMAGE% .'
-                }
-            }
-        }
-        stage('Docker Deploy') {
-            steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'docker-compose up -d'
-                }
+                echo 'CI/CD pipeline 실행 성공!'
             }
         }
     }
