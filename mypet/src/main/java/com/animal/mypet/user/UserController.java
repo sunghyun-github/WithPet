@@ -309,4 +309,5 @@ public class UserController {
 		// 업데이트 후 마이페이지로 리다이렉트
 		return "redirect:/user/mypage";
 	}
+	
 }
