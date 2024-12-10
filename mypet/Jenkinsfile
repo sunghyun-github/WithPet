@@ -7,27 +7,34 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
-
             }
         }
         stage('Build') {
             steps {
-                bat 'gradlew.bat build'
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat 'gradlew.bat build'
+                }
             }
         }
         stage('Test') {
             steps {
-                bat 'gradlew.bat test'
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat 'gradlew.bat test'
+                }
             }
         }
         stage('Docker Build') {
             steps {
-                bat 'docker build -t %DOCKER_IMAGE% .'
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat 'docker build -t %DOCKER_IMAGE% .'
+                }
             }
         }
         stage('Docker Deploy') {
             steps {
-                bat 'docker-compose up -d'
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat 'docker-compose up -d'
+                }
             }
         }
     }
