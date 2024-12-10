@@ -171,7 +171,7 @@ public class UserController {
 		}
 	}
 
-	// PW 찾기ㅣ
+	// PW 찾기
 	@GetMapping("/findPassword")
 	public String showFindPasswordForm() {
 		return "login/findPassword"; // 아이디 찾기 폼 페이지로 이동
@@ -255,8 +255,7 @@ public class UserController {
 		}
 	}
 
-//    마이페이지로 이동
-
+	//마이페이지로 이동
 	 @GetMapping("/mypage")
 	    public String getUserMypage(Model model, Principal principal) {
 	        boolean isSocialUser = principal instanceof OAuth2AuthenticationToken;
@@ -283,7 +282,7 @@ public class UserController {
 	        return "mypage/form";
 	    }
 
-//    정보수정 페이지로 이동
+	 //정보수정 페이지로 이동
 	@GetMapping("/editProfile")
 	public String editProfile(Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -295,7 +294,7 @@ public class UserController {
 		return "mypage/editForm";
 	}
 
-//    정보수정 처리
+	//정보수정 처리
 	@PostMapping("/editProfile")
 	public String editProfile(@RequestParam("userId") String userId, @RequestParam("userName") String userName,
 			@RequestParam("userEmail") String userEmail, @RequestParam("userPhone") String userPhone, Model model) {
