@@ -1,25 +1,22 @@
 pipeline {
     agent any
-    environment {
-        DOCKER_IMAGE = 'myapp:latest'
-    }
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
+                git url: 'https://github.com/sunghyun-github/WithPet.git', branch: 'develop', changelog: false
             }
         }
         stage('Build') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat './gradlew.bat build'
+                    bat 'gradlew.bat build'
                 }
             }
         }
         stage('Test') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat './gradlew.bat test'
+                    bat 'gradlew.bat test'
                 }
             }
         }
