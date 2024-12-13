@@ -10,34 +10,6 @@ pipeline {
                 git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
             }
         }
-        stage('Build') {
-            steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'gradlew.bat build'  // Gradle 빌드 실행
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'gradlew.bat test'  // 테스트 실행
-                }
-            }
-        }
-        stage('Docker Build') {
-            steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'docker-compose build'  // Docker Compose로 이미지 빌드
-                }
-            }
-        }
-        stage('Stop Containers') {
-            steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'docker-compose down --volumes --remove-orphans'  // 기존 컨테이너 종료 및 관련 리소스 삭제
-                }
-            }
-        }
         stage('Docker Deploy') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
@@ -47,7 +19,8 @@ pipeline {
                             usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
                             // .env 파일 작성
                             writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
-                            // 새로 빌드한 이미지를 사용해 컨테이너 시작
+                            // Docker Compose로 컨테이너 실행
+                            bat 'docker-compose down --volumes --remove-orphans'  // 기존 컨테이너 종료 및 관련 리소스 삭제
                             bat 'docker-compose up -d'  // 새로 빌드한 이미지를 사용해 컨테이너 시작
                         }
                     }
