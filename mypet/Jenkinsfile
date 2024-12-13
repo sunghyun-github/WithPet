@@ -27,14 +27,23 @@ pipeline {
         stage('Docker Build') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'docker build -t ${DOCKER_IMAGE} .'  // Docker 이미지 빌드
+                    bat "docker build -t ${env.DOCKER_IMAGE} ."  // Docker 이미지 빌드
                 }
             }
         }
         stage('Docker Deploy') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'docker-compose up -d'  // Docker Compose로 컨테이너 실행
+                    script {
+                        // Credentials 활용하여 환경 변수 설정
+                        withCredentials([usernamePassword(credentialsId: 'mypet-db', 
+                            usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
+                            // .env 파일 작성
+                            writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
+                            // Docker Compose 실행
+                            bat 'docker-compose up -d'
+                        }
+                    }
                 }
             }
         }
