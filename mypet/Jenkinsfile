@@ -1,48 +1,40 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = 'myapp:latest'
+        DOCKER_IMAGE = 'myapp:latest'  // Docker 이미지 이름 설정
     }
     stages {
         stage('Checkout') {
             steps {
+                // GitHub 저장소에서 코드 체크아웃
                 git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
             }
         }
         stage('Build') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-bat """
-    ./gradlew.bat build ^
-    -Dspring.datasource.url=%SPRING_DATASOURCE_URL% ^
-    -Dspring.datasource.username=%SPRING_DATASOURCE_USERNAME% ^
-    -Dspring.datasource.password=%SPRING_DATASOURCE_PASSWORD%
-"""                }
+                    bat './gradlew.bat build'  // Gradle 빌드 실행
+                }
             }
         }
         stage('Test') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat """
-    ./gradlew.bat build ^
-    -Dspring.datasource.url=%SPRING_DATASOURCE_URL% ^
-    -Dspring.datasource.username=%SPRING_DATASOURCE_USERNAME% ^
-    -Dspring.datasource.password=%SPRING_DATASOURCE_PASSWORD%
-"""
+                    bat './gradlew.bat test'  // 테스트 실행
                 }
             }
         }
         stage('Docker Build') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'docker build -t %DOCKER_IMAGE% .'
+                    bat 'docker build -t ${DOCKER_IMAGE} .'  // Docker 이미지 빌드
                 }
             }
         }
         stage('Docker Deploy') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'docker-compose up -d'
+                    bat 'docker-compose up -d'  // Docker Compose로 컨테이너 실행
                 }
             }
         }
