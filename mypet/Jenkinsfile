@@ -31,6 +31,13 @@ pipeline {
                 }
             }
         }
+        stage('Stop Containers') {
+            steps {
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat 'docker-compose down'  // 기존 컨테이너 종료 및 관련 리소스 삭제
+                }
+            }
+        }
         stage('Docker Deploy') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
@@ -40,8 +47,7 @@ pipeline {
                             usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
                             // .env 파일 작성
                             writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
-                            // 기존 컨테이너 종료 후 새로운 이미지를 빌드하여 컨테이너 시작
-                            bat 'docker-compose down'  // 기존 컨테이너 종료
+                            // 새로 빌드한 이미지를 사용해 컨테이너 시작
                             bat 'docker-compose up -d'  // 새로 빌드한 이미지를 사용해 컨테이너 시작
                         }
                     }
