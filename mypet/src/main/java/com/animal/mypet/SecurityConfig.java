@@ -53,7 +53,7 @@ public class SecurityConfig {
             	    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 세션이 필요한 경우에만 생성
             	    .invalidSessionUrl("/user/login")  // 세션 만료 시 이동할 URL
             	    .maximumSessions(1)  // 최대 세션 수
-            	    .maxSessionsPreventsLogin(true)  // 기존 세션을 유지하고 새 세션 생성을 차단
+            	    .maxSessionsPreventsLogin(true)  // 기존 세션을 유지하고 새 세션 생성을 차단 
             	    .expiredUrl("/user/login")  // 세션 만료 시 리디렉션할 URL
             	    .and()
             	    .sessionFixation().migrateSession()  // 세션 고정 공격 방지
