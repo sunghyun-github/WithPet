@@ -27,7 +27,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat "docker build -t ${env.DOCKER_IMAGE} ."  // Docker 이미지 빌드
+                    bat "docker build --no-cache -t ${env.DOCKER_IMAGE} ."  // Docker 이미지 재빌드 (캐시 사용 안 함)
                 }
             }
         }
@@ -40,8 +40,9 @@ pipeline {
                             usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
                             // .env 파일 작성
                             writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
-                            // Docker Compose 실행
-                            bat 'docker-compose up -d'
+                            // 기존 컨테이너 종료 및 삭제 후 새 컨테이너 시작
+                            bat 'docker-compose down'  // 기존 컨테이너 종료
+                            bat 'docker-compose up -d'  // 새로 컨테이너 시작
                         }
                     }
                 }
