@@ -11,8 +11,5 @@ class MypetApplicationTests {
 
 	@Autowired
     private UserService userService;
-	 @Test
-	    void contextLoads() {
-	    }
 	
 }
