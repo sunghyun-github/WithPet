@@ -6,24 +6,12 @@ pipeline {
                 git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
             }
         }
-        stage('Build') {
-            steps {
-                dir('mypet') {
-                    bat './gradlew build'
-                }
-            }
-        }
         stage('Docker Build') {
             steps {
                 dir('mypet') {
-                    bat "docker-compose build --no-cache"  // --no-cache로 캐시 무시하고 새로 빌드
-                }
-            }
-        }
-        stage('Docker Down') {
-            steps {
-                dir('mypet') {
-                    bat 'docker-compose down'
+                    script {
+                        bat 'docker-compose build --no-cache'
+                    }
                 }
             }
         }
@@ -31,13 +19,27 @@ pipeline {
             steps {
                 dir('mypet') {
                     script {
+                        // 자격 증명 관리
                         withCredentials([usernamePassword(credentialsId: 'mypet-db', 
                             usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
+                            
+                            // 환경 변수 파일 작성
                             writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
-                            bat 'docker-compose up -d --force-recreate'  // 컨테이너 강제로 재시작
+                            
+                            // 컨테이너 강제 재시작
+                            bat 'docker-compose up -d --force-recreate'
                         }
                     }
                 }
+            }
+        }
+    }
+    post {
+        // 빌드가 끝난 후 항상 실행되는 섹션
+        always {
+            // Docker Compose로 다운
+            dir('mypet') {
+                bat 'docker-compose down'
             }
         }
     }
