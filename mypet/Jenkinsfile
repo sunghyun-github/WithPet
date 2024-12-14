@@ -36,7 +36,6 @@ pipeline {
                     script {
                         // Credentials 활용하여 환경 변수 설정
                         withCredentials([
-                            usernamePassword(credentialsId: 'GMAIL_CREDENTIALS', usernameVariable: 'GMAIL_USERNAME', passwordVariable: 'GMAIL_PASSWORD'),
                             usernamePassword(credentialsId: 'NAVER_CREDENTIALS', usernameVariable: 'NAVER_CLIENT_ID', passwordVariable: 'NAVER_CLIENT_SECRET'),
                             usernamePassword(credentialsId: 'KAKAO_CREDENTIALS', usernameVariable: 'KAKAO_CLIENT_ID', passwordVariable: 'KAKAO_CLIENT_SECRET')
                         ]) {
@@ -49,8 +48,8 @@ pipeline {
                                 file.upload-dir=/path/to/upload/directory
                                 spring.mail.host=smtp.gmail.com
                                 spring.mail.port=587
-                                spring.mail.username=${GMAIL_USERNAME}
-                                spring.mail.password=${GMAIL_PASSWORD}
+                                spring.mail.username=tjdgus50998583@gmail.com
+                                spring.mail.password=mgyd augn grsk wxde
                                 spring.mail.properties.mail.smtp.auth=true
                                 spring.mail.properties.mail.smtp.timeout=5000
                                 spring.mail.properties.mail.smtp.starttls.enable=true
@@ -59,9 +58,8 @@ pipeline {
                                 spring.security.oauth2.client.registration.kakao.client-id=${KAKAO_CLIENT_ID}
                                 spring.security.oauth2.client.registration.kakao.client-secret=${KAKAO_CLIENT_SECRET}
                             """
-                            
                             // Docker Compose 실행
-                            bat 'docker-compose up -d'  // Docker Compose로 배포
+                            bat 'docker-compose up -d'
                         }
                     }
                 }
