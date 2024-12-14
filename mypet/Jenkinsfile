@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = 'mypet:latest'  // Docker 이미지 이름
+        DOCKER_IMAGE = 'myapp:latest'  // Docker 이미지 이름 설정
     }
     stages {
         stage('Checkout') {
@@ -12,34 +12,34 @@ pipeline {
         }
         stage('Build') {
             steps {
-                dir('mypet') {  // 프로젝트 디렉토리로 이동
-                    bat 'gradlew.bat clean build'  // Gradle 빌드 실행
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat 'gradlew.bat build'  // Gradle 빌드 실행
                 }
             }
         }
         stage('Test') {
             steps {
-                dir('mypet') {  // 프로젝트 디렉토리로 이동
+                dir('mypet') {  // 'mypet' 폴더로 이동
                     bat 'gradlew.bat test'  // 테스트 실행
                 }
             }
         }
         stage('Docker Build') {
             steps {
-                dir('mypet') {  // 프로젝트 디렉토리로 이동
+                dir('mypet') {  // 'mypet' 폴더로 이동
                     bat "docker build -t ${env.DOCKER_IMAGE} ."  // Docker 이미지 빌드
                 }
             }
         }
         stage('Docker Deploy') {
             steps {
-                dir('mypet') {  // 프로젝트 디렉토리로 이동
+                dir('mypet') {  // 'mypet' 폴더로 이동
                     script {
+                        // Credentials 활용하여 환경 변수 설정
                         withCredentials([usernamePassword(credentialsId: 'mypet-db', 
                             usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
-                            // .env 파일 생성
+                            // .env 파일 작성
                             writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
-                            echo 'Environment file created successfully.'
                             // Docker Compose 실행
                             bat 'docker-compose up -d'
                         }
