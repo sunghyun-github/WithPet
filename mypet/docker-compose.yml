@@ -27,23 +27,11 @@ services:
       MYSQL_ROOT_PASSWORD: rpass  # 루트 비밀번호
       MYSQL_DATABASE: fpjt  # 초기 생성 데이터베이스
     ports:
-      - "3307:3306"  # 로컬 3307 -> 컨테이너 3306 포트 매핑
+      - "3307:3306"  # 로컬 3306 -> 컨테이너 3306 포트 매핑
     restart: always
     volumes:
       - mysql-data:/var/lib/mysql  # 데이터 영구 저장용 볼륨
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    networks:
-      - mypet-network
-
-  app:
-    image: myapp:latest
-    env_file:
-      - .env  # .env 파일을 통해 환경 변수 설정
-    ports:
-      - "8080:8080"  # 로컬 8080 -> 컨테이너 8080 포트 매핑
-    volumes:
-      - ./data:/app/data
-    restart: always
     networks:
       - mypet-network
 

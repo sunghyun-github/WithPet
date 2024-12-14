@@ -4,18 +4,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Properties;
 
 @Configuration
 public class MailConfig {
-
-    @Value("${MAIL_USERNAME}")
-    private String username;
-
-    @Value("${MAIL_PASSWORD}")
-    private String password;
 
     @Bean
     public JavaMailSender javaMailSender() {
@@ -25,15 +18,17 @@ public class MailConfig {
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
-        // 사용자 인증: Jenkins 환경 변수에서 값을 가져옴
-        mailSender.setUsername(username); // Jenkins 환경 변수에서 이메일 가져오기
-        mailSender.setPassword(password); // Jenkins 환경 변수에서 앱 비밀번호 가져오기
+        // Gmail 계정과 앱 비밀번호를 설정합니다. 여기서 앱 비밀번호를 사용하세요.
+        mailSender.setUsername("tjdgus50998583@gmail.com");  // 본인 이메일
+        mailSender.setPassword("mgyd augn grsk wxde");  // Gmail 앱 비밀번호 (2단계 인증 활성화 시 앱 비밀번호 필요)
 
         // 추가 프로퍼티 설정 (TLS 사용)
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-
+        props.put("mail.smtp.starttls.enable", "true");  // STARTTLS 사용
+        props.put("mail.smtp.timeout", "5000");  // 타임아웃 설정 (옵션)
+        props.put("mail.smtp.connectiontimeout", "5000");  // 커넥션 타임아웃 (옵션)
+        
         return mailSender;
     }
 }
