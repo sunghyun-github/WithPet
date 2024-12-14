@@ -23,21 +23,14 @@ pipeline {
         stage('Docker Login') {
     steps {
         script {
-            withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
-                                               usernameVariable: 'DOCKER_USERNAME', 
-                                               passwordVariable: 'DOCKER_PASSWORD')]) {
-                // 환경 변수 직접 설정 후 login
-                bat """
-                    set DOCKER_USERNAME=${DOCKER_USERNAME}
-                    set DOCKER_PASSWORD=${DOCKER_PASSWORD}
-                    echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
-                """
-            }
+            def dockerUsername = 'root'  // Docker Hub 사용자명
+            def dockerPassword = 'rpass'  // Docker Hub 비밀번호
+            bat """
+                echo ${dockerPassword} | docker login -u ${dockerUsername} --password-stdin
+            """
         }
     }
 }
-
-
         stage('Docker Push') {
             steps {
                 script {
