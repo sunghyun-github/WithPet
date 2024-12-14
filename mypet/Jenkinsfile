@@ -23,7 +23,7 @@ pipeline {
         stage('Docker Login') {
     steps {
         script {
-            def dockerUsername = 'root'  // Docker Hub 사용자명
+            def dockerUsername = 'admin'  // Docker Hub 사용자명
             def dockerPassword = 'rpass'  // Docker Hub 비밀번호
             bat """
                 echo ${dockerPassword} | docker login -u ${dockerUsername} --password-stdin
