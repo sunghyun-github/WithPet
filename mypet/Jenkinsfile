@@ -13,21 +13,21 @@ pipeline {
         stage('Build') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'gradlew.bat build'  // Gradle 빌드 실행
+                    sh './gradlew build'  // Gradle 빌드 실행 (Linux에서는 sh 사용)
                 }
             }
         }
         stage('Test') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'gradlew.bat test'  // 테스트 실행
+                    sh './gradlew test'  // 테스트 실행 (Linux에서는 sh 사용)
                 }
             }
         }
         stage('Docker Build') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat "docker build -t ${env.DOCKER_IMAGE} ."  // Docker 이미지 빌드
+                    sh "docker build -t ${env.DOCKER_IMAGE} ."  // Docker 이미지 빌드 (Linux에서는 sh 사용)
                 }
             }
         }
@@ -40,8 +40,8 @@ pipeline {
                             usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
                             // .env 파일 작성
                             writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
-                            // Docker Compose 실행
-                            bat 'docker-compose up -d'
+                            // Docker Compose 실행 (Linux에서는 sh 사용)
+                            sh 'docker-compose up -d'
                         }
                     }
                 }
