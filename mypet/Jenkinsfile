@@ -17,21 +17,21 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
-            steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat './gradlew test'  // 테스트 실행 (Windows에서는 bat 사용)
-                }
-            }
-        }
         stage('Docker Build') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat "docker build -t ${env.DOCKER_IMAGE} ."  // Docker 이미지 빌드 (Windows에서는 bat 사용)
+                    bat "docker-compose build"  // Docker Compose 빌드 (Windows에서는 bat 사용)
                 }
             }
         }
-        stage('Docker Deploy') {
+        stage('Docker Down') {
+            steps {
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat 'docker-compose down'  // 기존 Docker 컨테이너 종료 (Windows에서는 bat 사용)
+                }
+            }
+        }
+        stage('Docker Up') {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
                     script {
@@ -41,7 +41,7 @@ pipeline {
                             // .env 파일 작성
                             writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
                             // Docker Compose 실행 (Windows에서 bat 사용)
-                            bat 'docker-compose up -d'
+                            bat 'docker-compose up -d'  // Docker Compose로 백그라운드 실행
                         }
                     }
                 }
