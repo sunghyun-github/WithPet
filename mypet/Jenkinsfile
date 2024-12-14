@@ -1,25 +1,51 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_IMAGE = 'myapp:latest'  // Docker 이미지 이름 설정
+    }
     stages {
+        stage('Checkout') {
+            steps {
+                // GitHub 저장소에서 코드 체크아웃
+                git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
+            }
+        }
         stage('Build') {
             steps {
-                bat 'gradlew build'
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat 'gradlew.bat build'  // Gradle 빌드 실행
+                }
             }
         }
-        stage('Docker Compose') {
+        stage('Test') {
             steps {
-                bat '''
-                docker-compose down
-                docker-compose build
-                docker-compose up -d
-                '''
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat 'gradlew.bat test'  // 테스트 실행
+                }
             }
         }
-    }
-    post {
-        always {
-            bat 'docker-compose logs'
-            bat 'docker-compose down'
+        stage('Docker Build') {
+            steps {
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat "docker build -t ${env.DOCKER_IMAGE} ."  // Docker 이미지 빌드
+                }
+            }
+        }
+        stage('Docker Deploy') {
+            steps {
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    script {
+                        // Credentials 활용하여 환경 변수 설정
+                        withCredentials([usernamePassword(credentialsId: 'mypet-db', 
+                            usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
+                            // .env 파일 작성
+                            writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
+                            // Docker Compose 실행
+                            bat 'docker-compose up -d'
+                        }
+                    }
+                }
+            }
         }
     }
 }
