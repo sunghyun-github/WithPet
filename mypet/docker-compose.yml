@@ -25,7 +25,7 @@ services:
       MYSQL_ROOT_PASSWORD: rpass  # 루트 비밀번호
       MYSQL_DATABASE: fpjt  # 초기 생성 데이터베이스
     ports:
-      - "3307:3306"  # 로컬 3306 -> 컨테이너 3306 포트 매핑
+      - "3306:3306"  # 로컬 3306 -> 컨테이너 3306 포트 매핑
     restart: always
     volumes:
       - mysql-data:/var/lib/mysql  # 데이터 영구 저장용 볼륨
