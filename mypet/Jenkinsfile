@@ -1,45 +1,25 @@
 pipeline {
     agent any
-    environment {
-        DOCKER_IMAGE = 'myapp:latest'  // Docker 이미지 이름 설정
-    }
     stages {
-        stage('Checkout') {
-            steps {
-                // GitHub 저장소에서 코드 체크아웃
-                git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
-            }
-        }
         stage('Build') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'gradlew.bat build'  // Gradle 빌드 실행
-                }
+                bat 'gradlew build'
             }
         }
-        stage('Docker Build') {
+        stage('Docker Compose') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'docker-compose build'  // Docker Compose로 이미지 빌드
-                }
+                bat '''
+                docker-compose down
+                docker-compose build
+                docker-compose up -d
+                '''
             }
         }
-        stage('Stop Containers') {
-            steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'docker-compose down --volumes --remove-orphans'  // 기존 컨테이너 종료 및 관련 리소스 삭제
-                }
-            }
-        }
-        stage('Docker Deploy') {
-            steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    script {
-                        // 새로 빌드한 이미지를 사용해 컨테이너 시작
-                        bat 'docker-compose up -d'  // 백그라운드에서 컨테이너 시작
-                    }
-                }
-            }
+    }
+    post {
+        always {
+            bat 'docker-compose logs'
+            bat 'docker-compose down'
         }
     }
 }
