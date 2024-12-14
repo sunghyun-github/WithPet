@@ -21,18 +21,22 @@ pipeline {
             }
         }
         stage('Docker Login') {
-	    steps {
-   		     script {
-   	         // Jenkins 자격 증명에서 'docker-hub-credentials'을 불러와서 환경 변수로 설정
-       		     withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
-      	   	                                      usernameVariable: 'DOCKER_USERNAME', 
-             	                                  passwordVariable: 'DOCKER_PASSWORD')]) {
-        			        // Docker 로그인 명령어 실행
-            		    bat "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
-        	  	 }
-      		  	}
- 		   }
-		}
+    steps {
+        script {
+            withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
+                                               usernameVariable: 'DOCKER_USERNAME', 
+                                               passwordVariable: 'DOCKER_PASSWORD')]) {
+                // 환경 변수 직접 설정 후 login
+                bat """
+                    set DOCKER_USERNAME=${DOCKER_USERNAME}
+                    set DOCKER_PASSWORD=${DOCKER_PASSWORD}
+                    echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
+                """
+            }
+        }
+    }
+}
+
 
         stage('Docker Push') {
             steps {
