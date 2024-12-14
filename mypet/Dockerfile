@@ -1,11 +1,11 @@
-# 1. Java 21 Base 이미지 사용
-FROM eclipse-temurin:21-jdk
+FROM jenkins/jenkins:lts
 
-# 2. 애플리케이션 JAR 파일 이름 정의
-ARG JAR_FILE=build/libs/mypet-0.0.1-SNAPSHOT.jar
+# Java 21 설치 (예시: Ubuntu 기반)
+RUN apt-get update && apt-get install -y openjdk-21-jdk
 
-# 3. JAR 파일을 Docker 컨테이너로 복사
-COPY ${JAR_FILE} app.jar
+# JAVA_HOME 환경 변수 설정
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
-# 4. 애플리케이션 실행 명령어
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Jenkins 실행
+USER jenkins
