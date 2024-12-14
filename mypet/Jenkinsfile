@@ -1,47 +1,59 @@
 pipeline {
     agent any
-    environment {
-        DOCKER_IMAGE = 'myapp:latest'  // Docker 이미지 이름 설정
-    }
     stages {
         stage('Checkout') {
             steps {
-                // GitHub 저장소에서 코드 체크아웃
                 git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
             }
         }
         stage('Build') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat './gradlew build'  // Gradle 빌드 실행 (Windows에서는 bat 사용)
+                dir('mypet') {
+                    bat './gradlew build'
                 }
             }
         }
         stage('Docker Build') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat "docker-compose build"  // Docker Compose 빌드 (Windows에서는 bat 사용)
+                dir('mypet') {
+                    bat "docker-compose build"
+                }
+            }
+        }
+        stage('Docker Login') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
+                                                       usernameVariable: 'DOCKER_USERNAME', 
+                                                       passwordVariable: 'DOCKER_PASSWORD')]) {
+                        bat "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                    }
+                }
+            }
+        }
+        stage('Docker Push') {
+            steps {
+                script {
+                    bat "docker tag myapp:latest myapp:latest"  // Tagging 이미지를 latest로 설정
+                    bat "docker push myapp:latest"
                 }
             }
         }
         stage('Docker Down') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat 'docker-compose down'  // 기존 Docker 컨테이너 종료 (Windows에서는 bat 사용)
+                dir('mypet') {
+                    bat 'docker-compose down'
                 }
             }
         }
         stage('Docker Up') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
+                dir('mypet') {
                     script {
-                        // Credentials 활용하여 환경 변수 설정
                         withCredentials([usernamePassword(credentialsId: 'mypet-db', 
                             usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
-                            // .env 파일 작성
                             writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
-                            // Docker Compose 실행 (Windows에서 bat 사용)
-                            bat 'docker-compose up -d'  // Docker Compose로 백그라운드 실행
+                            bat 'docker-compose up -d'
                         }
                     }
                 }
