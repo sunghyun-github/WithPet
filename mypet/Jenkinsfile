@@ -16,14 +16,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 dir('mypet') {
-                    bat "docker-compose build"
-                }
-            }
-        }
-        stage('Docker Down') {
-            steps {
-                dir('mypet') {
-                    bat 'docker-compose down'
+                    bat "docker-compose build --no-cache"  // --no-cache로 캐시 무시하고 새로 빌드
                 }
             }
         }
@@ -34,7 +27,7 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: 'mypet-db', 
                             usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
                             writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
-                            bat 'docker-compose up -d'
+                            bat 'docker-compose up -d --force-recreate'  // 컨테이너 강제로 재시작
                         }
                     }
                 }
