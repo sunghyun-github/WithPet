@@ -20,6 +20,13 @@ pipeline {
                 }
             }
         }
+        stage('Docker Down') {
+            steps {
+                dir('mypet') {
+                    bat 'docker-compose down'
+                }
+            }
+        }
         stage('Docker Up') {
             steps {
                 dir('mypet') {
