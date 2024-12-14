@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE = 'myapp:latest'  // Docker 이미지 이름 설정
+        FILE_UPLOAD_DIR = credentials('file-upload-dir')  // Credentials에서 파일 업로드 경로 가져오기
     }
     stages {
         stage('Checkout') {
@@ -35,11 +36,17 @@ pipeline {
             steps {
                 dir('mypet') {  // 'mypet' 폴더로 이동
                     script {
-                        // Credentials 활용하여 환경 변수 설정
+                        // Credentials 활용하여 DB 사용자명과 비밀번호 설정
                         withCredentials([usernamePassword(credentialsId: 'mypet-db', 
                             usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
-                            // .env 파일 작성
-                            writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
+                            
+                            // .env 파일 작성: DB_USERNAME, DB_PASSWORD, FILE_UPLOAD_DIR 설정
+                            writeFile file: '.env', text: """
+                            DB_USERNAME=${DB_USERNAME}
+                            DB_PASSWORD=${DB_PASSWORD}
+                            FILE_UPLOAD_DIR=${FILE_UPLOAD_DIR}  // 파일 업로드 경로 환경 변수 추가
+                            """
+
                             // Docker Compose 실행
                             bat 'docker-compose up -d'
                         }
