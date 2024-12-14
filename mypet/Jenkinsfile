@@ -59,8 +59,9 @@ pipeline {
                                 spring.security.oauth2.client.registration.kakao.client-id=${KAKAO_CLIENT_ID}
                                 spring.security.oauth2.client.registration.kakao.client-secret=${KAKAO_CLIENT_SECRET}
                             """
+                            
                             // Docker Compose 실행
-                            bat 'docker-compose up -d'
+                            bat 'docker-compose up -d'  // Docker Compose로 배포
                         }
                     }
                 }
