@@ -1,47 +1,50 @@
 pipeline {
     agent any
     environment {
-        DB_USERNAME = ''
-        DB_PASSWORD = ''
+        DOCKER_IMAGE = 'myapp:latest'  // Docker 이미지 이름 설정
     }
     stages {
         stage('Checkout') {
             steps {
+                // GitHub 저장소에서 코드 체크아웃
                 git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat 'gradlew.bat build'  // Gradle 빌드 실행
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat 'gradlew.bat test'  // 테스트 실행
+                }
             }
         }
         stage('Docker Build') {
             steps {
-                dir('mypet') {
-                    script {
-                        bat 'docker-compose build --no-cache'
-                    }
+                dir('mypet') {  // 'mypet' 폴더로 이동
+                    bat "docker build -t ${env.DOCKER_IMAGE} ."  // Docker 이미지 빌드
                 }
             }
         }
-        stage('Docker Up') {
+        stage('Docker Deploy') {
             steps {
-                dir('mypet') {
+                dir('mypet') {  // 'mypet' 폴더로 이동
                     script {
+                        // Credentials 활용하여 환경 변수 설정
                         withCredentials([usernamePassword(credentialsId: 'mypet-db', 
                             usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
-                            
+                            // .env 파일 작성
                             writeFile file: '.env', text: "DB_USERNAME=${DB_USERNAME}\nDB_PASSWORD=${DB_PASSWORD}"
-                            
-                            // 강제로 컨테이너 재시작하고 실행
-                            bat 'docker-compose up -d --force-recreate'
+                            // Docker Compose 실행
+                            bat 'docker-compose up -d'
                         }
                     }
                 }
-            }
-        }
-    }
-    post {
-        always {
-            // 컨테이너 종료가 필요한 경우만 수행하도록 설정
-            script {
-                // 필요에 따라 이 부분을 사용하여 컨테이너 종료
-                // 예: bat 'docker-compose down'
             }
         }
     }
