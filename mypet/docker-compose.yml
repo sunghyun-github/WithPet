@@ -14,6 +14,14 @@ services:
       - SPRING_DATASOURCE_PASSWORD=rpass
       - SPRING_PROFILES_ACTIVE=prod  # Spring 프로파일 설정
       - file.upload-dir=/path/to/upload/directory  # 업로드 디렉토리 경로 설정
+      # 이메일 관련 환경 변수는 Jenkins에서 가져옵니다.
+      - spring.mail.host=smtp.gmail.com
+      - spring.mail.port=587
+      - spring.mail.username=${GMAIL_USERNAME}
+      - spring.mail.password=${GMAIL_PASSWORD}
+      - spring.mail.properties.mail.smtp.auth=true
+      - spring.mail.properties.mail.smtp.timeout=5000
+      - spring.mail.properties.mail.smtp.starttls.enable=true
     depends_on:
       - db  # DB 서비스 의존성
     restart: always  
