@@ -1,5 +1,8 @@
 FROM jenkins/jenkins:lts
 
+# root 권한으로 변경
+USER root
+
 # Java 21 설치 (예시: Ubuntu 기반)
 RUN apt-get update && apt-get install -y openjdk-21-jdk
 
