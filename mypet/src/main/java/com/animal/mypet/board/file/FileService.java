@@ -1,6 +1,7 @@
 package com.animal.mypet.board.file;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @Service("boardFileService")
 public class FileService {
 
+	@Autowired
     @Value("${file.upload-dir}")
     private String fileUploadDir;
 
