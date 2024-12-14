@@ -2,33 +2,33 @@ version: '3.8'
 services:
   mypet:
     build:
-      context: .
-      dockerfile: Dockerfile
-    image: mypet:latest
+      context: .  # 현재 디렉토리에서 빌드
+      dockerfile: Dockerfile  # Dockerfile 지정
+    image: mypet:latest  # 빌드된 이미지 이름
     container_name: mypet-container
     ports:
-      - "8081:8080"
+      - "8081:8080"  # 로컬 8081 -> 컨테이너 8080 포트 매핑
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/fpjt?createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=rpass
     depends_on:
-      - db
+      - db  # DB 서비스 의존성
     restart: always  
     networks:
       - mypet-network
 
   db:
-    image: mysql:8.0
+    image: mysql:8.0  # MySQL 버전
     container_name: mysql-db
     environment:
-      MYSQL_ROOT_PASSWORD: rpass
-      MYSQL_DATABASE: fpjt  
+      MYSQL_ROOT_PASSWORD: rpass  # 루트 비밀번호
+      MYSQL_DATABASE: fpjt  # 초기 생성 데이터베이스
     ports:
-      - "3306:3306"
+      - "3307:3306"  # 로컬 3306 -> 컨테이너 3306 포트 매핑
     restart: always
     volumes:
-      - mysql-data:/var/lib/mysql  # 데이터 저장용 볼륨 추가
+      - mysql-data:/var/lib/mysql  # 데이터 영구 저장용 볼륨
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     networks:
       - mypet-network
