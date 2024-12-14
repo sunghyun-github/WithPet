@@ -20,25 +20,6 @@ pipeline {
                 }
             }
         }
-        stage('Docker Login') {
-    steps {
-        script {
-            def dockerUsername = 'admin'  // Docker Hub 사용자명
-            def dockerPassword = 'rpass'  // Docker Hub 비밀번호
-            bat """
-                echo ${dockerPassword} | docker login -u ${dockerUsername} --password-stdin
-            """
-        }
-    }
-}
-        stage('Docker Push') {
-            steps {
-                script {
-                    bat "docker tag myapp:latest myapp:latest"  // Tagging 이미지를 latest로 설정
-                    bat "docker push myapp:latest"
-                }
-            }
-        }
         stage('Docker Down') {
             steps {
                 dir('mypet') {
