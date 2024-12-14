@@ -2,51 +2,63 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE = 'myapp:latest'  // Docker 이미지 이름 설정
-        FILE_UPLOAD_DIR = credentials('file-upload-dir')  // Credentials에서 파일 업로드 경로 가져오기
     }
     stages {
         stage('Checkout') {
             steps {
-                // GitHub 저장소에서 코드 체크아웃
                 git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
             }
         }
         stage('Build') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
+                dir('mypet') {
                     bat 'gradlew.bat build'  // Gradle 빌드 실행
                 }
             }
         }
         stage('Test') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
+                dir('mypet') {
                     bat 'gradlew.bat test'  // 테스트 실행
                 }
             }
         }
         stage('Docker Build') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
-                    bat "docker build -t ${env.DOCKER_IMAGE} ."  // Docker 이미지 빌드
+                dir('mypet') {
+                    bat "docker build -t ${env.DOCKER_IMAGE} ."
                 }
             }
         }
         stage('Docker Deploy') {
             steps {
-                dir('mypet') {  // 'mypet' 폴더로 이동
+                dir('mypet') {
                     script {
-                        // Credentials 활용하여 DB 사용자명과 비밀번호 설정
-                        withCredentials([usernamePassword(credentialsId: 'mypet-db', 
-                            usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
-                            
-                            // .env 파일 작성: DB_USERNAME, DB_PASSWORD, FILE_UPLOAD_DIR 설정
+                        // Credentials 활용하여 환경 변수 설정
+                        withCredentials([
+                            usernamePassword(credentialsId: 'GMAIL_CREDENTIALS', usernameVariable: 'GMAIL_USERNAME', passwordVariable: 'GMAIL_PASSWORD'),
+                            usernamePassword(credentialsId: 'NAVER_CREDENTIALS', usernameVariable: 'NAVER_CLIENT_ID', passwordVariable: 'NAVER_CLIENT_SECRET'),
+                            usernamePassword(credentialsId: 'KAKAO_CREDENTIALS', usernameVariable: 'KAKAO_CLIENT_ID', passwordVariable: 'KAKAO_CLIENT_SECRET')
+                        ]) {
+                            // .env 파일 작성
                             writeFile file: '.env', text: """
-                            DB_USERNAME=${DB_USERNAME}
-                            DB_PASSWORD=${DB_PASSWORD}
-                            FILE_UPLOAD_DIR=${FILE_UPLOAD_DIR}  // 파일 업로드 경로 환경 변수 추가
+                                SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/fpjt?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8
+                                SPRING_DATASOURCE_USERNAME=root
+                                SPRING_DATASOURCE_PASSWORD=rpass
+                                SPRING_PROFILES_ACTIVE=prod
+                                file.upload-dir=/path/to/upload/directory
+                                spring.mail.host=smtp.gmail.com
+                                spring.mail.port=587
+                                spring.mail.username=${GMAIL_USERNAME}
+                                spring.mail.password=${GMAIL_PASSWORD}
+                                spring.mail.properties.mail.smtp.auth=true
+                                spring.mail.properties.mail.smtp.timeout=5000
+                                spring.mail.properties.mail.smtp.starttls.enable=true
+                                spring.security.oauth2.client.registration.naver.client-id=${NAVER_CLIENT_ID}
+                                spring.security.oauth2.client.registration.naver.client-secret=${NAVER_CLIENT_SECRET}
+                                spring.security.oauth2.client.registration.kakao.client-id=${KAKAO_CLIENT_ID}
+                                spring.security.oauth2.client.registration.kakao.client-secret=${KAKAO_CLIENT_SECRET}
                             """
-
                             // Docker Compose 실행
                             bat 'docker-compose up -d'
                         }
