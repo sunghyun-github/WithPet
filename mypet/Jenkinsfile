@@ -64,6 +64,9 @@ pipeline {
                             // Docker Compose 실행
                             bat 'docker-compose down'  // 기존 컨테이너 중지
                             bat 'docker-compose up -d'  // 새로운 컨테이너 배포
+                            
+                            // Docker Compose 로그 확인 (서비스가 정상적으로 시작되었는지 확인)
+                            bat 'docker-compose logs -f'  // 로그 추적
                         }
                     }
                 }
