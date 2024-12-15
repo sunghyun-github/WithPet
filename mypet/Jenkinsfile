@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = 'myapp:latest'  // Docker 이미지 이름 설정
+        DOCKER_IMAGE = 'mypet:latest'  // Docker 이미지 이름 설정
     }
     stages {
         stage('Checkout') {
@@ -26,7 +26,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 dir('mypet') {
-                    bat "docker build -t ${env.DOCKER_IMAGE} ."
+                    bat "docker build -t ${env.DOCKER_IMAGE} ."  // Docker 이미지 빌드
                 }
             }
         }
@@ -49,7 +49,7 @@ pipeline {
                                 spring.mail.host=smtp.gmail.com
                                 spring.mail.port=587
                                 spring.mail.username=tjdgus50998583@gmail.com
-                                spring.mail.password=mgyd augn grsk wxde
+                                spring.mail.password=mgydaugngrskwxde
                                 spring.mail.properties.mail.smtp.auth=true
                                 spring.mail.properties.mail.smtp.timeout=5000
                                 spring.mail.properties.mail.smtp.starttls.enable=true
@@ -59,7 +59,8 @@ pipeline {
                                 spring.security.oauth2.client.registration.kakao.client-secret=${KAKAO_CLIENT_SECRET}
                             """
                             // Docker Compose 실행
-                            bat 'docker-compose up -d'
+                            bat 'docker-compose down'  // 기존 컨테이너 중지
+                            bat 'docker-compose up -d'  // 새로운 컨테이너 배포
                         }
                     }
                 }
