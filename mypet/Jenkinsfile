@@ -35,7 +35,7 @@ pipeline {
                 dir('mypet') {
                     script {
                         // Credentials 활용하여 환경 변수 설정
-                        withCredentials([
+                        withCredentials([ 
                             usernamePassword(credentialsId: 'NAVER_CREDENTIALS', usernameVariable: 'NAVER_CLIENT_ID', passwordVariable: 'NAVER_CLIENT_SECRET'),
                             usernamePassword(credentialsId: 'KAKAO_CREDENTIALS', usernameVariable: 'KAKAO_CLIENT_ID', passwordVariable: 'KAKAO_CLIENT_SECRET'),
                             usernamePassword(credentialsId: 'PAYMENT_CREDENTIALS', usernameVariable: 'PAY_API_KEY', passwordVariable: 'PAY_API_SECRET')
