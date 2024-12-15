@@ -12,71 +12,22 @@ pipeline {
         stage('Build') {
             steps {
                 dir('mypet') {
-                    bat 'gradlew.bat build'  // Gradle 빌드 실행
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                dir('mypet') {
-                    bat 'gradlew.bat test'  // 테스트 실행
+                    bat './gradlew build'  // Gradle 빌드 실행
                 }
             }
         }
         stage('Docker Build') {
             steps {
                 dir('mypet') {
-                    bat "docker build -t ${env.DOCKER_IMAGE} ."  // Docker 이미지 빌드
-                }
-            }
-        }
-        stage('Test Docker Version') {
-            steps {
-                script {
-                    bat 'docker version'  // Docker 버전 확인
+                    bat 'docker-compose build'  // Docker Compose 빌드
                 }
             }
         }
         stage('Docker Deploy') {
             steps {
                 dir('mypet') {
-                    script {
-                        // 하드코딩된 크리덴셜 값으로 .env 파일 작성
-                        writeFile file: '.env', text: """
-                            SPRING_PROFILES_ACTIVE=local
-							SPRING_APPLICATION_NAME=mypet
-							SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/fpjt?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8
-							SPRING_DATASOURCE_USERNAME=root
-							SPRING_DATASOURCE_PASSWORD=rpass
-							SPRING_JPA_HIBERNATE_DDL_AUTO=update
-							SPRING_JPA_HIBERNATE_NAMING_PHYSICAL_STRATEGY=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-							SPRING_JPA_SHOW_SQL=true
-							SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
-							
-							SPRING_MAIL_HOST=smtp.gmail.com
-							SPRING_MAIL_PORT=587
-							SPRING_MAIL_USERNAME=tjdgus50998583@gmail.com
-							SPRING_MAIL_PASSWORD=mgydaugngrskwxde
-							SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
-							SPRING_MAIL_PROPERTIES_MAIL_SMTP_TIMEOUT=5000
-							SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
-							
-							FILE_UPLOAD_DIR=src/main/resources/static/uploads/
-							
-							NAVER_CLIENT_ID=OTHYx1TLX9F7uaMRfOG2
-							NAVER_CLIENT_SECRET=v7QbItcAeu
-							NAVER_REDIRECT_URI=http://localhost:8080/user/login/oauth/naver
-							
-							KAKAO_CLIENT_ID=cb7359c03c76727f4a18530220cab6d8
-							KAKAO_REDIRECT_URI=http://localhost:8080/user/login/oauth/kakao
-							
-							IAMPORT_API_KEY=1468513857610115
-							IAMPORT_API_SECRET=cA4IWDIBaxy2Gxn6ZSFsfAF1zE8UX53fZF3ffVLoRjCRP4LDKfPjWIT8tb1rkrrU3np1As38LbI6zV0o
-                        """
-                        // Docker Compose 실행
-                        bat 'docker-compose down'  // 기존 컨테이너 중지
-                        bat 'docker-compose up -d'  // 새로운 컨테이너 배포
-                    }
+                    bat 'docker-compose down'  // 기존 컨테이너 중지
+                    bat 'docker-compose up -d'  // 새로운 컨테이너 배포
                 }
             }
         }
