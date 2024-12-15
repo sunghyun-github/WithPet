@@ -13,10 +13,10 @@ import org.springframework.http.ResponseEntity;
 @Service
 public class PaymentService {
 
-    @Value("${iamport.api.key}")
+    @Value("${PAY_API_KEY}")
     private String apiKey;
 
-    @Value("${iamport.api.secret}")
+    @Value("${PAY_API_SECRET}")
     private String apiSecret;
 
     private final String API_URL = "https://api.iamport.kr";
