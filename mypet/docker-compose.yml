@@ -18,6 +18,8 @@ services:
       - db  # DB 서비스 의존성
     networks:
       - mypet-network
+    volumes:
+      - ./application.properties:/app/config/application.properties  # 호스트에서 컨테이너로 application.properties 파일 마운트
 
   db:
     image: mysql:8.0  # MySQL 버전
