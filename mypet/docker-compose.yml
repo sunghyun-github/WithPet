@@ -16,7 +16,6 @@ services:
       - file.upload-dir=/path/to/upload/directory
     depends_on:
       - db  # DB 서비스 의존성
-    restart: always  
     networks:
       - mypet-network
 
