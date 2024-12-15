@@ -30,12 +30,19 @@ pipeline {
                 }
             }
         }
+        stage('Test Docker Version') {
+            steps {
+                script {
+                    bat 'docker version'  // Docker 버전 확인
+                }
+            }
+        }
         stage('Docker Deploy') {
             steps {
                 dir('mypet') {
                     script {
                         // Credentials 활용하여 환경 변수 설정
-                        withCredentials([
+                        withCredentials([ 
                             usernamePassword(credentialsId: 'NAVER_CREDENTIALS', usernameVariable: 'NAVER_CLIENT_ID', passwordVariable: 'NAVER_CLIENT_SECRET'),
                             usernamePassword(credentialsId: 'KAKAO_CREDENTIALS', usernameVariable: 'KAKAO_CLIENT_ID', passwordVariable: 'KAKAO_CLIENT_SECRET'),
                             usernamePassword(credentialsId: 'IAMPORT_API_CREDENTIALS', usernameVariable: 'IAMPORT_API_KEY', passwordVariable: 'IAMPORT_API_SECRET') // IAMPORT 자격증명 추가
@@ -46,7 +53,7 @@ pipeline {
                                 SPRING_DATASOURCE_USERNAME=root
                                 SPRING_DATASOURCE_PASSWORD=rpass
                                 SPRING_PROFILES_ACTIVE=prod
-                                file.upload-dir=/path/to/upload/directory
+                                file.upload-dir=C:\\path\\to\\upload\\directory  // 경로 수정
                                 spring.mail.host=smtp.gmail.com
                                 spring.mail.port=587
                                 spring.mail.username=tjdgus50998583@gmail.com
