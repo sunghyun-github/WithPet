@@ -13,11 +13,11 @@ import org.springframework.http.ResponseEntity;
 @Service
 public class PaymentService {
 
-    @Value("${iamport.api.key}")
-    private String apiKey;
+	@Value("${IAMPORT_API_KEY}")
+	private String apiKey;
 
-    @Value("${iamport.api.secret}")
-    private String apiSecret;
+	@Value("${IAMPORT_API_SECRET}")
+	private String apiSecret;
 
     private final String API_URL = "https://api.iamport.kr";
     private final ObjectMapper objectMapper = new ObjectMapper();

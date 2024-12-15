@@ -35,9 +35,10 @@ pipeline {
                 dir('mypet') {
                     script {
                         // Credentials 활용하여 환경 변수 설정
-                        withCredentials([ 
+                        withCredentials([
                             usernamePassword(credentialsId: 'NAVER_CREDENTIALS', usernameVariable: 'NAVER_CLIENT_ID', passwordVariable: 'NAVER_CLIENT_SECRET'),
                             usernamePassword(credentialsId: 'KAKAO_CREDENTIALS', usernameVariable: 'KAKAO_CLIENT_ID', passwordVariable: 'KAKAO_CLIENT_SECRET'),
+                            usernamePassword(credentialsId: 'IAMPORT_API_CREDENTIALS', usernameVariable: 'IAMPORT_API_KEY', passwordVariable: 'IAMPORT_API_SECRET') // IAMPORT 자격증명 추가
                         ]) {
                             // .env 파일 작성
                             writeFile file: '.env', text: """
@@ -57,8 +58,8 @@ pipeline {
                                 spring.security.oauth2.client.registration.naver.client-secret=${NAVER_CLIENT_SECRET}
                                 spring.security.oauth2.client.registration.kakao.client-id=${KAKAO_CLIENT_ID}
                                 spring.security.oauth2.client.registration.kakao.client-secret=${KAKAO_CLIENT_SECRET}
-                                iamport.api.key=1468513857610115
-                                iamport.api.secret=cA4IWDIBaxy2Gxn6ZSFsfAF1zE8UX53fZF3ffVLoRjCRP4LDKfPjWIT8tb1rkrrU3np1As38LbI6zV0o
+                                iamport.api.key=${IAMPORT_API_KEY}  // Credentials에서 가져온 API 키
+                                iamport.api.secret=${IAMPORT_API_SECRET}  // Credentials에서 가져온 API 비밀키
                             """
                             // Docker Compose 실행
                             bat 'docker-compose down'  // 기존 컨테이너 중지
