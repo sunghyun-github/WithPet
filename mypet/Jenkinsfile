@@ -37,7 +37,8 @@ pipeline {
                         // Credentials 활용하여 환경 변수 설정
                         withCredentials([
                             usernamePassword(credentialsId: 'NAVER_CREDENTIALS', usernameVariable: 'NAVER_CLIENT_ID', passwordVariable: 'NAVER_CLIENT_SECRET'),
-                            usernamePassword(credentialsId: 'KAKAO_CREDENTIALS', usernameVariable: 'KAKAO_CLIENT_ID', passwordVariable: 'KAKAO_CLIENT_SECRET')
+                            usernamePassword(credentialsId: 'KAKAO_CREDENTIALS', usernameVariable: 'KAKAO_CLIENT_ID', passwordVariable: 'KAKAO_CLIENT_SECRET'),
+                            usernamePassword(credentialsId: 'PAYMENT_CREDENTIALS', usernameVariable: 'PAY_API_KEY', passwordVariable: 'PAY_API_SECRET')
                         ]) {
                             // .env 파일 작성
                             writeFile file: '.env', text: """
@@ -57,6 +58,8 @@ pipeline {
                                 spring.security.oauth2.client.registration.naver.client-secret=${NAVER_CLIENT_SECRET}
                                 spring.security.oauth2.client.registration.kakao.client-id=${KAKAO_CLIENT_ID}
                                 spring.security.oauth2.client.registration.kakao.client-secret=${KAKAO_CLIENT_SECRET}
+                                iamport.api.key=${PAY_API_KEY}
+                                iamport.api.secret=${PAY_API_SECRET}
                             """
                             // Docker Compose 실행
                             bat 'docker-compose down'  // 기존 컨테이너 중지
