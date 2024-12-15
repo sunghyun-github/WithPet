@@ -52,6 +52,7 @@ dependencies {
 	implementation 'commons-io:commons-io:2.16.1'
     implementation 'commons-fileupload:commons-fileupload:1.5'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'io.github.cdimascio:dotenv-java:5.2.2'
 }	
 
 tasks.named('test') {
