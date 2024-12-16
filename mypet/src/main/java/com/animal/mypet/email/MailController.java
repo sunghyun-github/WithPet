@@ -1,5 +1,6 @@
 package com.animal.mypet.email;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ public class MailController {
 
     private final MailService mailService;
 
+    @Async
     @ResponseBody
     @PostMapping("/isAuthenticated")
     public String MailSend(@RequestBody Map<String, String> request) {
