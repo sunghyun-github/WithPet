@@ -17,7 +17,7 @@ import java.util.Map;
 public class MailController {
 
     private final MailService mailService;
-
+//비동기 테스트
     @Async
     @ResponseBody
     @PostMapping("/isAuthenticated")
