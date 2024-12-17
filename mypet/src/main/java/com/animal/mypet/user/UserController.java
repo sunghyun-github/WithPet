@@ -107,6 +107,7 @@ public class UserController {
 		return "redirect:/user/login";
 	}
 
+	// 로그인페이지 이동
 	@GetMapping("/login")
 	public String login(Model model) {
 		return "login/form";
@@ -158,6 +159,7 @@ public class UserController {
 		return "login/findId"; // 아이디 찾기 폼 페이지로 이동
 	}
 
+	// ID찾기 POST
 	@PostMapping("/findId")
 	public String findId(@RequestParam("userName") String name, @RequestParam("userEmail") String email,
 			@RequestParam("userPhone") String phone, Model model) {
