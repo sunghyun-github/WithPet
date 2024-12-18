@@ -179,6 +179,7 @@ public class UserController {
 		return "login/findPassword"; // 아이디 찾기 폼 페이지로 이동
 	}
 
+	// PW 찾기 Post 
 	@PostMapping("/findPassword")
 	public String findPassword(@RequestParam("userId") String userId, @RequestParam("userName") String userName,
 			@RequestParam("userPhone") String userPhone, Model model) {
