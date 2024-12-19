@@ -230,7 +230,7 @@ public class UserController {
 	// 회원 탈퇴 폼 페이지로 이동
 	@GetMapping("/deleteAccount")
 	public String showDeleteAccountForm() {
-		return "login/deleteAccount"; // 템플릿 위치와 이름에 맞게 수정
+		return "login/deleteAccount"; 
 	}
 
 	// 회원탈퇴
