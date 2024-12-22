@@ -1,17 +1,25 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = "mypet:latest"
+        DOCKER_IMAGE = "mypet:latest" // 사용할 Docker 이미지 이름
     }
     stages {
+        stage('Checkout') {
+            steps {
+                // GitHub에서 코드 가져오기
+                git 'https://github.com/sunghyun-github/WithPet.git' // 본인의 리포지토리 URL
+            }
+        }
+        
         stage('Build') {
             steps {
                 script {
-                    // Gradle 빌드
-                    bat './gradlew build'
+                    // Windows 환경에서 Gradle Wrapper 실행
+                    bat 'gradlew.bat build'
                 }
             }
         }
+
         stage('Docker Build') {
             steps {
                 script {
@@ -20,16 +28,20 @@ pipeline {
                 }
             }
         }
+
         stage('Docker Push') {
             steps {
                 script {
+                    // Docker 이미지 푸시 (옵션: Docker Hub나 다른 레지스트리)
                     bat 'docker push %DOCKER_IMAGE%'
                 }
             }
         }
+
         stage('Deploy') {
             steps {
                 script {
+                    // Docker Compose로 컨테이너 실행
                     bat 'docker-compose up -d'
                 }
             }
