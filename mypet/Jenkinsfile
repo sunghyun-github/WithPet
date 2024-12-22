@@ -23,7 +23,6 @@ pipeline {
         stage('Docker Push') {
             steps {
                 script {
-                    // Docker Hub 또는 다른 레지스트리에 이미지 푸시
                     bat 'docker push %DOCKER_IMAGE%'
                 }
             }
