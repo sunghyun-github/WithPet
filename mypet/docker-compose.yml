@@ -8,18 +8,13 @@ services:
     container_name: mypet-container
     ports:
       - "8081:8080"  # 로컬 8081 -> 컨테이너 8080 포트 매핑
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/fpjt?createDatabaseIfNotExist=true
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=rpass
-      - SPRING_PROFILES_ACTIVE=prod
-      - file.upload-dir=/path/to/upload/directory
-    depends_on:
-      - db  # DB 서비스 의존성
+    env_file: 
+      - .env  # 환경 변수 값을 .env 파일에서 로드
     networks:
       - mypet-network
     volumes:
-      - ./application.properties:/app/config/application.properties  # 호스트에서 컨테이너로 application.properties 파일 마운트
+      - ./application.properties:/app/config/application.properties  # 호스트의 파일을 컨테이너에 마운트
+      - ./uploads:/path/to/upload/directory  # 업로드 디렉터리 마운트
 
   db:
     image: mysql:8.0  # MySQL 버전
@@ -28,7 +23,7 @@ services:
       MYSQL_ROOT_PASSWORD: rpass  # 루트 비밀번호
       MYSQL_DATABASE: fpjt  # 초기 생성 데이터베이스
     ports:
-      - "3307:3306"  # 로컬 3306 -> 컨테이너 3306 포트 매핑
+      - "3307:3306"  # 로컬 3307 -> 컨테이너 3306 포트 매핑
     restart: always
     volumes:
       - mysql-data:/var/lib/mysql  # 데이터 영구 저장용 볼륨

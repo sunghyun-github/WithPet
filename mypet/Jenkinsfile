@@ -1,33 +1,42 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = 'mypet:latest'  // Docker 이미지 이름 설정
+        // .env 파일을 로드하여 환경 변수 설정
+        DOCKER_IMAGE = "mypet:latest"
     }
     stages {
-        stage('Checkout') {
+        stage('Load .env') {
             steps {
-                git branch: 'develop', url: 'https://github.com/sunghyun-github/WithPet.git'
+                script {
+                    bat 'for /f "tokens=*" %%i in (.env) do set %%i'
+                }
             }
         }
         stage('Build') {
             steps {
-                dir('mypet') {
-                    bat './gradlew build'  // Gradle 빌드 실행
+                script {
+                    bat './gradlew build'
                 }
             }
         }
         stage('Docker Build') {
             steps {
-                dir('mypet') {
-                    bat 'docker-compose build'  // Docker Compose 빌드
+                script {
+                    bat 'docker build -t %DOCKER_IMAGE% .'
                 }
             }
         }
-        stage('Docker Deploy') {
+        stage('Docker Push') {
             steps {
-                dir('mypet') {
-                    bat 'docker-compose down'  // 기존 컨테이너 중지
-                    bat 'docker-compose up -d'  // 새로운 컨테이너 배포
+                script {
+                    bat 'docker push %DOCKER_IMAGE%'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    bat 'docker-compose up -d'
                 }
             }
         }
