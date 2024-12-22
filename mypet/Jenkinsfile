@@ -30,7 +30,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // docker-compose 명령을 실행하여 .env 파일을 자동으로 로드하고 배포
                     bat 'docker-compose up -d'
                 }
             }
