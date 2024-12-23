@@ -51,22 +51,27 @@ public class UserService {
     }
     
     // 유저 @개 만드는 메서드
-	/*
-	 * public List<User> createUsers(int numberOfUsers) { List<User> users = new
-	 * ArrayList<>(); for (int i = 1; i <= numberOfUsers; i++) { User user = new
-	 * User(); user.setUserId("user" + i); user.setUserName("User " + i);
-	 * user.setUserPhone("010-0000-00" + String.format("%02d", i));
-	 * user.setUserEmail("user" + i + "@example.com"); user.setUserRole("USER");
-	 * user.setUserPassword("password" + i); // Set default password if needed
-	 * users.add(saveUser(user)); } return users; }
-	 */
-
-    private User saveUser(User user) {
-        // Set creation and update timestamps using @PrePersist and @PreUpdate hooks
-        user.setCreatedAt(LocalDateTime.now());
-        user.setUpdatedAt(LocalDateTime.now());
-        return userRepository.save(user);
-    }
+//    public List<User> createUsers(int numberOfUsers) {
+//        List<User> users = new ArrayList<>();
+//        for (int i = 1; i <= numberOfUsers; i++) {
+//            User user = new User();
+//            user.setUserId("user" + i);
+//            user.setUserName("User " + i);
+//            user.setUserPhone("010-0000-00" + String.format("%02d", i));
+//            user.setUserEmail("user" + i + "@example.com");
+//            user.setUserRole("USER");
+//            user.setUserPassword("password" + i); // Set default password if needed
+//            users.add(saveUser(user));
+//        }
+//        return users;
+//    }
+//
+//    private User saveUser(User user) {
+//        // Set creation and update timestamps using @PrePersist and @PreUpdate hooks
+//        user.setCreatedAt(LocalDateTime.now());
+//        user.setUpdatedAt(LocalDateTime.now());
+//        return userRepository.save(user);
+//    }
     
     public User getUser(String username) {
         Optional<User> siteUser = this.userRepository.findByUserId(username);
