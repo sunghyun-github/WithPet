@@ -127,6 +127,7 @@ public class UserService {
         return true; // 성공적으로 삭제됨
     }
     
+    // 아이디찾기 
     public User findByUserId(String userId) {
         return userRepository.findByUserId(userId).orElse(null);
     }
