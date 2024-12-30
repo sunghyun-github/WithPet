@@ -36,6 +36,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+                    // Docker Compose로 컨테이너 실행
                     bat 'docker-compose up -d'
                 }
             }
