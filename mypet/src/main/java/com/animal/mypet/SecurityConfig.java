@@ -58,6 +58,7 @@ public class SecurityConfig {
             	    .and()
             	    .sessionFixation().migrateSession()  // 세션 고정 공격 방지
             	)
+            // 소셜로그인
             .oauth2Login(oauth2 -> oauth2
                     .loginPage("/user/login")
                     .defaultSuccessUrl("/")
